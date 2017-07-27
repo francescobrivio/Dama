@@ -1,3 +1,10 @@
-Per installarlo localmente:
+###### Per installarlo localmente:
 - vai nella directory dove vuoi scaricare la repository
 - git clone https://github.com/francescobrivio/Dama.git
+
+
+###### Useful Links
+http://www.perlmonks.org/?node_id=922840
+https://www.ibm.com/developerworks/library/l-ptkwidg/
+https://www.lehigh.edu/~sol0/ptk/perlmonth01/pm1.html
+https://www.perl.com/pub/1999/10/perltk/
