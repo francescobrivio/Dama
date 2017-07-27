@@ -1,0 +1,3 @@
+Per installarlo localmente:
+- vai nella directory dove vuoi scaricare la repository
+- git clone https://github.com/francescobrivio/Dama.git
