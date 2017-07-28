@@ -8,3 +8,5 @@ http://www.perlmonks.org/?node_id=922840
 https://www.ibm.com/developerworks/library/l-ptkwidg/
 https://www.lehigh.edu/~sol0/ptk/perlmonth01/pm1.html
 https://www.perl.com/pub/1999/10/perltk/
+
+https://docstore.mik.ua/orelly/perl3/tk/ch02_02.htm
