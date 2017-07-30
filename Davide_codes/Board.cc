@@ -1,49 +1,23 @@
+#include "include/cppinclude.h"
+#include "include/configurable.h"
 #include "Board.h"
-#include <iostream>
-#include <cmath>
-#include <string>
-#include <vector>
-#include <stdio.h>
-#include <stdlib.h>
-//#include <TRandom3.h>
 
 Board::Board()
 {
-  for(Int_t nx=0; nx<N; nx++)
-    for(Int_t ny=0; ny<N; ny++)
-      {
-	/*
-	if(ny<3 && nx%2==0)
-	  this->setStatus(nx, ny, 1);
-	else if(ny>4 && (nx+1)%2==0)
-          this->setStatus(nx, ny, -1);
-	else
-	this->setStatus(nx, ny, 0);*/
-	_board[nx][ny] = 0;
-      }
-  
+  _board.resize(N);
+  for(int ny=0; ny<9; ny++)
+    for(int nx=0; nx<9; nx++)
+    {
+      _board[nx].resize(N);
+      _board[nx][ny] = " ";
+    }
+  _nmoves = 0;
 }
 
-Board::Board(Int_t** board)
+Board::Board(const Board& origin):
+  _board (origin.getBoard()),
+  _nmoves (origin.getNmoves())
 {
-  /*for(Int_t nx=0; nx<N; nx++)
-    for(Int_t ny=0; ny<N; ny++)
-      {
-	value = *board[nx][ny];
-	this->setStatus(nx, ny, value);
-	}*/
-
-  _board = *board;
-}
-
-Board::Board(const Board& origin)
-{
-  for(Int_t nx=0; nx<N; nx++)
-    for(Int_t ny=0; ny<N; ny++)
-      {
-	value = origin[nx][ny];
-	this->setStatus(nx, ny, value);
-      }
 }
 
 Board& Board::operator= (const Board& origin)
@@ -52,6 +26,9 @@ Board& Board::operator= (const Board& origin)
 
   this->Board::operator=(origin);
   
+  this->setBoard(origin.getBoard());
+  this->setNmoves(origin.getNmoves());
+  
   return *this;
 }
 
@@ -59,26 +36,98 @@ Board::~Board()
 {
 }
 
-void setStatus(Int_t nx, Int_t ny; Int_t value)
+void Board::Initialize()
+{
+  char buffer[10];
+  int tmp = 0;
+  for(int n=1; n<9; n++)
+    {
+      tmp = sprintf (buffer, "%d", n);
+      this->setStatus(0, n, buffer);
+      this->setStatus(n, 0, this->getAlpha(n));
+    }
+
+  for(int nx=N-1; nx>0; nx--) // colonne     
+    for(int ny=1; ny<N; ny++) // righe     
+      {
+        if(ny<4 && (ny+nx)%2==0)
+          this->setStatus(nx, ny, "w");
+        else if(ny>5 && (nx+ny)%2==0)
+          this->setStatus(nx, ny, "b");
+	else
+	  this->setStatus(nx, ny, " ");
+      }
+}
+
+void Board::setBoard(Matrix origin)
+{
+  _board = origin;
+}
+
+Matrix Board::getBoard() const
+{
+  return _board;
+}
+
+void Board::setNmoves(int origin)
+{
+  _nmoves = origin;
+}
+
+int Board::getNmoves() const
+{
+  return _nmoves;
+}
+
+void Board::setStatus(int nx, int ny, std::string value)
 {
   _board[nx][ny] = value;  
 }
 
-Int_t getStatus(Int_t nx, Int_t ny)
+char Board::getStatus(int nx, int ny) const
 {
-  return _board[nx][ny];
+  return (_board[nx][ny])[0];
 }
 
-void Print(TString name)
+std::string Board::getAlpha(int idx) const
 {
-  std::ofstream output(name, std::ofstream::out);
+  std::map<int, std::string> numToAlpha;
+  numToAlpha.insert(std::pair<int, std::string>(1, "A"));
+  numToAlpha.insert(std::pair<int, std::string>(2, "B"));
+  numToAlpha.insert(std::pair<int, std::string>(3, "C"));
+  numToAlpha.insert(std::pair<int, std::string>(4, "D"));
+  numToAlpha.insert(std::pair<int, std::string>(5, "E"));
+  numToAlpha.insert(std::pair<int, std::string>(6, "F"));
+  numToAlpha.insert(std::pair<int, std::string>(7, "G"));
+  numToAlpha.insert(std::pair<int, std::string>(8, "H"));
+
+  std::string temp = numToAlpha[idx];
+  return temp;
+}
+
+void Board::Print(const char* name)
+{
+  std::ofstream output(name);
   
-  for(Int_t ny=0; ny<N; ny++)
-    for(Int_t nx=0; nx<N; nx++)
-      if(name != "")
-	output << this->getStatus(nx, ny);
-      else
-	std::cout << this->getStatus(nx, ny);
+  if(name != "")
+    output << "************************" << std::endl << std::endl;
+  else
+    std::cout << "************************" << std::endl << std::endl;
+
+  for(int ny=N-1; ny>=0; ny--) // colonne   
+    {
+      for(int nx=0; nx<N; nx++) // righe   
+	if(name != "")
+	  output << this->getStatus(nx, ny) << "  ";
+	else
+	  std::cout << this->getStatus(nx, ny) << "  ";
+      std::cout << std::endl;
+    }
   
+  if(name != "")
+    output << std::endl << "************************" << std::endl;
+  else
+    std::cout << std::endl << "************************" << std::endl;
+
   output.close();
 }

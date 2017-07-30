@@ -1,42 +1,38 @@
 #ifndef Pedina_H
 #define Pedina_H
 
-#include "configurable.h"
-#include <iostream>
-#include <cmath>
-#include <string>
-#include <vector>
-#include <stdio.h>
-#include <stdlib.h>
+#include "include/configurable.h"
 
-class Pedina:
+class Pedina
 {
-
  public:
   Pedina();
-  Pedina(const TString color, Int_t x, Int_t y);
+  Pedina(const std::string color, int x, int y, Board* board);
   Pedina(const Pedina& origin);
   ~Pedina();
 
   Pedina& operator=(const Pedina& origin);
 
-  void setColor(TString color);
-  TString getColor();
+  void setColor(std::string color);
+  std::string getColor() const;
 
-  void setX(Int_t x);
-  void setY(Int_t y);
+  void setX(int x);
+  void setY(int y);
   
-  Int_t getX();
-  Int_t getY();
+  int getX() const;
+  int getY() const;
 
-  void Move(Int_t x, Int_t y);
-  void Check(Int_t x, Int_t y);
+  Board* getBoard() const;
+  void setBoard(Board* board);
+
+  void Move(int x, int y);
+  Moves Check();
   
  private:
-  Int_t _color;
-  Int_t _x;
-  Int_t _y;
-  Player* _player;
+  std::string _color;
+  int _x;
+  int _y;
+  //Player* _player;
   Board* _board;
 
 };

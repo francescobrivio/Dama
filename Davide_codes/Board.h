@@ -1,33 +1,30 @@
 #ifndef Board_H
 #define Board_H
 
-#include "configurable.h"
-#include <iostream>
-#include <cmath>
-#include <string>
-#include <vector>
-#include <stdio.h>
-#include <stdlib.h>
+#include "include/configurable.h"
 
-class Board:
+class Board
 {
  public:
   Board();
-  Board(Int_t**);
   Board(const Board& origin);
   ~Board();
   
   Board& operator=(const Board& origin);
 
-  void setStatus(Int_t nx, Int_t ny, Int_t value);
-  Int_t getStatus(Int_t nx, Int_t ny);
-  void Print(TString name = "");
-  //void Draw();
-  //Int_t isFree(Int_t x, Int_t y); 
-  
-  //private:
-  Int_t _board[N][N];
-
+  void Initialize();
+  void setNmoves(int origin);
+  int getNmoves() const;
+  void setBoard(Matrix origin);
+  Matrix getBoard() const;
+  void setStatus(int nx, int ny, std::string value);
+  char getStatus(int nx, int ny) const;
+  std::string getAlpha(int idx) const;
+  void Print(const char* name = "");
+    
+ private:
+  Matrix _board;
+  int _nmoves;
 };
 
 #endif // Board_H
