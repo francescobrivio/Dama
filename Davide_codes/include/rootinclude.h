@@ -1,0 +1,40 @@
+#ifndef ROOTINCLUDE_H
+#define ROOTINCLUDE_H 1
+
+#include <TChain.h>
+#include <TROOT.h>
+#include "TSystem.h"
+#include <TCanvas.h>
+#include <TLegend.h>
+#include <TLatex.h>
+#include <TFile.h>
+#include <TH2.h>
+#include <TKey.h>
+#include <TPad.h>
+#include <TLegend.h>
+#include <TPaveText.h>
+#include <TH1.h>
+#include <TF1.h>
+#include <TSystem.h>
+#include <TTree.h>
+#include <TIterator.h>
+#include <TProfile.h>
+#include <TLorentzVector.h>
+#include <TStopwatch.h>
+#include "TMath.h"
+#include <TAttMarker.h>
+#include <TStyle.h>
+#include <TPaveStats.h>
+#include <TArrow.h>
+#include "TEventList.h"
+#include "TList.h"
+#include "TH3D.h"
+#include "TPie.h"
+#include "TGraphErrors.h"
+#include "TGaxis.h"
+#include "TMultiGraph.h"
+#include "TRandom3.h"
+#include "TPaveText.h"
+#include "TVirtualFitter.h"
+
+#endif //ROOTINCLUDE_H              

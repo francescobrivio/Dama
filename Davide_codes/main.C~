@@ -1,0 +1,62 @@
+//#include "Pedina.h"
+//#include "Dama.h"
+//#include "Player.h"
+//#include "Board.h"
+#include "Board.cc"
+
+int main()
+{
+  Board board;
+  //Player cpu1;
+  //Player cpu2;
+  
+  board.Initialize();
+  board.Print("");
+    
+  int x = 0, y = 0;
+  char xStr = ' ', yStr =  ' ';
+  int k = 0;
+  std::string val = "";
+  std::string pos = "", posNew = "";
+
+  while(k < 3)
+    {
+      std::cout << "Quale pedina vuoi muovere?  (Es: A3)" << std::endl;
+      std::cin >> pos;
+      std::cout << "Dove la vuoi muovere? " << std::endl;
+      std::cin >> posNew;
+
+      xStr = tolower(pos[0]);
+      yStr = tolower(pos[1]);
+      
+      y = (int)(yStr - '0');
+      x = (int)(xStr - 'a' + 1);
+      
+      val = board.getStatus(x, y);
+      board.setStatus(x, y, " ");
+      
+      xStr = tolower(posNew[0]);
+      yStr = tolower(posNew[1]);
+
+      y = (int)(yStr - '0');
+      x = (int)(xStr - 'a' + 1);
+
+      board.setStatus(x, y, val);
+      
+      k++;
+
+      board.Print("");
+      
+    }
+
+  return 0;
+
+}
+
+
+/*                                                                                                                                                          
+      char buffer[10];
+      int tmp = 0;  
+      tmp = sprintf (buffer, "%d", cazz);    
+      std::cout << "ndosnfomsofos       " << buffer << std::endl; 
+*/

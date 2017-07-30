@@ -1,32 +1,30 @@
 #include "Pedina.h"
-#include <iostream>
-#include <cmath>
-#include <string>
-#include <vector>
-#include <stdio.h>
-#include <stdlib.h>
-#include <TRandom3.h>
+#include "include/cppinclude.h"
 
 Pedina::Pedina()
 {
+  Board* board = new Board(); 
   srand (time(NULL));
   _x = rand() % N + 1;
   _y = rand() % N + 1;
   _color = 1;
+  _board = board;
 }
 
-Pedina::Pedina(const TString color, Int_t x, Int_t y)
+Pedina::Pedina(const std::string color, int x, int y, Board* board):
+  _x (x),
+  _y (y),
+  _color (color),
+  _board (board)
 {
-  this->setX(x);
-  this->setY(y);
-  this->setColor(color);
 }
 
-Pedina::Pedina(const Pedina& origin)
+Pedina::Pedina(const Pedina& origin):
+  _x (origin.getX()),
+  _y (origin.getY()),
+  _color (origin.getColor()),
+  _board (origin.getBoard())
 {
-  this->setX(origin.getX());
-  this->setY(origin.getY());
-  this->setColor(origin.getColor());
 }
 
 Pedina& Pedina::operator= (const Pedina& origin)
@@ -38,6 +36,7 @@ Pedina& Pedina::operator= (const Pedina& origin)
   this->setX(origin.getX());
   this->setY(origin.getY());
   this->setColor(origin.getColor());
+  this->setBoard(origin.getBoard());
 
   return *this;
 }
@@ -46,37 +45,80 @@ Pedina::~Pedina()
 {
 }
 
-Pedina::Move(Int_t x, Int_t y)
+void Pedina::setX(int x)
+{
+  _x = x;
+}
+
+void Pedina::setY(int y)
+{
+  _y = y;
+}
+
+int Pedina::getX() const
+{
+  return _x;
+}
+
+int Pedina::getY() const
+{
+  return _y;
+}
+
+void Pedina::setColor(std::string color)
+{
+  _color = color;
+}
+
+std::string Pedina::getColor() const
+{
+  return _color;
+}
+
+void Pedina::setBoard(Board* board)
+{
+  _board = board;
+}
+
+Board* Pedina::getBoard() const
+{
+  return _board;
+}
+
+void Pedina::Move(int x, int y)
 {
   this->setX(x);
   this->setY(y);
 }
 
-Pedina::Check()
+
+Moves Pedina::Check()
 {
-  Int_t new_x1[Nmoves_pedina], new_y = 0;
-  Int_t isfree[Nmoves_pedina];
+  int new_x[Nmoves_pedina], new_y = 0;
+  char isfree[Nmoves_pedina];
   Moves moves;
   Position newPos;
-  TString status = "";
+  std::string status = "";
 
   new_y  = this->getY() + 1;
   new_x[0] = this->getX() - 1;
   new_x[1] = this->getX() + 1;
 
-  for(Int_t i=0; i<Nmoves_pedina; i++)
+  for(int i=0; i<Nmoves_pedina; i++)
     {
-      isfree[i] = this->getBoard()->isFree(new_x[i], new_y);  
+      isfree[i] = this->getBoard()->getStatus(new_x[i], new_y);  
       
-      if(isfree[i] == 0) status = "free";
-      else if (isfree[i] == 1) status = "ally";
-      else if (isfree[i] == -1) status = "enemy";
+      if(isfree[i] == ' ') status = "free";
+      else if (tolower(isfree[i]) == 'w') status = "ally";
+      else if (tolower(isfree[i]) == 'b') status = "enemy";
       else status = "error";
       
-      newPos = std::pair<Int_t, Int_t>(new_x[i], new_y);
+      newPos = std::pair<int, int>(new_x[i], new_y);
       
-      moves.push_back(std::pair<Position, TString>(newPos, status));
+      moves.push_back(std::pair<Position, std::string>(newPos, status));
     }
 
   return moves;  
+
 }
+
