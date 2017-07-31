@@ -1,7 +1,9 @@
 #ifndef configurable_H
 #define configurable_H
 
-#define N 9
+#define Nslot 9
+#define Npawn 12
+#define Nplayers 2
 #define Nmoves_pedina 2
 #define Nmoves_dama 4
 

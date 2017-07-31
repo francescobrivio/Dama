@@ -5,8 +5,8 @@ Pedina::Pedina()
 {
   Board* board = new Board(); 
   srand (time(NULL));
-  _x = rand() % N + 1;
-  _y = rand() % N + 1;
+  _x = rand() % Nslot + 1;
+  _y = rand() % Nslot + 1;
   _color = 1;
   _board = board;
 }

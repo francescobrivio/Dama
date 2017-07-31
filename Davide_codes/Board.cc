@@ -4,11 +4,11 @@
 
 Board::Board()
 {
-  _board.resize(N);
-  for(int ny=0; ny<9; ny++)
-    for(int nx=0; nx<9; nx++)
+  _board.resize(Nslot);
+  for(int ny=0; ny<Nslot; ny++)
+    for(int nx=0; nx<Nslot; nx++)
     {
-      _board[nx].resize(N);
+      _board[nx].resize(Nslot);
       _board[nx][ny] = " ";
     }
   _nmoves = 0;
@@ -40,15 +40,15 @@ void Board::Initialize()
 {
   char buffer[10];
   int tmp = 0;
-  for(int n=1; n<9; n++)
+  for(int n=1; n<Nslot; n++)
     {
       tmp = sprintf (buffer, "%d", n);
       this->setStatus(0, n, buffer);
       this->setStatus(n, 0, this->getAlpha(n));
     }
 
-  for(int nx=N-1; nx>0; nx--) // colonne     
-    for(int ny=1; ny<N; ny++) // righe     
+  for(int nx=Nslot-1; nx>0; nx--) // colonne     
+    for(int ny=1; ny<Nslot; ny++) // righe     
       {
         if(ny<4 && (ny+nx)%2==0)
           this->setStatus(nx, ny, "w");
@@ -114,9 +114,9 @@ void Board::Print(const char* name)
   else
     std::cout << "************************" << std::endl << std::endl;
 
-  for(int ny=N-1; ny>=0; ny--) // colonne   
+  for(int ny=Nslot-1; ny>=0; ny--) // colonne   
     {
-      for(int nx=0; nx<N; nx++) // righe   
+      for(int nx=0; nx<Nslot; nx++) // righe   
 	if(name != "")
 	  output << this->getStatus(nx, ny) << "  ";
 	else
@@ -130,4 +130,22 @@ void Board::Print(const char* name)
     std::cout << std::endl << "************************" << std::endl;
 
   output.close();
+}
+
+void Board::PrintPositions(const char* name)
+{
+  std::ofstream output(name);
+  char val = ' ';
+
+  if(name != "")
+    {
+      for(int ny=Nslot-1; ny>0; ny--) // colonne 
+	for(int nx=1; nx<Nslot; nx++) // righe 
+	  {
+	    val = this->getStatus(nx, ny);
+	    if(val == ' ')
+	      val = 'e';
+	    output << this->getAlpha(nx) << ny << " " << val << std::endl;
+	  }
+    }
 }
