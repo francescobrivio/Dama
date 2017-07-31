@@ -10,20 +10,30 @@ int main()
   //Player cpu2;
   
   board.Initialize();
-  board.Print("");
-    
+  //board.Print("");
+
+  
+  std::vector<Pedina*> Wpawn;
+  std::vector<Pedina*> Bpawn;
+  for(int i=0; i<Npawn; i++)
+    {
+      Pedina* temp = new Pedina();
+      Wpawn.push_back(temp);
+      Bpawn.push_back(temp);
+    }
+  
   int x = 0, y = 0;
   char xStr = ' ', yStr =  ' ';
-  int k = 0;
-  std::string val = "";
-  std::string pos = "", posNew = "";
+  bool endGame = false;
 
-  while(k < 3)
+  std::string val = "";
+  std::string pos = "";
+
+  while(!endGame)
     {
       std::cout << "Quale pedina vuoi muovere?  (Es: A3)" << std::endl;
-      std::cin >> pos;
       std::cout << "Dove la vuoi muovere? " << std::endl;
-      std::cin >> posNew;
+      std::cin >> pos;
 
       xStr = tolower(pos[0]);
       yStr = tolower(pos[1]);
@@ -34,18 +44,21 @@ int main()
       val = board.getStatus(x, y);
       board.setStatus(x, y, " ");
       
-      xStr = tolower(posNew[0]);
-      yStr = tolower(posNew[1]);
+      xStr = tolower(pos[2]);
+      yStr = tolower(pos[3]);
 
       y = (int)(yStr - '0');
       x = (int)(xStr - 'a' + 1);
 
       board.setStatus(x, y, val);
+         
+      //board.Print("");
+      //board.PrintPositions("positions.txt");
       
-      k++;
+      std::cout << "GREAT!!!!" << std::endl;
 
-      board.Print("");
-      
+      if(Wpawn.size() == 0 || Bpawn.size() == 0)
+	endGame = true;
     }
 
   return 0;
