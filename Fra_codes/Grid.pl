@@ -3,91 +3,91 @@
 sub createGrid
 {
     $gridframe->Button(-text=>"8", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2')->grid
-        ($cell_8a = $gridframe->Button(-text=>"8a", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'), #, -command=>sub{print $cell_8a->cget(-text)}),
-         $cell_8b = $gridframe->Button(-text=>"8b", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'), #, -image=>$img_dama_bianca
-         $cell_8c = $gridframe->Button(-text=>"8c", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>[\&whoami, $self]),
-         $cell_8d = $gridframe->Button(-text=>"8d", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_8e = $gridframe->Button(-text=>"8e", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_8f = $gridframe->Button(-text=>"8f", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_8g = $gridframe->Button(-text=>"8g", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_8h = $gridframe->Button(-text=>"8h", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
+        ($cell_8a = $gridframe->Button(-text=>"8a", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_8a->cget(-text)}),
+         $cell_8b = $gridframe->Button(-text=>"8b", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_8b->cget(-text)}),
+         $cell_8c = $gridframe->Button(-text=>"8c", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_8c->cget(-text)}),
+         $cell_8d = $gridframe->Button(-text=>"8d", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_8d->cget(-text)}),
+         $cell_8e = $gridframe->Button(-text=>"8e", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_8e->cget(-text)}),
+         $cell_8f = $gridframe->Button(-text=>"8f", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_8f->cget(-text)}),
+         $cell_8g = $gridframe->Button(-text=>"8g", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_8g->cget(-text)}),
+         $cell_8h = $gridframe->Button(-text=>"8h", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_8h->cget(-text)}),
         );
 
     $gridframe->Button(-text=>"7", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2')->grid
-        ($cell_7a = $gridframe->Button(-text=>"7a", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_7b = $gridframe->Button(-text=>"7b", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_7c = $gridframe->Button(-text=>"7c", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_7d = $gridframe->Button(-text=>"7d", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_7e = $gridframe->Button(-text=>"7e", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_7f = $gridframe->Button(-text=>"7f", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_7g = $gridframe->Button(-text=>"7g", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_7h = $gridframe->Button(-text=>"7h", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
+        ($cell_7a = $gridframe->Button(-text=>"7a", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_7a->cget(-text)}),
+         $cell_7b = $gridframe->Button(-text=>"7b", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_7b->cget(-text)}),
+         $cell_7c = $gridframe->Button(-text=>"7c", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_7c->cget(-text)}),
+         $cell_7d = $gridframe->Button(-text=>"7d", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_7d->cget(-text)}),
+         $cell_7e = $gridframe->Button(-text=>"7e", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_7e->cget(-text)}),
+         $cell_7f = $gridframe->Button(-text=>"7f", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_7f->cget(-text)}),
+         $cell_7g = $gridframe->Button(-text=>"7g", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_7g->cget(-text)}),
+         $cell_7h = $gridframe->Button(-text=>"7h", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_7h->cget(-text)}),
         );
 
     $gridframe->Button(-text=>"6", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2')->grid
-        ($cell_6a = $gridframe->Button(-text=>"6a", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_6b = $gridframe->Button(-text=>"6b", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_6c = $gridframe->Button(-text=>"6c", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_6d = $gridframe->Button(-text=>"6d", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_6e = $gridframe->Button(-text=>"6e", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_6f = $gridframe->Button(-text=>"6f", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_6g = $gridframe->Button(-text=>"6g", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_6h = $gridframe->Button(-text=>"6h", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
+        ($cell_6a = $gridframe->Button(-text=>"6a", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_6a->cget(-text)}),
+         $cell_6b = $gridframe->Button(-text=>"6b", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_6b->cget(-text)}),
+         $cell_6c = $gridframe->Button(-text=>"6c", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_6c->cget(-text)}),
+         $cell_6d = $gridframe->Button(-text=>"6d", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_6d->cget(-text)}),
+         $cell_6e = $gridframe->Button(-text=>"6e", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_6e->cget(-text)}),
+         $cell_6f = $gridframe->Button(-text=>"6f", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_6f->cget(-text)}),
+         $cell_6g = $gridframe->Button(-text=>"6g", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_6g->cget(-text)}),
+         $cell_6h = $gridframe->Button(-text=>"6h", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_6h->cget(-text)}),
         );
 
     $gridframe->Button(-text=>"5", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2')->grid
-        ($cell_5a = $gridframe->Button(-text=>"5a", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_5b = $gridframe->Button(-text=>"5b", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_5c = $gridframe->Button(-text=>"5c", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_5d = $gridframe->Button(-text=>"5d", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_5e = $gridframe->Button(-text=>"5e", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_5f = $gridframe->Button(-text=>"5f", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_5g = $gridframe->Button(-text=>"5g", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_5h = $gridframe->Button(-text=>"5h", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
+        ($cell_5a = $gridframe->Button(-text=>"5a", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_5a->cget(-text)}),
+         $cell_5b = $gridframe->Button(-text=>"5b", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_5b->cget(-text)}),
+         $cell_5c = $gridframe->Button(-text=>"5c", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_5c->cget(-text)}),
+         $cell_5d = $gridframe->Button(-text=>"5d", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_5d->cget(-text)}),
+         $cell_5e = $gridframe->Button(-text=>"5e", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_5e->cget(-text)}),
+         $cell_5f = $gridframe->Button(-text=>"5f", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_5f->cget(-text)}),
+         $cell_5g = $gridframe->Button(-text=>"5g", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_5g->cget(-text)}),
+         $cell_5h = $gridframe->Button(-text=>"5h", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_5h->cget(-text)}),
         );
 
     $gridframe->Button(-text=>"4", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2')->grid
-        ($cell_4a = $gridframe->Button(-text=>"4a", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_4b = $gridframe->Button(-text=>"4b", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_4c = $gridframe->Button(-text=>"4c", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_4d = $gridframe->Button(-text=>"4d", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_4e = $gridframe->Button(-text=>"4e", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_4f = $gridframe->Button(-text=>"4f", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_4g = $gridframe->Button(-text=>"4g", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_4h = $gridframe->Button(-text=>"4h", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
+        ($cell_4a = $gridframe->Button(-text=>"4a", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_4a->cget(-text)}),
+         $cell_4b = $gridframe->Button(-text=>"4b", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_4b->cget(-text)}),
+         $cell_4c = $gridframe->Button(-text=>"4c", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_4c->cget(-text)}),
+         $cell_4d = $gridframe->Button(-text=>"4d", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_4d->cget(-text)}),
+         $cell_4e = $gridframe->Button(-text=>"4e", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_4e->cget(-text)}),
+         $cell_4f = $gridframe->Button(-text=>"4f", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_4f->cget(-text)}),
+         $cell_4g = $gridframe->Button(-text=>"4g", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_4g->cget(-text)}),
+         $cell_4h = $gridframe->Button(-text=>"4h", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_4h->cget(-text)}),
         );
 
     $gridframe->Button(-text=>"3", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2')->grid
-        ($cell_3a = $gridframe->Button(-text=>"3a", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_3b = $gridframe->Button(-text=>"3b", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_3c = $gridframe->Button(-text=>"3c", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_3d = $gridframe->Button(-text=>"3d", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_3e = $gridframe->Button(-text=>"3e", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_3f = $gridframe->Button(-text=>"3f", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_3g = $gridframe->Button(-text=>"3g", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_3h = $gridframe->Button(-text=>"3h", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
+        ($cell_3a = $gridframe->Button(-text=>"3a", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_3a->cget(-text)}),
+         $cell_3b = $gridframe->Button(-text=>"3b", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_3b->cget(-text)}),
+         $cell_3c = $gridframe->Button(-text=>"3c", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_3c->cget(-text)}),
+         $cell_3d = $gridframe->Button(-text=>"3d", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_3d->cget(-text)}),
+         $cell_3e = $gridframe->Button(-text=>"3e", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_3e->cget(-text)}),
+         $cell_3f = $gridframe->Button(-text=>"3f", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_3f->cget(-text)}),
+         $cell_3g = $gridframe->Button(-text=>"3g", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_3g->cget(-text)}),
+         $cell_3h = $gridframe->Button(-text=>"3h", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_3h->cget(-text)}),
         );
 
     $gridframe->Button(-text=>"2", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2')->grid
-        ($cell_2a = $gridframe->Button(-text=>"2a", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_2b = $gridframe->Button(-text=>"2b", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_2c = $gridframe->Button(-text=>"2c", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_2d = $gridframe->Button(-text=>"2d", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_2e = $gridframe->Button(-text=>"2e", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_2f = $gridframe->Button(-text=>"2f", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_2g = $gridframe->Button(-text=>"2g", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_2h = $gridframe->Button(-text=>"2h", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
+        ($cell_2a = $gridframe->Button(-text=>"2a", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_2a->cget(-text)}),
+         $cell_2b = $gridframe->Button(-text=>"2b", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_2b->cget(-text)}),
+         $cell_2c = $gridframe->Button(-text=>"2c", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_2c->cget(-text)}),
+         $cell_2d = $gridframe->Button(-text=>"2d", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_2d->cget(-text)}),
+         $cell_2e = $gridframe->Button(-text=>"2e", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_2e->cget(-text)}),
+         $cell_2f = $gridframe->Button(-text=>"2f", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_2f->cget(-text)}),
+         $cell_2g = $gridframe->Button(-text=>"2g", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_2g->cget(-text)}),
+         $cell_2h = $gridframe->Button(-text=>"2h", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_2h->cget(-text)}),
         );
 
     $gridframe->Button(-text=>"1", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2')->grid
-        ($cell_1a = $gridframe->Button(-text=>"1a", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_1b = $gridframe->Button(-text=>"1b", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_1c = $gridframe->Button(-text=>"1c", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_1d = $gridframe->Button(-text=>"1d", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_1e = $gridframe->Button(-text=>"1e", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_1f = $gridframe->Button(-text=>"1f", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
-         $cell_1g = $gridframe->Button(-text=>"1g", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2'),
-         $cell_1h = $gridframe->Button(-text=>"1h", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2'),
+        ($cell_1a = $gridframe->Button(-text=>"1a", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{$input += $cell_1a->cget(-text)}),
+         $cell_1b = $gridframe->Button(-text=>"1b", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{$input += $cell_1b->cget(-text)}),
+         $cell_1c = $gridframe->Button(-text=>"1c", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_1c->cget(-text)}),
+         $cell_1d = $gridframe->Button(-text=>"1d", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_1d->cget(-text)}),
+         $cell_1e = $gridframe->Button(-text=>"1e", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_1e->cget(-text)}),
+         $cell_1f = $gridframe->Button(-text=>"1f", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_1f->cget(-text)}),
+         $cell_1g = $gridframe->Button(-text=>"1g", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_1g->cget(-text)}),
+         $cell_1h = $gridframe->Button(-text=>"1h", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_1h->cget(-text)}),
         );
 
     $gridframe->Button(-text=>"  ", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2')->grid
@@ -100,39 +100,6 @@ sub createGrid
          $gridframe->Button(-text=>"g", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
          $gridframe->Button(-text=>"h", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
         );
-    
-    #%buttonsToNames = reverse %namesToButtons;
-    #@buttonsList = ($cell_8a, $cell_8b,$cell_8c,$cell_8d,$cell_8e,$cell_8f,$cell_8g,$cell_8h);#,
-#    $cell_a, $cell_b,$cell_c,$cell_d,$cell_e,$cell_f,$cell_g,$cell_h,
-#    $cell_a, $cell_b,$cell_c,$cell_d,$cell_e,$cell_f,$cell_g,$cell_h,
-#    $cell_a, $cell_b,$cell_c,$cell_d,$cell_e,$cell_f,$cell_g,$cell_h,
-#    $cell_a, $cell_b,$cell_c,$cell_d,$cell_e,$cell_f,$cell_g,$cell_h,
-#    $cell_a, $cell_b,$cell_c,$cell_d,$cell_e,$cell_f,$cell_g,$cell_h,
-#    $cell_a, $cell_b,$cell_c,$cell_d,$cell_e,$cell_f,$cell_g,$cell_h,
-#    $cell_a, $cell_b,$cell_c,$cell_d,$cell_e,$cell_f,$cell_g,$cell_h);
-    #foreach (@buttonsList)
-    #{
-    #    $_->configure(-command=>sub{print $_->cget(-text)})
-    #}
-    #foreach $key (keys %namesToButtons)
-    #{
-        #print "key: " . $key . " value:" . $buttonsToNames[$key] . "\n";
-        #unshift(@buttonsList, $key);
-        #$key->configure(-command=>[\&whoami,$key]);
-    #}
-}
-
-sub configureGrid
-{
-    @buttonsList = ($cell_8a, $cell_8b,$cell_8c,$cell_8d,$cell_8e,$cell_8f,$cell_8g,$cell_8h);
-    foreach (@buttonsList)
-    {
-        print "cell: $_ \n";
-        $val = $_->cget(-text);
-        print "val $val \n";
-        $_->configure(-command=>sub{print $val});
-    }
-
 }
 
 %namesToButtons = (

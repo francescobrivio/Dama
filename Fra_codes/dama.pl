@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 
 ##### Packages #####
+use IPC::Open2;
+
 use Tk;
 use Tk::Dialog;
 use Tk::LabFrame;
@@ -13,9 +15,13 @@ require 'Routines.pl';
 ##### Variables #####
 $welcomeMessage = "Welcome";
 
+#my $pid = open2($Reader,$Writer, "../Davide_codes/dama.exe") or die "$!";
+
+my $input;
+my $input2;
 
 ##### Main #####
-my $mw = MainWindow->new;
+$mw = MainWindow->new;
 $mw->geometry("700x500");
 $mw->title ("Test Dama");
 
@@ -62,21 +68,13 @@ $gridframe->pack(-side=>"left", -fill=>"both", -expand=>1, -pady=>'0');
     $testext = $gridframe->Label(-text=>'Welcome');
     $testext->pack();
 
-
+    #$d1 = $mw->Dialog(-text=>"Begin Game", -popover=>$gridframe);
+        #$begingame = $d1->Button(-text=>"Begin", -command=>\&beginGame);
+        #$begingame->pack();
+        #$endgame = $d1->Button(-text=>"Quit", -command=>sub{die});
+        #$endgame->pack();
 
 ##### Loop #####
 $mw->MainLoop;
-
-##### Functions #####
-sub BEGIN
-{
-	print "Starting Game...\n";
-}
-
-sub quit
-{
-    print "Quitting Game...\n";
-    exit(0);
-}
 
 

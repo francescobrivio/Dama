@@ -51,7 +51,8 @@ int main()
       x = (int)(xStr - 'a' + 1);
 
       board.setStatus(x, y, val);
-         
+      std::cout << pos << std::endl;
+      
       //board.Print("");
       //board.PrintPositions("positions.txt");
       
