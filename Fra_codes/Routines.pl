@@ -1,11 +1,23 @@
 #!/usr/bin/perl
 
+##### Functions #####
+sub BEGIN
+{
+	print "Starting Game...\n";
+}
+
+sub quit
+{
+    print "Quitting Game...\n";
+    exit(0);
+}
+
 sub newGame
 {
-    print "Pop-up with new game choice ... \n";
+    use 5.010;
     $testext->destroy();
     createGrid();
-    configureGrid();
+    #$d1->Show;
 }
 
 sub printFunc
@@ -18,12 +30,6 @@ sub white_move
     $cell_8a->configure(-text=>"O",
                         -fg=>"white",
                         -font=>"{bold}");
-}
-
-sub whoami
-{
-    $cell = $_;
-    print $cell->cget(-text);
 }
 
 sub black_move
