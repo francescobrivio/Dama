@@ -12,17 +12,25 @@ sub quit
     exit(0);
 }
 
+sub clear
+{
+    $gf = shift;
+    my @w = $gf->packSlaves;
+    foreach (@w) { $_->packForget; }
+}
+
 sub newGame
 {
-    use 5.010;
-    $testext->destroy();
-    createGrid();
+    #$testext->destroy();
+    createGrid2();
+    #configureGrid();
     #$d1->Show;
 }
 
 sub printFunc
 {
-    print "$userEntry \n";
+    #print "$userEntry \n";
+    print "$input \n";
 }
 
 sub white_move

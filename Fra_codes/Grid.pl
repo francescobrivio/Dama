@@ -80,13 +80,13 @@ sub createGrid
         );
 
     $gridframe->Button(-text=>"1", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2')->grid
-        ($cell_1a = $gridframe->Button(-text=>"1a", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{$input += $cell_1a->cget(-text)}),
-         $cell_1b = $gridframe->Button(-text=>"1b", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{$input += $cell_1b->cget(-text)}),
-         $cell_1c = $gridframe->Button(-text=>"1c", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_1c->cget(-text)}),
-         $cell_1d = $gridframe->Button(-text=>"1d", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_1d->cget(-text)}),
-         $cell_1e = $gridframe->Button(-text=>"1e", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_1e->cget(-text)}),
-         $cell_1f = $gridframe->Button(-text=>"1f", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_1f->cget(-text)}),
-         $cell_1g = $gridframe->Button(-text=>"1g", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print $cell_1g->cget(-text)}),
+        ($cell_1a = $gridframe->Button(-text=>"1a", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{$input = $cell_1a->cget(-text)}),
+         $cell_1b = $gridframe->Button(-text=>"1b", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{$input = $cell_1b->cget(-text)}),
+         $cell_1c = $gridframe->Button(-text=>"1c", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print "input: $input \n"}),
+         $cell_1d = $gridframe->Button(-text=>"1d", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{$user_move->configure(-textvariable=>$user_move->cget(-textvariable).$cell_1d->cget(-text))}),
+         $cell_1e = $gridframe->Button(-text=>"1e", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2', -command=>sub{print "$cell_1e->cget(-text) - $user_move->cget(-textvariable)"; if ($cell_1e->cget(-text) eq $user_move->cget(-textvariable)) {$user_move->configure(-textvariable=>"");} else {$user_move->configure(-textvariable=>$user_move->cget(-textvariable).$cell_1e->cget(-text));} }),
+         $cell_1f = $gridframe->Button(-text=>"1f", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2' ),
+         $cell_1g = $gridframe->Button(-text=>"1g", -relief=>'flat', -fg=>'sienna', -bg=>'sienna',     -width=>'2', -height=>'2' ),
          $cell_1h = $gridframe->Button(-text=>"1h", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2', -command=>sub{print $cell_1h->cget(-text)}),
         );
 
@@ -100,10 +100,79 @@ sub createGrid
          $gridframe->Button(-text=>"g", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
          $gridframe->Button(-text=>"h", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
         );
+
+}
+
+
+
+sub stampami
+{
+    my $testo = shift;
+    if ($testo eq $user_move->cget(-textvariable))
+    {
+        $user_move->configure(-textvariable=>"");
+    }
+    else
+    {
+        $user_move->configure(-textvariable=>$user_move->cget(-textvariable).$testo);
+    }
+}
+
+
+sub createGrid2
+{
+    my @buttons;
+    my $counter;
+    foreach $num (1 .. 8)
+    {
+        my $counter = 0;
+        foreach $let ("a" .. "h")
+        {
+            my $position = $counter + (($num -1) * 8);
+            push @buttons, $gridframe->Button(-text=>"$num$let", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2',
+                                              -command=>sub{
+                                                                my $testo_move = $user_move->cget(-textvariable);
+                                                                my $testo_bott = $buttons[$position]->cget(-text);
+                                                                if ($testo_move =~ /$testo_bott/g)
+                                                                { my $pos = pos($testo_move);
+                                                                    $user_move->delete($pos-2,$pos);
+                                                                    }
+                                                                else
+                                                                { $user_move->configure(-textvariable=>$testo_move.$testo_bott); }
+                                                                print "move: ", $user_move->cget(-textvariable), "\n";
+                                                            }
+                                             );
+
+            $counter++;
+        }
+    }
+
+    foreach $num2 (reverse 1 .. 8)
+    {
+        my $index = ($num2-1)*8;
+        $gridframe->Button(-text=>"$num2", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2')->grid
+        (
+            $buttons[0+$index], $buttons[1+$index], $buttons[2+$index],
+            $buttons[3+$index], $buttons[4+$index], $buttons[5+$index],
+            $buttons[6+$index], $buttons[7+$index]
+        );
+    }
+    
+    $gridframe->Button(-text=>"  ", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2')->grid
+    ($gridframe->Button(-text=>"a", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
+     $gridframe->Button(-text=>"b", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
+     $gridframe->Button(-text=>"c", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
+     $gridframe->Button(-text=>"d", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
+     $gridframe->Button(-text=>"e", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
+     $gridframe->Button(-text=>"f", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
+     $gridframe->Button(-text=>"g", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
+     $gridframe->Button(-text=>"h", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
+    );
+    
 }
 
 %namesToButtons = (
-    '8a' => $cell_8a,
+    '8a' => \$cell_8a,
     '8b' => $cell_8b,
     '8c' => $cell_8c,
     '8d' => $cell_8d,
