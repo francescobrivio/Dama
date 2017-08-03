@@ -2,6 +2,9 @@
 #include "Pedina.cc"
 //#include "Dama.cc"
 //#include "Player.cc"
+#include <unistd.h>
+#include <thread>
+#include <chrono>
 
 int main()
 {
@@ -9,9 +12,17 @@ int main()
   //Player cpu1;
   //Player cpu2;
   
+  std::string team="";
+  std::cin >> team;
+  
   board.Initialize();
   //board.Print("");
+  
 
+  std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+  std::string vec_positions;
+  vec_positions = board.getPositions();
+  std::cout << vec_positions << std::endl;
   
   std::vector<Pedina*> Wpawn;
   std::vector<Pedina*> Bpawn;

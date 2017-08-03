@@ -22,6 +22,8 @@ class Board
   std::string getAlpha(int idx) const;
   void Print(const char* name = "");
   void PrintPositions(const char* name = "");
+  
+  std::string getPositions();
     
  private:
   Matrix _board;

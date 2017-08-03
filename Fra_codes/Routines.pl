@@ -8,7 +8,9 @@ sub BEGIN
 
 sub quit
 {
+    my $loc_pid = shift;
     print "Quitting Game...\n";
+    system("kill $loc_pid");
     exit(0);
 }
 
@@ -21,9 +23,8 @@ sub clear
 
 sub newGame
 {
-    #$testext->destroy();
+    $testext->destroy();
     createGrid2();
-    #configureGrid();
     #$d1->Show;
 }
 
@@ -33,12 +34,6 @@ sub printFunc
     print "$input \n";
 }
 
-sub white_move
-{
-    $cell_8a->configure(-text=>"O",
-                        -fg=>"white",
-                        -font=>"{bold}");
-}
 
 sub black_move
 {
@@ -46,6 +41,7 @@ sub black_move
                         -fg=>"black",
                         -font=>"{bold}");
 }
+
 
 1;
 

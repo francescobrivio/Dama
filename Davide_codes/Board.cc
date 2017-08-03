@@ -149,3 +149,26 @@ void Board::PrintPositions(const char* name)
 	  }
     }
 }
+
+
+std::string Board::getPositions()
+{
+    std::string output_vec;
+    char val=' ';
+    
+    for(int ny=1; ny<Nslot; ny++)
+        for(int nx=1; nx<Nslot; nx++)
+            {
+                val = this->getStatus(ny, nx);
+                if(val == ' ')
+                val = 'e';
+                output_vec += val;
+            }
+    output_vec += "\n";
+    
+    return output_vec;
+}
+
+
+
+

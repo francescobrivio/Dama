@@ -103,8 +103,6 @@ sub createGrid
 
 }
 
-
-
 sub stampami
 {
     my $testo = shift;
@@ -121,7 +119,6 @@ sub stampami
 
 sub createGrid2
 {
-    my @buttons;
     my $counter;
     foreach $num (1 .. 8)
     {
@@ -129,20 +126,30 @@ sub createGrid2
         foreach $let ("a" .. "h")
         {
             my $position = $counter + (($num -1) * 8);
-            push @buttons, $gridframe->Button(-text=>"$num$let", -relief=>'flat', -fg=>'moccasin', -bg=>'moccasin', -width=>'2', -height=>'2',
+            push @buttons, $gridframe->Button(-text=>"$num$let", -relief=>'flat', -width=>'2', -height=>'2', #-image=> $dama_bianca_scaled, 
                                               -command=>sub{
                                                                 my $testo_move = $user_move->cget(-textvariable);
                                                                 my $testo_bott = $buttons[$position]->cget(-text);
                                                                 if ($testo_move =~ /$testo_bott/g)
                                                                 { my $pos = pos($testo_move);
-                                                                    $user_move->delete($pos-2,$pos);
-                                                                    }
+                                                                  $user_move->delete($pos-2,$pos);
+                                                                }
                                                                 else
                                                                 { $user_move->configure(-textvariable=>$testo_move.$testo_bott); }
                                                                 print "move: ", $user_move->cget(-textvariable), "\n";
                                                             }
                                              );
 
+            if ($num % 2 == 0)
+            {
+                if ($counter % 2 == 0) {$buttons[$position]->configure( -fg=>'sienna'  , -bg=>'sienna')  ;}
+                else                   {$buttons[$position]->configure( -fg=>'moccasin', -bg=>'moccasin');}
+            }
+            else
+            {
+                if ($counter % 2 != 0) {$buttons[$position]->configure( -fg=>'sienna'  , -bg=>'sienna')  ;}
+                else                   {$buttons[$position]->configure( -fg=>'moccasin', -bg=>'moccasin');}
+            }
             $counter++;
         }
     }
@@ -169,6 +176,22 @@ sub createGrid2
      $gridframe->Button(-text=>"h", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
     );
     
+}
+
+sub loopOnButtons
+{
+    my @inner_fake_positions = @{$_[0]};
+    $k = 0;
+    foreach (@buttons)
+    {
+        print "loop: " . $inner_fake_positions[$k];
+        if      ($inner_fake_positions[$k] eq "w") {$_->configure(-image=> $dama_bianca_scaled);}
+        elsif   ($inner_fake_positions[$k] eq 'b') {$_->configure(-image=> $dama_nera_scaled);  }
+        else                                       {$_->configure(-image=> '', -height=>'2', -width=>'2'); }
+        $k++;
+    }
+    
+
 }
 
 %namesToButtons = (
