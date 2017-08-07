@@ -43,5 +43,19 @@ sub black_move
 }
 
 
+sub changeImage
+{
+    my($widget) = @_;
+    chomp(my $newPosition = <$READFROM_CPP>);
+    $widget->configure(-command=>sub{
+                                    print "prima: @newPositions \n";
+                                    @fake_positions = split//,$newPositions;
+                                    print "tasto: ".$newPositions."\n";
+                                    &loopOnButtons(\@fake_positions)
+                                    }
+                      );
+
+}
+
 1;
 

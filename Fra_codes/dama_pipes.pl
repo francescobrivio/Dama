@@ -6,9 +6,6 @@ use IPC::Open2;
 use IO::Handle;
 use IO::Pipe;
 
-package forks::shared;
-use forks::shared;
-
 use Tk;
 use Tk::Dialog;
 use Tk::LabFrame;
@@ -22,7 +19,16 @@ require 'Routines.pl';
 $welcomeMessage = "Welcome";
 my $input = '';
 @buttons;
-#@fake_positions ; #= (0,0,0,0,0,0,0,0, # 1a, 1b ....
+@fake_positions = qw/w w e w e e e B
+                     b e w e b e w W
+                     e w b e w e b w
+                     w e b e b W B e
+                     e w w w e e e B
+                     b e w e b e w W
+                     e w b e w e b w
+                     w e b e b W B e/;
+print "fake_positions: @fake_positions \n" ;
+                  #= (0,0,0,0,0,0,0,0, # 1a, 1b ....
                   # 1,1,1,1,1,1,1,2, # 2a, 2b ....
                   # 1,2,2,0,0,0,0,2,
                   # 0,2,0,0,1,2,0,2,
@@ -31,30 +37,27 @@ my $input = '';
                   # 2,1,1,2,0,2,1,1,
                   # 2,0,0,2,1,1,2,2); # ... 8h
 
-my $GLOBALPOSITIONS : shared;
-share ($GLOBALPOSITIONS);
-
 #### Main #####
 
 # Pipes
 pipe ($READFROM_TK , $WRITETO_CPP); # in CPP legge da TK, e da TK scrive a CPP
-#pipe ($READFROM_CPP, $WRITETO_TK ); # in TK legge da CPP, e da CPP scrive a TK
+pipe ($READFROM_CPP, $WRITETO_TK ); # in TK legge da CPP, e da CPP scrive a TK
 $WRITETO_CPP->autoflush(1);
-#$WRITETO_TK->autoflush(1);
+$WRITETO_TK->autoflush(1);
 
 # Forking;
 if (my $pid = fork)
 {
-    #close $READFROM_TK;
-    #close $WRITETO_TK;
+    close $READFROM_TK;
+    close $WRITETO_TK;
     &TKthread($pid);
     #close READFROM_CPP;
     #close WRITETO_CPP;
 }
 else
 {
-    #close $READFROM_CPP;
-    #close $WRITETO_CPP;
+    close $READFROM_CPP;
+    close $WRITETO_CPP;
     &CPPthread($pid);
     #close READFROM_TK;
     #close WRITETO_TK;
@@ -106,21 +109,20 @@ sub TKthread
     my $logframe = $mw->LabFrame(-label=>"Moves Log", -bd=>2, -relief=>'raised', -padx=>"10");
     $logframe->pack(-side=>"right", -fill=>"both");
 
-        my $test_move = $logframe->Button(-text=>"change image", -command=>sub{#chomp(my $newPosition = <$READFROM_CPP>);
-                                                                               print "prima: $GLOBALPOSITIONS \n";
-                                                                               @fake_positions = split//,GLOBALPOSITIONS;
-                                                                               print "tasto: @fake_positions\n";
-                                                                               &loopOnButtons(\@fake_positions)}); #[\&loopOnButtons,\@fake_positions]);
+        my $test_move = $logframe->Button(-text=>"change image" #,-command=>[\&loopOnButtons,\@fake_positions]);
+                                                                 , -command=>sub{chomp($newPosition = <$READFROM_CPP>);
+                                                                               print "prima: $newPositions \n";
+                                                                               @fake_positions = split//,$newPositions;
+                                                                               print "dopo: @newPositions \n";
+                                                                               &loopOnButtons(\@fake_positions)});
         $test_move->pack();
+        #$mw->fileevent($READFROM_CPP, 'readable', [\&changeImage,$test_move]);
 
-        my $test_move2 = $logframe->Button(-text=>"", -image=> $dama_nera_scaled, -command=>sub{print $WRITETO_CPP "black\n"});
-        $test_move2->pack();
+        #my $test_move2 = $logframe->Button(-text=>"", -image=> $dama_nera_scaled, -command=>sub{print $WRITETO_CPP "black\n;"});
+        #$test_move2->pack();
     
-        my $test_move3 = $logframe->Button(-text=>"", -image=> $dama_bianca_scaled, -command=>sub{print $WRITETO_CPP "white\n"});
-        $test_move3->pack();
-    
-        my $test_move4 = $logframe->Button(-text=>"write agin to cpp", -command=>sub{print $WRITETO_CPP "again\n"});
-        $test_move4->pack();
+        #my $test_move3 = $logframe->Button(-text=>"", -image=> $dama_bianca_scaled, -command=>sub{print $WRITETO_CPP "white\n;"});
+        #$test_move3->pack();
 
         my $log = $logframe->Label(-text=>'qui il log vero', -borderwidth=>3, -relief=>"sunken", -fg=>"white", -bg=>"black");
         $log->pack(-fill=>"x");
@@ -161,12 +163,9 @@ sub CPPthread
     print "Child PID: $$ \n";
     
     ####
-    chomp ($team = <$READFROM_TK>);
-    #$team = "black";
+    #chomp ($team = <$READFROM_TK>);
+    $team = "black";
     print "team: $team\n";
-    
-    chomp ($again = <$READFROM_TK>);
-    print "again: $again\n";
     
     my $Reader;
     my $Writer;
@@ -176,10 +175,11 @@ sub CPPthread
     print $Writer("$team\n");
     $str = <$Reader>;
     print "cppthread: $str \n";
-    $GLOBALPOSITIONS = $str;
-    print "cppGLOBAL: $GLOBALPOSITIONS\n";
+    #print "split: ",split(//,$str), "\n";
     #@fake_positions = split//,$str ;
-    #print $WRITETO_TK "str\n;";
+    #print "split: $str \n";
+    #join(' ', split(//,$str));
+    print $WRITETO_TK "prova";#\$str;
     
     ###### actions #####
     #my $question = <$Reader>;

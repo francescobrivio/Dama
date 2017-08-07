@@ -4,10 +4,7 @@
 
 use IPC::Open2;
 use IO::Handle;
-use IO::Pipe;
-
-package forks::shared;
-use forks::shared;
+use Socket;
 
 use Tk;
 use Tk::Dialog;
@@ -22,7 +19,7 @@ require 'Routines.pl';
 $welcomeMessage = "Welcome";
 my $input = '';
 @buttons;
-#@fake_positions ; #= (0,0,0,0,0,0,0,0, # 1a, 1b ....
+@fake_positions ; #= (0,0,0,0,0,0,0,0, # 1a, 1b ....
                   # 1,1,1,1,1,1,1,2, # 2a, 2b ....
                   # 1,2,2,0,0,0,0,2,
                   # 0,2,0,0,1,2,0,2,
@@ -31,33 +28,23 @@ my $input = '';
                   # 2,1,1,2,0,2,1,1,
                   # 2,0,0,2,1,1,2,2); # ... 8h
 
-my $GLOBALPOSITIONS : shared;
-share ($GLOBALPOSITIONS);
-
 #### Main #####
 
-# Pipes
-pipe ($READFROM_TK , $WRITETO_CPP); # in CPP legge da TK, e da TK scrive a CPP
-#pipe ($READFROM_CPP, $WRITETO_TK ); # in TK legge da CPP, e da CPP scrive a TK
-$WRITETO_CPP->autoflush(1);
-#$WRITETO_TK->autoflush(1);
+# Socket
+socketpair(CPP_socket, TK_socket, AF_UNIX, SOCK_STREAM, PF_UNSPEC) || die "socketpair: $!";
+CPP_socket->autoflush(1);
+TK_socket->autoflush(1);
 
 # Forking;
 if (my $pid = fork)
 {
-    #close $READFROM_TK;
-    #close $WRITETO_TK;
+    close TK_socket;
     &TKthread($pid);
-    #close READFROM_CPP;
-    #close WRITETO_CPP;
 }
 else
 {
-    #close $READFROM_CPP;
-    #close $WRITETO_CPP;
+    close CPP_socket;
     &CPPthread($pid);
-    #close READFROM_TK;
-    #close WRITETO_TK;
 }
 
 # TKthread
@@ -78,14 +65,6 @@ sub TKthread
     $dama_nera = $mw->Photo(-file=> "../Images/dama_nera.png");
     $dama_nera_scaled = $mw->Photo(-file=>"");
     $dama_nera_scaled->copy($dama_nera, -subsample=>2,2);
-    
-    $damone_bianco = $mw->Photo(-file=> "../Images/damone_bianco.png");
-    $damone_bianco_scaled = $mw->Photo(-file=>"");
-    $damone_bianco_scaled->copy($damone_bianco, -subsample=>2,2);
-
-    $damone_nero = $mw->Photo(-file=> "../Images/damone_nero.png");
-    $damone_nero_scaled = $mw->Photo(-file=>"");
-    $damone_nero_scaled->copy($damone_nero, -subsample=>2,2);
 
 
     # menuFrame
@@ -106,21 +85,18 @@ sub TKthread
     my $logframe = $mw->LabFrame(-label=>"Moves Log", -bd=>2, -relief=>'raised', -padx=>"10");
     $logframe->pack(-side=>"right", -fill=>"both");
 
-        my $test_move = $logframe->Button(-text=>"change image", -command=>sub{#chomp(my $newPosition = <$READFROM_CPP>);
-                                                                               print "prima: $GLOBALPOSITIONS \n";
-                                                                               @fake_positions = split//,GLOBALPOSITIONS;
-                                                                               print "tasto: @fake_positions\n";
+        my $test_move = $logframe->Button(-text=>"change image", -command=>sub{chomp(my $newPosition = <CPP_socket>);
+                                                                               print "prima: ".$newPositions."\n";
+                                                                               @fake_positions = split//,$newPositions;
+                                                                               print "tasto: ".$newPositions."\n";
                                                                                &loopOnButtons(\@fake_positions)}); #[\&loopOnButtons,\@fake_positions]);
         $test_move->pack();
 
-        my $test_move2 = $logframe->Button(-text=>"", -image=> $dama_nera_scaled, -command=>sub{print $WRITETO_CPP "black\n"});
+        my $test_move2 = $logframe->Button(-text=>"", -image=> $dama_nera_scaled, -command=>sub{print CPP_socket "black\n;"});
         $test_move2->pack();
     
-        my $test_move3 = $logframe->Button(-text=>"", -image=> $dama_bianca_scaled, -command=>sub{print $WRITETO_CPP "white\n"});
+        my $test_move3 = $logframe->Button(-text=>"", -image=> $dama_bianca_scaled, -command=>sub{print CPP_socket "white\n;"});
         $test_move3->pack();
-    
-        my $test_move4 = $logframe->Button(-text=>"write agin to cpp", -command=>sub{print $WRITETO_CPP "again\n"});
-        $test_move4->pack();
 
         my $log = $logframe->Label(-text=>'qui il log vero', -borderwidth=>3, -relief=>"sunken", -fg=>"white", -bg=>"black");
         $log->pack(-fill=>"x");
@@ -161,12 +137,9 @@ sub CPPthread
     print "Child PID: $$ \n";
     
     ####
-    chomp ($team = <$READFROM_TK>);
+    chomp ($team = <TK_socket>);
     #$team = "black";
     print "team: $team\n";
-    
-    chomp ($again = <$READFROM_TK>);
-    print "again: $again\n";
     
     my $Reader;
     my $Writer;
@@ -176,10 +149,8 @@ sub CPPthread
     print $Writer("$team\n");
     $str = <$Reader>;
     print "cppthread: $str \n";
-    $GLOBALPOSITIONS = $str;
-    print "cppGLOBAL: $GLOBALPOSITIONS\n";
     #@fake_positions = split//,$str ;
-    #print $WRITETO_TK "str\n;";
+    print TK_socket "$str\n;";
     
     ###### actions #####
     #my $question = <$Reader>;

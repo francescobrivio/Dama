@@ -157,7 +157,7 @@ sub createGrid2
     foreach $num2 (reverse 1 .. 8)
     {
         my $index = ($num2-1)*8;
-        $gridframe->Button(-text=>"$num2", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2')->grid
+        $gridframe->Button(-text=>"$num2", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2', -state=>'disabled', -disabledforeground=>'black')->grid
         (
             $buttons[0+$index], $buttons[1+$index], $buttons[2+$index],
             $buttons[3+$index], $buttons[4+$index], $buttons[5+$index],
@@ -165,15 +165,15 @@ sub createGrid2
         );
     }
     
-    $gridframe->Button(-text=>"  ", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2')->grid
-    ($gridframe->Button(-text=>"a", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
-     $gridframe->Button(-text=>"b", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
-     $gridframe->Button(-text=>"c", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
-     $gridframe->Button(-text=>"d", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
-     $gridframe->Button(-text=>"e", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
-     $gridframe->Button(-text=>"f", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
-     $gridframe->Button(-text=>"g", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
-     $gridframe->Button(-text=>"h", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2'),
+    $gridframe->Button(-text=>"  ", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2', -state=>'disabled', -disabledforeground=>'black')->grid
+    ($gridframe->Button(-text=>"a", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2', -state=>'disabled', -disabledforeground=>'black'),
+     $gridframe->Button(-text=>"b", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2', -state=>'disabled', -disabledforeground=>'black'),
+     $gridframe->Button(-text=>"c", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2', -state=>'disabled', -disabledforeground=>'black'),
+     $gridframe->Button(-text=>"d", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2', -state=>'disabled', -disabledforeground=>'black'),
+     $gridframe->Button(-text=>"e", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2', -state=>'disabled', -disabledforeground=>'black'),
+     $gridframe->Button(-text=>"f", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2', -state=>'disabled', -disabledforeground=>'black'),
+     $gridframe->Button(-text=>"g", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2', -state=>'disabled', -disabledforeground=>'black'),
+     $gridframe->Button(-text=>"h", -relief=>'flat', -bg=>'white', -width=>'2', -height=>'2', -state=>'disabled', -disabledforeground=>'black'),
     );
     
 }
@@ -181,18 +181,20 @@ sub createGrid2
 sub loopOnButtons
 {
     my @inner_fake_positions = @{$_[0]};
+    print "loop: @inner_fake_positions \n";
     $k = 0;
     foreach (@buttons)
     {
-        print "loop: " . $inner_fake_positions[$k];
-        if      ($inner_fake_positions[$k] eq "w") {$_->configure(-image=> $dama_bianca_scaled);}
-        elsif   ($inner_fake_positions[$k] eq 'b') {$_->configure(-image=> $dama_nera_scaled);  }
+        #print "loop: " . $inner_fake_positions[$k];
+        if      ($inner_fake_positions[$k] eq "w") {$_->configure(-image=> $dama_bianca_scaled)  ;}
+        elsif   ($inner_fake_positions[$k] eq 'b') {$_->configure(-image=> $dama_nera_scaled)    ;}
+        elsif   ($inner_fake_positions[$k] eq 'W') {$_->configure(-image=> $damone_bianco_scaled);}
+        elsif   ($inner_fake_positions[$k] eq 'B') {$_->configure(-image=> $damone_nero_scaled)  ;}
         else                                       {$_->configure(-image=> '', -height=>'2', -width=>'2'); }
         $k++;
     }
-    
-
 }
+
 
 %namesToButtons = (
     '8a' => \$cell_8a,
