@@ -154,7 +154,7 @@ sub CPPthread
     my $move = "";
     
     print "INIZIO LOOP";
-    while($endgame == 0)
+    while($endgame == 0)   # anche $endgame deve essere ritornato da exe dopo ogni mossa, controllando ad ogni mossa che la partita sia ancora in ballo
     {
 	chomp ($move = <READFROM_TK>);
 	print $move." arrivata a c++\n";
@@ -162,20 +162,9 @@ sub CPPthread
 	$new_positions = <$Reader>;
 	print "cazzo le position loop:  $new_positions \n";
 	print WRITETO_TK $new_positions."\n";
-    }	
-	###### actions #####
-    #my $question = <$Reader>;
-    #print $question;
-    #my $question2 = <$Reader>;
-    #print $question2;
-
-    #print $Writer($input);
-
-    #my $pos = <$Reader>;
-    #print "Position: $position \n";
-
-    #my $great = <$Reader>;
-    #print $great;
+    # updateGrid -> forse qui nel loop ci va una funzione che looppa sui bottoni e aggiorna le nuove posizioni, o probabilmente la funzione va messa in tk,
+    # ma non mi piace avere un bottone che dice "change image", perchè il programma dovrebbe cambiarla da solo l'immagine
+    }
     
     close(Writer);
     close(Reader);
