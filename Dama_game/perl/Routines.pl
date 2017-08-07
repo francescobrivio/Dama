@@ -34,11 +34,15 @@ sub printFunc
 }
 
 
-sub black_move
+sub beginGame
 {
-    $cell_8b->configure(-text=>"O",
-                        -fg=>"black",
-                        -font=>"{bold}");
+    $inner_team = shift;
+    print WRITETO_C $inner_team;
+    $d1->destroy();
+    
+    chomp ($newPositions = <READFROM_C>);
+    @positions = split//,$newPositions;
+    &loopOnButtons(\@positions);
 }
 
 

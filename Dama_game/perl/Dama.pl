@@ -87,10 +87,10 @@ sub TKthread
     my $logframe = $mw->LabFrame(-label=>"Moves Log", -bd=>2, -relief=>'raised', -padx=>"10");
     $logframe->pack(-side=>"right", -fill=>"both");
 
-        my $test_move = $logframe->Button(-text=>"change image", -command=>sub{chomp ($newPositions = <READFROM_C>);
-                                                                               @positions = split//,$newPositions;
-                                                                               &loopOnButtons(\@positions)});
-        $test_move->pack();
+        #my $test_move = $logframe->Button(-text=>"change image", -command=>sub{chomp ($newPositions = <READFROM_C>);
+        #                                                                       @positions = split//,$newPositions;
+        #                                                                       &loopOnButtons(\@positions)});
+        #$test_move->pack();
 
         #my $test_move2 = $logframe->Button(-text=>"", -image=> $dama_nera_scaled, -command=>sub{print WRITETO_C "black\n"});
         #$test_move2->pack();
@@ -98,8 +98,8 @@ sub TKthread
         #my $test_move3 = $logframe->Button(-text=>"", -image=> $dama_bianca_scaled, -command=>sub{print WRITETO_C "white\n"});
         #$test_move3->pack();
 
-        my $log = $logframe->Label(-text=>'qui il log vero', -borderwidth=>3, -relief=>"sunken", -fg=>"white", -bg=>"black");
-        $log->pack(-fill=>"x");
+        #my $log = $logframe->Label(-text=>'qui il log vero', -borderwidth=>3, -relief=>"sunken", -fg=>"white", -bg=>"black");
+        #$log->pack(-fill=>"x");
 
         $user_move = $logframe->Entry();
         $user_move->pack(-side=>"left");
@@ -117,15 +117,10 @@ sub TKthread
 
     
         $d1 = $mw->Dialog(-title=>"",-text=>"Scegli il colore della tua squadra!", -popover=>$gridframe, -buttons=>[]);
-        my $black_team = $d1->Radiobutton(-text=>'black', -value=>'black', -variable=>\$team, -image=> $dama_nera_scaled  , -command=>sub{print WRITETO_C "black\n";$d1->destroy()});
+        my $black_team = $d1->Radiobutton(-text=>'black', -value=>'black', -variable=>\$team, -image=> $dama_nera_scaled  , -command=>[\&beginGame,"black\n"]);
         $black_team->pack();
-        my $white_team = $d1->Radiobutton(-text=>'white', -value=>'white', -variable=>\$team, -image=> $dama_bianca_scaled, -command=>sub{print WRITETO_C "white\n";$d1->destroy()});
+        my $white_team = $d1->Radiobutton(-text=>'white', -value=>'white', -variable=>\$team, -image=> $dama_bianca_scaled, -command=>[\&beginGame,"white\n"]);
         $white_team->pack();
-    
-            #my $begingame = $d1->Button(-text=>"Begin", -command=>\&beginGame);
-            #$begingame->pack();
-            #my $endgame = $d1->Button(-text=>"Quit", -command=>[\&clear, $gridframe]);    # <- qui user sub{....}
-            #$endgame->pack();
 
     ##### Loop #####
     $mw->MainLoop;
@@ -148,7 +143,7 @@ sub CPPthread
     my $Reader;
     my $Writer;
     my $pid2 = open2($Reader,$Writer, "../cpp/dama.exe");
-    print "Open PID Dama: $pid2 \n";
+    #print "Open PID Dama: $pid2 \n";
     
     print $Writer("$team\n");
     my $new_positions = <$Reader>;
