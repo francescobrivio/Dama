@@ -140,11 +140,15 @@ sub CPPthread
     chomp ($team = <READFROM_TK>);
     print "team: $team\n";
     
+    #declare the IPC::Open2 connection to dama.exe
     my $Reader;
     my $Writer;
     my $pid2 = open2($Reader,$Writer, "../cpp/dama.exe");
+    $Writer->autoflush(1);
+    $Reader->autoflush(1);
     #print "Open PID Dama: $pid2 \n";
     
+    # starting positions
     print $Writer("$team\n");
     my $new_positions = <$Reader>;
     print "cazzo le position:  $new_positions \n"; 
@@ -154,20 +158,24 @@ sub CPPthread
     my $move = "";
     
     print "INIZIO LOOP";
-    while($endgame == 0)   # anche $endgame deve essere ritornato da exe dopo ogni mossa, controllando ad ogni mossa che la partita sia ancora in ballo
+    while($endgame == 0)
     {
-	chomp ($move = <READFROM_TK>);
-	print $move." arrivata a c++\n";
-	print $Writer("$move\n");
-	$new_positions = <$Reader>;
-	print "cazzo le position loop:  $new_positions \n";
-	print WRITETO_TK $new_positions."\n";
-    # updateGrid -> forse qui nel loop ci va una funzione che looppa sui bottoni e aggiorna le nuove posizioni, o probabilmente la funzione va messa in tk,
-    # ma non mi piace avere un bottone che dice "change image", perchè il programma dovrebbe cambiarla da solo l'immagine
+        chomp ($move = <READFROM_TK>);
+        print $move." arrivata a c++\n";
+        print $Writer("$move\n");
+        chomp ($new_positions = <$Reader>);
+        print "cazzo le position loop:  $new_positions \n";
+        print WRITETO_TK $new_positions."\n";      # updateGrid -> forse qui nel loop ci va una funzione che looppa sui bottoni e aggiorna le nuove posizioni,
+                                                   #o probabilmente la funzione va messa in tk,
+                                                   # ma non mi piace avere un bottone che dice "change image", perchè il programma dovrebbe cambiarla da solo l'immagine
+        
+        $endgame = <$Reader>;
+        print "endgame: $endgame\n";
+        
     }
     
-    close(Writer);
-    close(Reader);
+    close($Writer);
+    close($Reader);
     
     exit(0);
 

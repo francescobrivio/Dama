@@ -29,6 +29,8 @@ butto qui un po’ di idee:
 		2) l’altro contiene i bottoni enterMove e clearMove con il riquadro dove appare la mossa
 
 
+- ho visto che c’è un problema, quando si schiaccia “quit” tk si chiude ma il programma non finisce
+
 ovviamente queste sono solo un po’ di idee a caso. 
 Forse domani riesco a lavorarci un po’, ma poi fino al 25 non farò nulla!
 ...però non fare tutto tu se no io non mi diverto! ;)

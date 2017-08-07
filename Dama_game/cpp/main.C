@@ -3,8 +3,8 @@
 //#include "Dama.cc"
 //#include "Player.cc"
 #include <unistd.h>
-#include <thread>
-#include <chrono>
+//#include <thread>
+//#include <chrono>
 
 int main()
 {
@@ -19,7 +19,7 @@ int main()
   //board.Print("");
   
 
-  std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+  //std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // serve ancora?? mi sa di no..
   std::string vec_positions;
   vec_positions = board.getPositions();
   std::cout << vec_positions << std::endl;
@@ -42,8 +42,9 @@ int main()
 
   while(!endGame)
     {
-      std::cout << "Quale pedina vuoi muovere?  (Es: A3)" << std::endl;
-      std::cout << "Dove la vuoi muovere? " << std::endl;
+      //std::cout << "Quale pedina vuoi muovere?  (Es: A3)" << std::endl;
+      //std::cout << "Dove la vuoi muovere? " << std::endl;
+      
       std::cin >> pos;
 
       xStr = tolower(pos[0]);
@@ -67,10 +68,16 @@ int main()
       //board.Print("");
       //board.PrintPositions("positions.txt");
       
-      std::cout << "GREAT!!!!" << std::endl;
+      std::string new_positions;
+      new_positions = board.getPositions();
+      std::cout << new_positions << std::endl;
 
       if(Wpawn.size() == 0 || Bpawn.size() == 0)
-	endGame = true;
+	    endGame = true;
+      else
+        endGame = false;
+    
+      std::cout << endGame << std::endl;
     }
 
   return 0;
