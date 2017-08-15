@@ -10,17 +10,19 @@ use Tk;
 use Tk::Dialog;
 use Tk::LabFrame;
 use Tk::PNG;
+use utf8;
 
 require 'Grid.pl';
 require 'Routines.pl';
 
 
 ##### Global Variables #####
-$welcomeMessage = "Welcome";
+#my $welcomeMessage = "Welcome";
 my $input = '';
 @buttons;
 @positions ;
 $team;
+$CPU;
 
 #### Main #####
 
@@ -48,11 +50,12 @@ else
 sub TKthread
 {
     my $pid = shift;
+    chomp($pid_cpp = <READFROM_C>);
     #print "Father PID: $$ - Child PID: $pid \n";
     
     # MainWindow
     my $mw = MainWindow->new;
-    $mw->geometry("800x500");
+    $mw->geometry("800x800");
     $mw->title ("Test Dama");
 
     $dama_bianca = $mw->Photo(-file=> "../Images/dama_bianca.png");
@@ -71,16 +74,20 @@ sub TKthread
     $damone_nero_scaled = $mw->Photo(-file=>"");
     $damone_nero_scaled->copy($damone_nero, -subsample=>2,2);
 
+    $dama_empty = $mw->Photo(-file=> "../Images/dama_empty.png");
+    $dama_empty_scaled = $mw->Photo(-file=>"");
+    $dama_empty_scaled->copy($dama_empty, -subsample=>2,2);
+
     # menuFrame
     my $menuframe = $mw->Frame(-background=>"aquamarine4", -bd=>2, -relief=>'raised');
     $menuframe->pack(-side=>"top", -fill=>"x");
 
         my $filemenu = $menuframe->Menubutton(-text=>'File', -activebackground=>"aquamarine", -foreground=>"black");
         $filemenu->command(-label=>"New Game", -command=>\&newGame);
-        $filemenu->command( -label=>"Quit", -command=>[\&quit,$pid]);
+        $filemenu->command( -label=>"Quit", -command=>[\&quit,$pid,$pid_cpp]);
         $filemenu->pack(-side=>"left", -fill=>"x");
 
-        my $quitmenu = $menuframe->Button( -text=>"Quit", -command=>[\&quit,$pid])->pack;
+        my $quitmenu = $menuframe->Button( -text=>"Quit", -command=>[\&quit,$$,$pid,$pid_cpp])->pack;
         $quitmenu->pack(-side=>"right");
 
     # logFrame
@@ -105,7 +112,31 @@ sub TKthread
         $user_move->pack(-side=>"left");
 
         my $printing = $logframe->Button(-text=>"Enter Move", -command=>sub{print WRITETO_C $user_move->cget(-textvariable)."\n";
-									    print $user_move->cget(-textvariable)." passato a c++\n"});
+									    print $user_move->cget(-textvariable)." passato a c++\n";
+									    chomp($newPositions = <READFROM_C>);
+									    @positions = split//, $newPositions;            
+									    #print "cazzo!!!!!!!   ".$newPositions;
+									    &loopOnButtons(\@positions);   
+									    chomp($endGame = <READFROM_C>);
+									    #print "letto endgame!!";
+									    $user_move->delete(0,30);
+									    if($endGame == 1) {
+										print "END GAME\n";
+									    }
+									    #print WRITETO_C "auto\n";
+									    #});
+									    if($CPU==1) {
+										$mw->update;
+										sleep(2);
+										print WRITETO_C "auto\n";
+										print "auto passato a c++\n";
+										chomp($newPositions = <READFROM_C>);
+										@positions = split//,$newPositions;
+										&loopOnButtons(\@positions);
+										chomp($endGame = <READFROM_C>);
+										if($endGame == 1) {
+										    print "END GAME\n";
+										}}});
         $printing->pack(-side=>"right");
     
         my $clearing = $logframe->Button(-text=>"Clear Move", -command=>sub{$user_move->delete(0,30);} );
@@ -114,8 +145,13 @@ sub TKthread
     # gridFrame
     $gridframe = $mw->LabFrame(-label=>"Dama", -bd=>2, -relief=>'raised');
     $gridframe->pack(-side=>"left", -fill=>"both", -expand=>1, -pady=>'0');
-
     
+        $d0 = $mw->Dialog(-title=>"",-text=>"Scegli la modalità di gioco!", -popover=>$gridframe, -buttons=>[]);
+        my $PvsP = $d0->Radiobutton(-text=>'Player vs Player', -value=>0, -variable=>\$CPU, -command=>[\&gameMode, 0]);
+        $PvsP->pack();
+        my $PvsC = $d0->Radiobutton(-text=>'Player vs CPU', -value=>1, -variable=>\$CPU, -command=>[\&gameMode, 1]);
+        $PvsC->pack();
+
         $d1 = $mw->Dialog(-title=>"",-text=>"Scegli il colore della tua squadra!", -popover=>$gridframe, -buttons=>[]);
         my $black_team = $d1->Radiobutton(-text=>'black', -value=>'black', -variable=>\$team, -image=> $dama_nera_scaled  , -command=>[\&beginGame,"black\n"]);
         $black_team->pack();
@@ -137,22 +173,28 @@ sub CPPthread
     
     ####
     #print "Scegli il colore della tua squadra!";
-    chomp ($team = <READFROM_TK>);
-    print "team: $team\n";
+    #chomp ($team = <READFROM_TK>);
+    #print "team: $team\n";
     
     #declare the IPC::Open2 connection to dama.exe
     my $Reader;
     my $Writer;
     my $pid2 = open2($Reader,$Writer, "../cpp/dama.exe");
+    print WRITETO_TK $pid2."\n";
+
     $Writer->autoflush(1);
     $Reader->autoflush(1);
     #print "Open PID Dama: $pid2 \n";
-    
+
+    #print "Scegli il colore della tua squadra!"; 
+    chomp ($team = <READFROM_TK>);
+    print "team: $team\n";
+
     # starting positions
     print $Writer("$team\n");
     my $new_positions = <$Reader>;
-    print "cazzo le position:  $new_positions \n"; 
-    print WRITETO_TK $new_positions."\n";
+    #print "cazzo le position:  $new_positions \n"; 
+    print WRITETO_TK $new_positions;#."\n";
 
     my $endgame = 0;
     my $move = "";
@@ -163,15 +205,16 @@ sub CPPthread
         chomp ($move = <READFROM_TK>);
         print $move." arrivata a c++\n";
         print $Writer("$move\n");
-        chomp ($new_positions = <$Reader>);
-        print "cazzo le position loop:  $new_positions \n";
-        print WRITETO_TK $new_positions."\n";      # updateGrid -> forse qui nel loop ci va una funzione che looppa sui bottoni e aggiorna le nuove posizioni,
+        $new_positions = <$Reader>;
+        #print "cazzo le position loop:  $new_positions \n";
+        print WRITETO_TK $new_positions;#."\n";      # updateGrid -> forse qui nel loop ci va una funzione che looppa sui bottoni e aggiorna le nuove posizioni,
                                                    #o probabilmente la funzione va messa in tk,
-                                                   # ma non mi piace avere un bottone che dice "change image", perchè il programma dovrebbe cambiarla da solo l'immagine
-        
+	                                           # ma non mi piace avere un bottone che dice "change image", 
+	                                           # perchè il programma dovrebbe cambiarla da solo l'immagine
         $endgame = <$Reader>;
         print "endgame: $endgame\n";
-        
+	print WRITETO_TK $endGame."\n";
+	#chomp ($turn = <READFROM_TK>);
     }
     
     close($Writer);

@@ -36,10 +36,23 @@ Board::~Board()
 {
 }
 
-void Board::Initialize()
+void Board::Initialize(std::string team)
 {
   char buffer[10];
   int tmp = 0;
+  std::string str1 = "", str2 = "";
+
+  if(team == "black")
+    {
+      str1 = "b";
+      str2 = "w";
+    }
+  else if(team == "white")
+    {
+      str1 = "w";
+      str2 = "b";
+    }
+
   for(int n=1; n<Nslot; n++)
     {
       tmp = sprintf (buffer, "%d", n);
@@ -47,13 +60,14 @@ void Board::Initialize()
       this->setStatus(n, 0, this->getAlpha(n));
     }
 
-  for(int nx=Nslot-1; nx>0; nx--) // colonne     
-    for(int ny=1; ny<Nslot; ny++) // righe     
+  for(int ny=Nslot-1; ny>0; ny--) // colonne     
+    for(int nx=1; nx<Nslot; nx++) // righe     
       {
+	
         if(ny<4 && (ny+nx)%2==0)
-          this->setStatus(nx, ny, "w");
+          this->setStatus(nx, ny, str1);
         else if(ny>5 && (nx+ny)%2==0)
-          this->setStatus(nx, ny, "b");
+          this->setStatus(nx, ny, str2);
 	else
 	  this->setStatus(nx, ny, " ");
       }
@@ -114,9 +128,9 @@ void Board::Print(const char* name)
   else
     std::cout << "************************" << std::endl << std::endl;
 
-  for(int ny=Nslot-1; ny>=0; ny--) // colonne   
+  for(int ny=Nslot-1; ny>=0; ny--)    
     {
-      for(int nx=0; nx<Nslot; nx++) // righe   
+      for(int nx=0; nx<Nslot; nx++) 
 	if(name != "")
 	  output << this->getStatus(nx, ny) << "  ";
 	else
@@ -159,7 +173,7 @@ std::string Board::getPositions()
     for(int ny=1; ny<Nslot; ny++)
         for(int nx=1; nx<Nslot; nx++)
             {
-                val = this->getStatus(ny, nx);
+                val = this->getStatus(nx, ny);
                 if(val == ' ')
                 val = 'e';
                 output_vec += val;

@@ -2,9 +2,9 @@
 #include "Pedina.cc"
 //#include "Dama.cc"
 //#include "Player.cc"
-#include <unistd.h>
-#include <thread>
-#include <chrono>
+//#include <unistd.h>
+//#include <thread>
+//#include <chrono>
 
 int main()
 {
@@ -15,15 +15,18 @@ int main()
   std::string team="";
   std::cin >> team;
   
-  board.Initialize();
+  board.Initialize(team);
   //board.Print("");
   
 
-  std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+  //std::this_thread::sleep_for(std::chrono::milliseconds(1000));
   std::string vec_positions;
   vec_positions = board.getPositions();
-  std::cout << vec_positions << std::endl;
-  
+  if(team != "")
+    std::cout << vec_positions << std::endl;
+  else
+    std::cout << "ERROR: Positions not found!" << std::endl;
+
   std::vector<Pedina*> Wpawn;
   std::vector<Pedina*> Bpawn;
   for(int i=0; i<Npawn; i++)
@@ -62,12 +65,22 @@ int main()
       x = (int)(xStr - 'a' + 1);
 
       board.setStatus(x, y, val);
-      std::cout << pos << std::endl;
+      //std::cout << pos << std::endl;
       
+      if(pos != "")
+	{
+	  vec_positions = board.getPositions();
+	  std::cout << vec_positions << std::endl;
+	}
+      else
+	std::cout << "ERROR: Move not allowed!" << std::endl;
+
+      //board.Print("");
+
       //board.Print("");
       //board.PrintPositions("positions.txt");
       
-      std::cout << "GREAT!!!!" << std::endl;
+      //std::cout << "GREAT!!!!" << std::endl;
 
       if(Wpawn.size() == 0 || Bpawn.size() == 0)
 	endGame = true;

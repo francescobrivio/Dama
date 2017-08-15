@@ -12,7 +12,7 @@ class Board
   
   Board& operator=(const Board& origin);
 
-  void Initialize();
+  void Initialize(std::string team = "white");
   void setNmoves(int origin);
   int getNmoves() const;
   void setBoard(Matrix origin);

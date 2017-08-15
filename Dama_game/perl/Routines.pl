@@ -8,9 +8,13 @@ sub BEGIN
 
 sub quit
 {
-    my $loc_pid = shift;
+    my $tk_pid = shift;
+    my $cpp_pid = shift;
+    my $exe_pid = shift;
     #print "Quitting Game...\n";
-    system("kill $loc_pid");
+    system("kill $exe_pid");
+    system("kill $cpp_pid");
+    system("kill $tk_pid");
     exit(0);
 }
 
@@ -24,7 +28,7 @@ sub clear
 sub newGame
 {
     createGrid2();
-    $d1->Show;
+    $d0->Show;
 }
 
 sub printFunc
@@ -36,7 +40,7 @@ sub printFunc
 
 sub beginGame
 {
-    $inner_team = shift;
+    my $inner_team = shift;
     print WRITETO_C $inner_team;
     $d1->destroy();
     
@@ -45,6 +49,20 @@ sub beginGame
     &loopOnButtons(\@positions);
 }
 
+sub gameMode
+{
+    my $cpu = shift;
+    if($cpu == 0) {
+	print "Mode: Player vs Player! \n"; }
+    elsif($cpu == 1) {
+	print "Mode: Player vs CPU! \n"; }
+    else {
+	print "Undefined mode! \n"; }
+
+    $d0->destroy();
+    $d1->Show;
+    
+}
 
 1;
 
