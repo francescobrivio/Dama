@@ -20,6 +20,7 @@ class Board
   void setStatus(int nx, int ny, std::string value);
   char getStatus(int nx, int ny) const;
   std::string getAlpha(int idx) const;
+  void autoMove(const char val);
   void Print(const char* name = "");
   void PrintPositions(const char* name = "");
   

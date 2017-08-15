@@ -122,6 +122,37 @@ std::string Board::getAlpha(int idx) const
   return temp;
 }
 
+void Board::autoMove(const char team)
+{
+  int tmp = 0;
+  std::string val = "";
+  bool flag = false;
+  srand (time(NULL));
+
+  for(int ny=Nslot-1; ny>=0; ny--) // colonne      
+    {
+      if(flag)
+	break;
+      
+      for(int nx=0; nx<Nslot; nx++) // righe            
+	{
+	  if(this->getStatus(nx, ny) != team)
+	    continue;
+
+	  tmp = rand() % 100 + 1;
+	  
+	  if(tmp < 81)
+	    continue;
+	  
+	  val = this->getStatus(nx, ny);
+	  this->setStatus(nx, ny-1, val);
+	  this->setStatus(nx, ny, " ");	  
+	  
+	  flag = true;
+	  break;
+	}
+    }
+}
 void Board::Print(const char* name)
 {
   std::ofstream output(name);

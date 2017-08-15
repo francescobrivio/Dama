@@ -45,26 +45,27 @@ int main()
       std::cin >> pos;
       
       if(pos == "auto")
-	pos = board.autoMove();
-      
-      yStr = tolower(pos[0]);
-      xStr = tolower(pos[1]);
-      
-      y = (int)(yStr - '0');
-      x = (int)(xStr - 'a' + 1);
-      
-      val = board.getStatus(x, y);
-      board.setStatus(x, y, " ");
-      
-      yStr = tolower(pos[2]);
-      xStr = tolower(pos[3]);
+	board.autoMove('b');
+      else
+	{
+	  yStr = tolower(pos[0]);
+	  xStr = tolower(pos[1]);
 	  
-      y = (int)(yStr - '0');
-      x = (int)(xStr - 'a' + 1);
+	  y = (int)(yStr - '0');
+	  x = (int)(xStr - 'a' + 1);
+	  
+	  val = board.getStatus(x, y);
+	  board.setStatus(x, y, " ");
       
-      board.setStatus(x, y, val);
-      //std::cout << pos << std::endl;
-   
+	  yStr = tolower(pos[2]);
+	  xStr = tolower(pos[3]);
+	  
+	  y = (int)(yStr - '0');
+	  x = (int)(xStr - 'a' + 1);
+      
+	  board.setStatus(x, y, val);
+	  //std::cout << pos << std::endl;
+	}
       //board.Print("");
       //board.PrintPositions("positions.txt");
       

@@ -206,11 +206,11 @@ sub CPPthread
         print $move." arrivata a c++\n";
         print $Writer("$move\n");
         $new_positions = <$Reader>;
-        #print "cazzo le position loop:  $new_positions \n";
+        print "cazzo le position loop:  $new_positions \n";
         print WRITETO_TK $new_positions;#."\n";      # updateGrid -> forse qui nel loop ci va una funzione che looppa sui bottoni e aggiorna le nuove posizioni,
-                                                   #o probabilmente la funzione va messa in tk,
-	                                           # ma non mi piace avere un bottone che dice "change image", 
-	                                           # perchè il programma dovrebbe cambiarla da solo l'immagine
+	                                             # o probabilmente la funzione va messa in tk,
+	                                             # ma non mi piace avere un bottone che dice "change image", 
+	                                             # perchè il programma dovrebbe cambiarla da solo l'immagine
         $endgame = <$Reader>;
         print "endgame: $endgame\n";
 	print WRITETO_TK $endGame."\n";
