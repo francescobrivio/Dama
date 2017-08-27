@@ -55,7 +55,7 @@ sub TKthread
     
     # MainWindow
     my $mw = MainWindow->new;
-    $mw->geometry("800x800");
+    $mw->geometry("800x500");
     $mw->title ("Test Dama");
 
     $dama_bianca = $mw->Photo(-file=> "../Images/dama_bianca.png");
@@ -202,18 +202,19 @@ sub CPPthread
     print "INIZIO LOOP";
     while($endgame == 0)
     {
-        chomp ($move = <READFROM_TK>);
+        chomp ($move = <READFROM_TK>);          # leggo mossa da tk
         print $move." arrivata a c++\n";
-        print $Writer("$move\n");
-        $new_positions = <$Reader>;
+        print $Writer("$move\n");               # passo mossa a exe
+        $new_positions = <$Reader>;             # leggo nuove posizioni da exe
+        #$_ = $new_positions;
+        #/-\s+(\w+)/;
         print "cazzo le position loop:  $new_positions \n";
-        print WRITETO_TK $new_positions;#."\n";      # updateGrid -> forse qui nel loop ci va una funzione che looppa sui bottoni e aggiorna le nuove posizioni,
-	                                             # o probabilmente la funzione va messa in tk,
-	                                             # ma non mi piace avere un bottone che dice "change image", 
-	                                             # perchè il programma dovrebbe cambiarla da solo l'immagine
-        $endgame = <$Reader>;
+        #print "cazzo le position loop:  $1 \n";
+        print WRITETO_TK $new_positions;        # passo le nuove posizioni a tk
+        #print WRITETO_TK $1;        # passo le nuove posizioni a tk
+        $endgame = <$Reader>;                   # leggo endgame da exe
         print "endgame: $endgame\n";
-	print WRITETO_TK $endGame."\n";
+	print WRITETO_TK $endGame."\n";             # passo endgame a tk
 	#chomp ($turn = <READFROM_TK>);
     }
     

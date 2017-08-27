@@ -5,6 +5,13 @@
 //#include <thread>
 //#include <chrono>
 
+int good_move( int old_x, int old_y, int new_x, int new_y, Board board)
+{
+    if      (old_x == new_x || old_y == new_y)      return 0; // only diagonal moves
+ // else if (board.getStatus(old_x, old_y) != *"")  return 0; // move ony if the new cell is free
+    else                                            return 1;
+}
+
 int main()
 {
   Board board;
@@ -30,9 +37,10 @@ int main()
       Bpawn.push_back(temp);
     }
   
-  int x = 0, y = 0;
-  char xStr = ' ', yStr =  ' ';
+  int old_x = 0, old_y = 0, new_x = 0, new_y = 0;
+  char old_xStr = ' ', old_yStr =  ' ', new_xStr = ' ', new_yStr = ' ';
   int endGame = 0;
+  int move_validity = 0;
 
   std::string val = "";
   std::string pos = "";
@@ -45,33 +53,47 @@ int main()
       std::cin >> pos;
       
       if(pos == "auto")
-	board.autoMove('b');
+        board.autoMove('b');
       else
-	{
-	  yStr = tolower(pos[0]);
-	  xStr = tolower(pos[1]);
+        {
+	      old_yStr = tolower(pos[0]);
+	      old_xStr = tolower(pos[1]);
 	  
-	  y = (int)(yStr - '0');
-	  x = (int)(xStr - 'a' + 1);
-	  
-	  val = board.getStatus(x, y);
-	  board.setStatus(x, y, " ");
+	      old_y = (int)(old_yStr - '0');
+	      old_x = (int)(old_xStr - 'a' + 1);
       
-	  yStr = tolower(pos[2]);
-	  xStr = tolower(pos[3]);
+	      new_yStr = tolower(pos[2]);
+	      new_xStr = tolower(pos[3]);
 	  
-	  y = (int)(yStr - '0');
-	  x = (int)(xStr - 'a' + 1);
+	      new_y = (int)(new_yStr - '0');
+	      new_x = (int)(new_xStr - 'a' + 1);
+          
+          move_validity = good_move( old_x, old_y, new_x, new_y, board);
+          if (move_validity != 1)
+          {
+            //std::string old_positions;
+            //old_positions = board.getPositions();
+            //std::cout << old_positions;
+            std::cout << board.getPositions();
+          }
+          else
+          {
+	        val = board.getStatus(old_x, old_y);
+	        board.setStatus(old_x, old_y, " ");
       
-	  board.setStatus(x, y, val);
-	  //std::cout << pos << std::endl;
-	}
+	        board.setStatus(new_x, new_y, val);
+	        //std::cout << pos << std::endl;
+          }
+	    }
       //board.Print("");
       //board.PrintPositions("positions.txt");
       
-      std::string new_positions;
-      new_positions = board.getPositions();
-      std::cout << new_positions;// << std::endl;
+      if (move_validity == 1)
+      {
+        std::string new_positions;
+        new_positions = board.getPositions();
+        std::cout << new_positions;// << std::endl;
+      }
 
       if(Wpawn.size() == 0 || Bpawn.size() == 0)
 	    endGame = 1;
