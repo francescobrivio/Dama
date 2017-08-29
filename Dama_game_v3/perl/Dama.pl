@@ -58,23 +58,23 @@ sub TKthread
     $mw->geometry("800x500");
     $mw->title ("Test Dama");
 
-    $dama_bianca = $mw->Photo(-file=> "../Images/dama_bianca.png");
+    $dama_bianca = $mw->Photo(-file=> "../../Images/dama_bianca.png");
     $dama_bianca_scaled = $mw->Photo(-file=>"");
     $dama_bianca_scaled->copy($dama_bianca, -subsample=>2,2);
 
-    $dama_nera = $mw->Photo(-file=> "../Images/dama_nera.png");
+    $dama_nera = $mw->Photo(-file=> "../../Images/dama_nera.png");
     $dama_nera_scaled = $mw->Photo(-file=>"");
     $dama_nera_scaled->copy($dama_nera, -subsample=>2,2);
 
-    $damone_bianco = $mw->Photo(-file=> "../Images/damone_bianco.png");
+    $damone_bianco = $mw->Photo(-file=> "../../Images/damone_bianco.png");
     $damone_bianco_scaled = $mw->Photo(-file=>"");
     $damone_bianco_scaled->copy($damone_bianco, -subsample=>2,2);
 
-    $damone_nero = $mw->Photo(-file=> "../Images/damone_nero.png");
+    $damone_nero = $mw->Photo(-file=> "../../Images/damone_nero.png");
     $damone_nero_scaled = $mw->Photo(-file=>"");
     $damone_nero_scaled->copy($damone_nero, -subsample=>2,2);
 
-    $dama_empty = $mw->Photo(-file=> "../Images/dama_empty.png");
+    $dama_empty = $mw->Photo(-file=> "../../Images/dama_empty.png");
     $dama_empty_scaled = $mw->Photo(-file=>"");
     $dama_empty_scaled->copy($dama_empty, -subsample=>2,2);
 
