@@ -49,7 +49,7 @@ sub createGrid2
         );
     }
     
-    $gridframe->Button(-text=>"  ", -relief=>'flat', -height=>'1', -width=>'1',-state=>'disabled', -disabledforeground=>'black')->grid
+    $gridframe->Button(-text=>"  ", -relief=>'flat', -height=>'1', -width=>'1', -state=>'disabled', -disabledforeground=>'black')->grid
     ($gridframe->Button(-text=>"a", -relief=>'flat', -height=>'1', -width=>'1', -state=>'disabled', -disabledforeground=>'black'),
      $gridframe->Button(-text=>"b", -relief=>'flat', -height=>'1', -width=>'1', -state=>'disabled', -disabledforeground=>'black'),
      $gridframe->Button(-text=>"c", -relief=>'flat', -height=>'1', -width=>'1', -state=>'disabled', -disabledforeground=>'black'),

@@ -78,5 +78,20 @@ sub gameMode
     
 }
 
+
+sub countPawns
+{
+    my $pawns = shift;
+    
+    $nwhite = $pawns =~ /w/gi;
+    $nblack = $pawns =~ /b/gi;
+    
+    $white_textvar = $nWhite_entry->cget(-textvariable);
+    $black_textvar = $nBlack_entry->cget(-textvariable);
+    
+    $white_textvar = $nwhite;
+    $black_textvar = $nblack;
+}
+
 1;
 

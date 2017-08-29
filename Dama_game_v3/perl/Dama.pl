@@ -93,34 +93,32 @@ sub TKthread
     # logFrame
     my $logframe = $mw->LabFrame(-label=>"Moves Log", -bd=>2, -relief=>'raised', -padx=>"10");
     $logframe->pack(-side=>"right", -fill=>"both");
-
-        #my $test_move = $logframe->Button(-text=>"change image", -command=>sub{chomp ($newPositions = <READFROM_C>);
-        #                                                                       @positions = split//,$newPositions;
-        #                                                                       &loopOnButtons(\@positions)});
-        #$test_move->pack();
-
-        #my $test_move2 = $logframe->Button(-text=>"", -image=> $dama_nera_scaled, -command=>sub{print WRITETO_C "black\n"});
-        #$test_move2->pack();
     
-        #my $test_move3 = $logframe->Button(-text=>"", -image=> $dama_bianca_scaled, -command=>sub{print WRITETO_C "white\n"});
-        #$test_move3->pack();
-
-        #my $log = $logframe->Label(-text=>'qui il log vero', -borderwidth=>3, -relief=>"sunken", -fg=>"white", -bg=>"black");
-        #$log->pack(-fill=>"x");
-    
-        $log = $logframe->Scrolled("Text", -scrollbars => 'e', -width=>40, -height=>25, -bg=>"black", -fg=>"white")->pack();
+        $log = $logframe->Scrolled("Text", -scrollbars => 'e', -width=>40, -height=>25, -bg=>"black", -fg=>"white");
         $log->tagConfigure('red'  , -foreground=>"red");
         $log->tagConfigure('green', -foreground=>"green");
         $log->tagConfigure('under', -underline=>1);
         $log->insert('end', "----------- WELCOME TO DAMA -----------\n", 'green');
-        $log->insert('end', " Remeber, WHITE always starts first!\n");
-        $log->insert('end', " Select \"File->NewGame\" to begin!\n");
+        $log->insert('end', " Remeber, WHITE always starts first.\n");
+        $log->insert('end', " Select \"File->NewGame\" to begin.\n");
         $log->insert('end', "---------------------------------------\n", 'green');
 
-        $user_move = $logframe->Entry();
-        $user_move->pack(-side=>"left");
+        #$pawns_left = $logframe->Text(-width=>43, -height=>2, -bg=>"black", -fg=>"white")->pack();
+        #$pawns_left->tagConfigure('title'  , -foreground=>"green");
+        #$pawns_left->insert('end', " --------------- PAWNS LEFT -------------- \n", 'title');
+    
+        $pawns_left_title = $logframe->Label(-text=>' --------------- PAWNS LEFT -------------- ');
+        #s$pawns_left_title->pack();
 
-        my $printing = $logframe->Button(-text=>"Enter Move", -command=>sub{
+        $nWhite_label = $logframe->Label(-text=>'White');
+        $nWhite_entry = $logframe->Entry(-width=>3, -state=>'disabled');
+        $nBlack_label = $logframe->Label(-text=>'Black');
+        $nBlack_entry = $logframe->Entry(-width=>3, -state=>'disabled');
+    
+        $user_move = $logframe->Entry(-width=>17);
+        #$user_move->pack(-side=>"left");
+
+        my $printing = $logframe->Button(-text=>"Enter Move",, -width=>9, -command=>sub{
                                         print WRITETO_C $user_move->cget(-textvariable)."\n";
                                         chomp($flag_msg = <READFROM_C>);
                                         @flag_split = split //, $flag_msg;
@@ -176,11 +174,23 @@ sub TKthread
 										    print "END GAME\n";
 										  }
                                         }
+                                        &countPawns(\$newPositions);
                                         });
-        $printing->pack(-side=>"right");
+        #$printing->pack(-side=>"right");
     
-        my $clearing = $logframe->Button(-text=>"Clear Move", -command=>sub{$user_move->delete(0,30);} );
-        $clearing->pack(-side=>"right");
+        my $clearing = $logframe->Button(-text=>"Clear Move", -width=>8, -command=>sub{$user_move->delete(0,30);} );
+        #$clearing->pack(-side=>"right");
+
+        $log                ->pack(-side => 'top', -anchor => 'n', -fill=>'x');
+        $pawns_left_title   ->pack();
+        $nWhite_label       ->pack();
+        $nWhite_entry       ->pack();
+        #$nBlack_label       ->pack();
+        #$nBlack_entry       ->pack();
+        $user_move          ->pack(-side => 'left', -fill=>'x');
+        $clearing           ->pack(-side => 'left', -fill=>'x');
+        $printing           ->pack(-side => 'left', -fill=>'x');
+
 
     # gridFrame
     $gridframe = $mw->LabFrame(-label=>"Dama", -bd=>2, -relief=>'raised');
