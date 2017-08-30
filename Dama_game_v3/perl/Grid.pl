@@ -10,19 +10,21 @@ sub createGrid2
         {
             my $position = $counter + (($num -1) * 8);
             push @buttons, $gridframe->Button(-text=>"$num$let", -relief=>'flat',
-					      #-width=>2, -height=>2,
 					      -image=>$dama_empty_scaled,
-					      -command=>sub{    my $testo_move = $user_move->cget(-textvariable);
-                                                                my $testo_bott = $buttons[$position]->cget(-text);
-                                                                if ($testo_move =~ /$testo_bott/g)
-                                                                { my $pos = pos($testo_move);
-                                                                  $user_move->delete($pos-2,$pos);
-                                                                }
-                                                                else
-                                                                { $user_move->configure(-textvariable=>$testo_move.$testo_bott); }
-                                                                #print "move: ", $user_move->cget(-textvariable), "\n";
-                                                            }
-                                             );
+					      -command=>sub{
+                                          my $testo_move = $user_move->cget(-textvariable);
+                                          my $testo_bott = $buttons[$position]->cget(-text);
+                                          if ($testo_move =~ /$testo_bott/g)
+                                          {
+                                            my $pos = pos($testo_move);
+                                            $user_move->delete($pos-2,$pos);
+                                          }
+                                          else
+                                          {
+                                            $user_move->configure(-textvariable=>$testo_move.$testo_bott);
+                                          }
+                                        }
+                                    );
 
             if ($num % 2 == 0)
             {
@@ -72,9 +74,9 @@ sub loopOnButtons
         elsif   ($inner_positions[$k] eq 'b') {$_->configure(-image=> $dama_nera_scaled)    ;}
         elsif   ($inner_positions[$k] eq 'W') {$_->configure(-image=> $damone_bianco_scaled);}
         elsif   ($inner_positions[$k] eq 'B') {$_->configure(-image=> $damone_nero_scaled)  ;}
-	else                                  {$_->configure(-image=> $dama_empty_scaled); }
+        else                                  {$_->configure(-image=> $dama_empty_scaled); }
 
-	$k++;
+        $k++;
     }
 }
 

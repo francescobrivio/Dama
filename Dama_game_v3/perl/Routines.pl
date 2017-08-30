@@ -52,6 +52,7 @@ sub beginGame
     chomp ($newPositions = <READFROM_C>);
     @positions = split//,$newPositions;
     &loopOnButtons(\@positions);
+    &countPawns(\@positions);
 }
 
 sub gameMode
@@ -78,19 +79,21 @@ sub gameMode
     
 }
 
-
 sub countPawns
 {
-    my $pawns = shift;
+    my @inner_positions = @{$_[0]};
     
-    $nwhite = $pawns =~ /w/gi;
-    $nblack = $pawns =~ /b/gi;
+    $nwhite = 0;
+    $nblack = 0;
+    foreach (@inner_positions)
+    {
+        if ($_ eq 'w' || $_ eq 'W') {$nwhite = $nwhite + 1;}
+        if ($_ eq 'b' || $_ eq 'B') {$nblack = $nblack + 1;}
+    }
     
-    $white_textvar = $nWhite_entry->cget(-textvariable);
-    $black_textvar = $nBlack_entry->cget(-textvariable);
+    $nWhite_entry->configure(-textvariable=>$nwhite);
+    $nBlack_entry->configure(-textvariable=>$nblack);
     
-    $white_textvar = $nwhite;
-    $black_textvar = $nblack;
 }
 
 1;

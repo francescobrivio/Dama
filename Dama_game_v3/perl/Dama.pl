@@ -55,7 +55,7 @@ sub TKthread
     
     # MainWindow
     my $mw = MainWindow->new;
-    $mw->geometry("800x500");
+    $mw->geometry("800x700");
     $mw->title ("Test Dama");
 
     $dama_bianca = $mw->Photo(-file=> "../../Images/dama_bianca.png");
@@ -111,15 +111,16 @@ sub TKthread
         #s$pawns_left_title->pack();
 
         $nWhite_label = $logframe->Label(-text=>'White');
-        $nWhite_entry = $logframe->Entry(-width=>3, -state=>'disabled');
+        $nWhite_entry = $logframe->Entry(-width=>3, -state=>'disabled', -disabledforeground=>'black', -disabledbackground=>'white');
         $nBlack_label = $logframe->Label(-text=>'Black');
-        $nBlack_entry = $logframe->Entry(-width=>3, -state=>'disabled');
+        $nBlack_entry = $logframe->Entry(-width=>3, -state=>'disabled', -disabledforeground=>'black', -disabledbackground=>'white');
     
         $user_move = $logframe->Entry(-width=>17);
         #$user_move->pack(-side=>"left");
 
         my $printing = $logframe->Button(-text=>"Enter Move",, -width=>9, -command=>sub{
                                         print WRITETO_C $user_move->cget(-textvariable)."\n";
+            
                                         chomp($flag_msg = <READFROM_C>);
                                         @flag_split = split //, $flag_msg;
                                         if ($flag_msg == 1)
@@ -146,11 +147,14 @@ sub TKthread
                                           $log->insert('end', " Move not allowed!Try again!\n", 'red');
                                           $log->see('end');
                                         }
+            
 									    chomp($newPositions = <READFROM_C>);
 									    @positions = split//, $newPositions;            
 									    &loopOnButtons(\@positions);
+                                        &countPawns(\@positions);
 									    chomp($endGame = <READFROM_C>);
 									    $user_move->delete(0,30);
+            
 									    if($endGame == 1)
                                         {
 										  print "END GAME\n";
@@ -174,7 +178,8 @@ sub TKthread
 										    print "END GAME\n";
 										  }
                                         }
-                                        &countPawns(\$newPositions);
+            
+
                                         });
         #$printing->pack(-side=>"right");
     
@@ -185,8 +190,8 @@ sub TKthread
         $pawns_left_title   ->pack();
         $nWhite_label       ->pack();
         $nWhite_entry       ->pack();
-        #$nBlack_label       ->pack();
-        #$nBlack_entry       ->pack();
+        $nBlack_label       ->pack();
+        $nBlack_entry       ->pack();
         $user_move          ->pack(-side => 'left', -fill=>'x');
         $clearing           ->pack(-side => 'left', -fill=>'x');
         $printing           ->pack(-side => 'left', -fill=>'x');
@@ -256,7 +261,6 @@ sub CPPthread
       print $Writer("$move\n");
       $flag_fromCPP  = <$Reader>;
       $new_positions = <$Reader>;
-      #print "cazzo le position loop:  $new_positions \n";
       print WRITETO_TK $flag_fromCPP;
       print WRITETO_TK $new_positions;
 
