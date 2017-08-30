@@ -1,5 +1,6 @@
 #include "Board.cc"
 #include "Pedina.cc"
+#include "Pedone.cc"
 #include "Moves.h"
 
 /*Pedina* findPedina(std::vector<Pedina> *pawns, int x, int y);
