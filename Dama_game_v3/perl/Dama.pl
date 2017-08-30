@@ -54,7 +54,7 @@ sub TKthread
     
     # Tk MainWindow
     my $mw = MainWindow->new;
-    $mw->geometry("800x600");
+    $mw->geometry("800x550");
     $mw->title ("Test Dama");
 
     # Images to represent the pawns
@@ -93,11 +93,18 @@ sub TKthread
         $quitmenu->pack(-side=>"right");
 
     # logFrame
-    my $logframe = $mw->LabFrame(-label=>"Moves Log", -bd=>2, -relief=>'raised', -padx=>"10");
+    my $logframe = $mw->LabFrame( -bd=>2, -relief=>'raised', -padx=>"10");
     $logframe->pack(-side=>"right", -fill=>"both");
     
+        my $loglogframe = $logframe->Frame()->pack();
+        my $pawnsframe  = $logframe->Frame()->pack();
+        my $movesframe  = $logframe->Frame()->pack();
+    
+        # Simple text
+        $log_title = $loglogframe->Label(-text=>' ------------------- MOVES LOG ------------------ ')->pack();
+    
         # Scrolled button to keep the log of the moves
-        $log = $logframe->Scrolled("Text", -scrollbars => 'e', -width=>40, -height=>25, -bg=>"black", -fg=>"white");
+        $log = $loglogframe->Scrolled("Text", -scrollbars => 'e', -width=>40, -height=>25, -bg=>"black", -fg=>"white")->pack();
         $log->tagConfigure('red'  , -foreground=>"red");
         $log->tagConfigure('green', -foreground=>"green");
         $log->tagConfigure('under', -underline=>1);
@@ -107,19 +114,22 @@ sub TKthread
         $log->insert('end', "---------------------------------------\n", 'green');
     
         # Simple text
-        $pawns_left_title = $logframe->Label(-text=>' --------------- PAWNS LEFT -------------- ');
+        $pawns_left_title = $loglogframe->Label(-text=>"\n ------------------- PAWNS LEFT ------------------ ")->pack();
 
         # Counters to show the numbero of pawns remaining
-        $nWhite_label = $logframe->Label(-text=>'White');
-        $nWhite_entry = $logframe->Entry(-width=>3, -state=>'disabled', -disabledforeground=>'black', -disabledbackground=>'white');
-        $nBlack_label = $logframe->Label(-text=>'Black');
-        $nBlack_entry = $logframe->Entry(-width=>3, -state=>'disabled', -disabledforeground=>'black', -disabledbackground=>'white');
+        $nWhite_label = $pawnsframe->Label(-text=>'White')->pack(-side=>'left');
+        $nWhite_entry = $pawnsframe->Entry(-width=>3, -state=>'disabled', -disabledforeground=>'black', -disabledbackground=>'white')->pack(-side=>'left');
+        $nBlack_label = $pawnsframe->Label(-text=>'    Black')->pack(-side=>'left');
+        $nBlack_entry = $pawnsframe->Entry(-width=>3, -state=>'disabled', -disabledforeground=>'black', -disabledbackground=>'white')->pack(-side=>'left');
+    
+        # Simple text
+        $separation_line = $movesframe->Label(-text=>"\n ------------------- USER MOVE ------------------ ")->pack();
     
         # Container for the move
-        $user_move = $logframe->Entry(-width=>17);
+        $user_move = $movesframe->Entry(-width=>17)->pack(-side => 'left', -fill=>'x');
 
         # Confirm the move
-        my $printing = $logframe->Button(-text=>"Enter Move",, -width=>9, -command=>sub{
+        my $printing = $movesframe->Button(-text=>"Enter Move",, -width=>9, -command=>sub{
                                         print WRITETO_C $user_move->cget(-textvariable)."\n";
             
                                         chomp($flag_msg = <READFROM_C>);
@@ -181,21 +191,10 @@ sub TKthread
                                         }
             
 
-                                        });
+                                        })->pack(-side => 'left', -fill=>'x');
     
         # Delete the move
-        my $clearing = $logframe->Button(-text=>"Clear Move", -width=>8, -command=>sub{$user_move->delete(0,30);} );
-
-        # Pack all buttons in LogFrame
-        $log                ->pack(-side => 'top', -anchor => 'n', -fill=>'x');
-        $pawns_left_title   ->pack();
-        $nWhite_label       ->pack();
-        $nWhite_entry       ->pack();
-        $nBlack_label       ->pack();
-        $nBlack_entry       ->pack();
-        $user_move          ->pack(-side => 'left', -fill=>'x');
-        $clearing           ->pack(-side => 'left', -fill=>'x');
-        $printing           ->pack(-side => 'left', -fill=>'x');
+        my $clearing = $movesframe->Button(-text=>"Clear Move", -width=>8, -command=>sub{$user_move->delete(0,30);} )->pack(-side => 'left', -fill=>'x');
 
 
     # gridFrame
