@@ -60,17 +60,14 @@ sub gameMode
     my $cpu = shift;
     if($cpu == 0)
       {
-        #print "Mode: Player vs Player! \n";
         $log->insert('end', " Game mode chosen: Player vs Player\n");
       }
     elsif($cpu == 1)
       {
-        #print "Mode: Player vs CPU! \n";
         $log->insert('end', " Game mode chosen: Player vs CPU\n");
       }
     else
       {
-        #print "Undefined mode! \n";
         $log->insert('end', " Undefined mode, please try again!\n");
       }
 

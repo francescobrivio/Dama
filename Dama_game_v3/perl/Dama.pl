@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
-##### Packages #####
-
+################# Packages #################
+# Perl includes
 use IPC::Open2;
 use IO::Handle;
 use IO::Pipe;
@@ -12,27 +12,26 @@ use Tk::LabFrame;
 use Tk::PNG;
 use utf8;
 
+# Ad hoc includes
 require 'Grid.pl';
 require 'Routines.pl';
 
+################ Main #################
 
-##### Global Variables #####
-#my $welcomeMessage = "Welcome";
+# Global Variables
 my $input = '';
 @buttons;
 @positions ;
 $team;
 $CPU;
 
-#### Main #####
-
-# Pipes
+# Pipes declaration
 pipe (READFROM_TK, WRITETO_C);
 pipe (READFROM_C , WRITETO_TK);
 WRITETO_C->autoflush(1);
 WRITETO_TK->autoflush(1);
 
-# Forking;
+# Forking
 if (my $pid = fork)
 {
     close READFROM_TK;
@@ -49,15 +48,16 @@ else
 # TKthread
 sub TKthread
 {
+    # Fork sanity check
     my $pid = shift;
     chomp($pid_cpp = <READFROM_C>);
-    #print "Father PID: $$ - Child PID: $pid \n";
     
-    # MainWindow
+    # Tk MainWindow
     my $mw = MainWindow->new;
-    $mw->geometry("800x700");
+    $mw->geometry("800x600");
     $mw->title ("Test Dama");
 
+    # Images to represent the pawns
     $dama_bianca = $mw->Photo(-file=> "../../Images/dama_bianca.png");
     $dama_bianca_scaled = $mw->Photo(-file=>"");
     $dama_bianca_scaled->copy($dama_bianca, -subsample=>2,2);
@@ -82,11 +82,13 @@ sub TKthread
     my $menuframe = $mw->Frame(-background=>"aquamarine4", -bd=>2, -relief=>'raised');
     $menuframe->pack(-side=>"top", -fill=>"x");
 
+        # Menu bar
         my $filemenu = $menuframe->Menubutton(-text=>'File', -activebackground=>"aquamarine", -foreground=>"black");
         $filemenu->command(-label=>"New Game", -command=>\&newGame);
         $filemenu->command( -label=>"Quit", -command=>[\&quit,$pid,$pid_cpp]);
         $filemenu->pack(-side=>"left", -fill=>"x");
 
+        # Quit button
         my $quitmenu = $menuframe->Button( -text=>"Quit", -command=>[\&quit,$$,$pid,$pid_cpp])->pack;
         $quitmenu->pack(-side=>"right");
 
@@ -94,6 +96,7 @@ sub TKthread
     my $logframe = $mw->LabFrame(-label=>"Moves Log", -bd=>2, -relief=>'raised', -padx=>"10");
     $logframe->pack(-side=>"right", -fill=>"both");
     
+        # Scrolled button to keep the log of the moves
         $log = $logframe->Scrolled("Text", -scrollbars => 'e', -width=>40, -height=>25, -bg=>"black", -fg=>"white");
         $log->tagConfigure('red'  , -foreground=>"red");
         $log->tagConfigure('green', -foreground=>"green");
@@ -102,22 +105,20 @@ sub TKthread
         $log->insert('end', " Remeber, WHITE always starts first.\n");
         $log->insert('end', " Select \"File->NewGame\" to begin.\n");
         $log->insert('end', "---------------------------------------\n", 'green');
-
-        #$pawns_left = $logframe->Text(-width=>43, -height=>2, -bg=>"black", -fg=>"white")->pack();
-        #$pawns_left->tagConfigure('title'  , -foreground=>"green");
-        #$pawns_left->insert('end', " --------------- PAWNS LEFT -------------- \n", 'title');
     
+        # Simple text
         $pawns_left_title = $logframe->Label(-text=>' --------------- PAWNS LEFT -------------- ');
-        #s$pawns_left_title->pack();
 
+        # Counters to show the numbero of pawns remaining
         $nWhite_label = $logframe->Label(-text=>'White');
         $nWhite_entry = $logframe->Entry(-width=>3, -state=>'disabled', -disabledforeground=>'black', -disabledbackground=>'white');
         $nBlack_label = $logframe->Label(-text=>'Black');
         $nBlack_entry = $logframe->Entry(-width=>3, -state=>'disabled', -disabledforeground=>'black', -disabledbackground=>'white');
     
+        # Container for the move
         $user_move = $logframe->Entry(-width=>17);
-        #$user_move->pack(-side=>"left");
 
+        # Confirm the move
         my $printing = $logframe->Button(-text=>"Enter Move",, -width=>9, -command=>sub{
                                         print WRITETO_C $user_move->cget(-textvariable)."\n";
             
@@ -181,11 +182,11 @@ sub TKthread
             
 
                                         });
-        #$printing->pack(-side=>"right");
     
+        # Delete the move
         my $clearing = $logframe->Button(-text=>"Clear Move", -width=>8, -command=>sub{$user_move->delete(0,30);} );
-        #$clearing->pack(-side=>"right");
 
+        # Pack all buttons in LogFrame
         $log                ->pack(-side => 'top', -anchor => 'n', -fill=>'x');
         $pawns_left_title   ->pack();
         $nWhite_label       ->pack();
@@ -198,22 +199,24 @@ sub TKthread
 
 
     # gridFrame
-    $gridframe = $mw->LabFrame(-label=>"Dama", -bd=>2, -relief=>'raised');
+    $gridframe = $mw->LabFrame(-label=>"DamaGame", -bd=>2, -relief=>'raised');
     $gridframe->pack(-side=>"left", -fill=>"both", -expand=>1, -pady=>'0');
     
-        $d0 = $mw->Dialog(-title=>"",-text=>"Scegli la modalità di gioco!", -popover=>$gridframe, -buttons=>[]);
+        # Dialog for game mode decision
+        $d0 = $mw->Dialog(-title=>"",-text=>"Choose the game mode!", -popover=>$gridframe, -buttons=>[]);
         my $PvsP = $d0->Radiobutton(-text=>'Player vs Player', -value=>0, -variable=>\$CPU, -command=>[\&gameMode, 0]);
         $PvsP->pack();
         my $PvsC = $d0->Radiobutton(-text=>'Player vs CPU', -value=>1, -variable=>\$CPU, -command=>[\&gameMode, 1]);
         $PvsC->pack();
 
-        $d1 = $mw->Dialog(-title=>"",-text=>"Scegli il colore della tua squadra!", -popover=>$gridframe, -buttons=>[]);
+        # Dialog for team color decision
+        $d1 = $mw->Dialog(-title=>"",-text=>"Choose the color of you team!", -popover=>$gridframe, -buttons=>[]);
         my $black_team = $d1->Radiobutton(-text=>'black', -value=>'black', -variable=>\$team, -image=> $dama_nera_scaled  , -command=>[\&beginGame,"black\n"]);
         $black_team->pack();
         my $white_team = $d1->Radiobutton(-text=>'white', -value=>'white', -variable=>\$team, -image=> $dama_bianca_scaled, -command=>[\&beginGame,"white\n"]);
         $white_team->pack();
 
-    ##### Loop #####
+    # Tk MainLoop
     $mw->MainLoop;
 
     exit(0);
@@ -222,54 +225,51 @@ sub TKthread
 # TKthread
 sub CPPthread
 {
+    # Fork sanity check
     my $pid = shift;
     die "Cannot fork $!\n" unless defined $pid;
-    #print "Child PID: $$ \n";
     
-    ####
-    #print "Scegli il colore della tua squadra!";
-    #chomp ($team = <READFROM_TK>);
-    #print "team: $team\n";
-    
-    #declare the IPC::Open2 connection to dama.exe
+    # Declare the IPC::Open2 connection to dama.exe
     my $Reader;
     my $Writer;
     my $pid2 = open2($Reader,$Writer, "../cpp/dama.exe");
     print WRITETO_TK $pid2."\n";
-
     $Writer->autoflush(1);
     $Reader->autoflush(1);
-    #print "Open PID Dama: $pid2 \n";
 
-    #print "Scegli il colore della tua squadra!"; 
+    # Read the team chosen from Tk in order to initialize the game
     chomp ($team = <READFROM_TK>);
-    #print "team: $team\n";
 
-    # starting positions
+    # Starting positions
     print $Writer("$team\n");
     my $new_positions = <$Reader>;
-    #print "cazzo le position:  $new_positions \n";
     print WRITETO_TK $new_positions;#."\n";
 
+    # Declare flags and useful variables
     my $endgame = 0;
     my $move = "";
     
+    # Main loop for the game
     while($endgame == 0)
     {
+      # Read the move from Tk
       chomp ($move = <READFROM_TK>);
-      #print $move." arrivata a c++\n";
+      
+      # Pass the move to exe
       print $Writer("$move\n");
+      
+      # Read move_flag, updated_positions and endgame_flag from exe
       $flag_fromCPP  = <$Reader>;
       $new_positions = <$Reader>;
+      $endgame = <$Reader>;
+        
+      # Pass move_flag, updated_positions and endgame_flag to Tk
       print WRITETO_TK $flag_fromCPP;
       print WRITETO_TK $new_positions;
-
-      $endgame = <$Reader>;
-      #print "endgame: $endgame\n";
       print WRITETO_TK $endGame."\n";
-      #chomp ($turn = <READFROM_TK>);
     }
     
+    # Close the pipes to exe
     close($Writer);
     close($Reader);
     

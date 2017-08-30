@@ -23,15 +23,15 @@ int main(int argc, char *argv[])
   
   board.Initialize(p1team);
 
-  std::string turn = "";
-  std::string player_flag = "";
-
   std::string vec_positions;
   vec_positions = board.getPositions();
   std::cout << vec_positions;
   
   std::vector<Pedina> *P1pawns = new std::vector<Pedina>;
   std::vector<Pedina> *P2pawns = new std::vector<Pedina>;
+
+  std::string turn = "";
+  std::string player_flag = "";
     
   for(unsigned int i=0; i<vec_positions.size(); i++)
     {
