@@ -24,6 +24,8 @@ int main(int argc, char *argv[])
   
   board.Initialize(p1team);
 
+  //board.setStatus(4,4,"W");
+
   std::string vec_positions;
   vec_positions = board.getPositions();
   std::cout << vec_positions;
@@ -41,8 +43,16 @@ int main(int argc, char *argv[])
 
       if(vec_positions[i] == p1team[0])
       {
+        if (ncol == 200 && nrow == 200)
+        {
+          Pedone pedone(p1team, 4, 4, &board);
+          P1pawns->push_back(pedone);
+        }
+        else
+        {
         Pedina temp(p1team, ncol, nrow, &board, 1);
         P1pawns->push_back(temp);
+        }
       }
       else if(vec_positions[i] == p2team[0])
       {
@@ -50,6 +60,12 @@ int main(int argc, char *argv[])
         P2pawns->push_back(temp);
       }
     }
+
+  /*for(unsigned int i = 0; i<P1pawns->size(); i++)
+  {
+     std::cout << "Colore: " << P1pawns->at(i).getColor() << std::endl;
+  }*/
+
 
   int x = 0, y = 0;
   char xStr = ' ', yStr =  ' ';
@@ -59,7 +75,7 @@ int main(int argc, char *argv[])
   std::string val = "";
   std::string pos = "";
 
-  Pedina* tmp_pawn = new Pedina();
+  Pedone* tmp_pawn = new Pedone();
   Moves moves; 
   while(endGame == 0)
     {
@@ -72,11 +88,11 @@ int main(int argc, char *argv[])
 
       std::cin >> pos;
       
-      if(pos == "auto")
+      /*if(pos == "auto")
         if(turn == P1pawns->at(0).getColor())
           pos = autoMove(P1pawns);
         else if(turn == P2pawns->at(0).getColor())
-          pos = autoMove(P2pawns);
+          pos = autoMove(P2pawns);*/
 
       if(pos == "none")
         endGame = 1;
@@ -92,9 +108,9 @@ int main(int argc, char *argv[])
     
           // Select the correct pawn
           if(turn == P1pawns->at(0).getColor())
-            tmp_pawn = findPedina(P1pawns, x, y);
+            tmp_pawn = (Pedone*)findPedina(P1pawns, x, y);
           else if(turn == P2pawns->at(0).getColor())
-            tmp_pawn = findPedina(P2pawns, x, y);
+            tmp_pawn = (Pedone*)findPedina(P2pawns, x, y);
 
           // Check if the move is allowed
           if(tmp_pawn->getColor() == turn)
@@ -114,10 +130,10 @@ int main(int argc, char *argv[])
                   // Move the pawn
                   tmp_pawn->Move(x, y);
 
-                  if(turn == P1pawns->at(0).getColor())
+                  /*if(turn == P1pawns->at(0).getColor())
                     P2pawns = erasePawns(P2pawns, pos);
                   else if(turn == P2pawns->at(0).getColor())
-                    P1pawns = erasePawns(P1pawns, pos);
+                    P1pawns = erasePawns(P1pawns, pos);*/
                 }
               else
                 {

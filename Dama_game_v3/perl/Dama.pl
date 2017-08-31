@@ -93,7 +93,7 @@ sub TKthread
         $quitmenu->pack(-side=>"right");
 
     # logFrame
-    my $logframe = $mw->LabFrame( -bd=>2, -relief=>'raised', -padx=>"10");
+    my $logframe = $mw->LabFrame(-label=>"", -bd=>2, -relief=>'raised', -padx=>"10");
     $logframe->pack(-side=>"right", -fill=>"both");
     
         my $loglogframe = $logframe->Frame()->pack();
@@ -117,9 +117,9 @@ sub TKthread
         $pawns_left_title = $loglogframe->Label(-text=>"\n ------------------- PAWNS LEFT ------------------ ")->pack();
 
         # Counters to show the numbero of pawns remaining
-        $nWhite_label = $pawnsframe->Label(-text=>'White')->pack(-side=>'left');
+        $nWhite_label = $pawnsframe->Label(-text=>'White:')->pack(-side=>'left');
         $nWhite_entry = $pawnsframe->Entry(-width=>3, -state=>'disabled', -disabledforeground=>'black', -disabledbackground=>'white')->pack(-side=>'left');
-        $nBlack_label = $pawnsframe->Label(-text=>'    Black')->pack(-side=>'left');
+        $nBlack_label = $pawnsframe->Label(-text=>'        Black:')->pack(-side=>'left');
         $nBlack_entry = $pawnsframe->Entry(-width=>3, -state=>'disabled', -disabledforeground=>'black', -disabledbackground=>'white')->pack(-side=>'left');
     
         # Simple text
@@ -127,6 +127,9 @@ sub TKthread
     
         # Container for the move
         $user_move = $movesframe->Entry(-width=>17)->pack(-side => 'left', -fill=>'x');
+
+        # Delete the move
+        my $clearing = $movesframe->Button(-text=>"Clear Move", -width=>8, -command=>sub{$user_move->delete(0,30);} )->pack(-side => 'left', -fill=>'x');
 
         # Confirm the move
         my $printing = $movesframe->Button(-text=>"Enter Move",, -width=>9, -command=>sub{
@@ -192,9 +195,6 @@ sub TKthread
             
 
                                         })->pack(-side => 'left', -fill=>'x');
-    
-        # Delete the move
-        my $clearing = $movesframe->Button(-text=>"Clear Move", -width=>8, -command=>sub{$user_move->delete(0,30);} )->pack(-side => 'left', -fill=>'x');
 
 
     # gridFrame

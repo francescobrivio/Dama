@@ -7,17 +7,15 @@ Pedone::Pedone()
   srand (time(NULL));
   _x = rand() % (Nslots-1) + 1;
   _y = rand() % (Nslots-1) + 1;
-  _color = "red";
+  _color = "blue";
   _board = board;
-  _dir = 0;
 }
 
-Pedone::Pedone(const std::string color, int x, int y, Board* board, const int dir):
+Pedone::Pedone(const std::string color, int x, int y, Board* board):
   _x (x),
   _y (y),
   _color (color),
-  _board (board),
-  _dir (dir)
+  _board (board)
 {
 }
 
@@ -25,84 +23,12 @@ Pedone::Pedone(const Pedone& origin):
   _x (origin.getX()),
   _y (origin.getY()),
   _color (origin.getColor()),
-  _board (origin.getBoard()),
-  _dir (origin.getDir())
+  _board (origin.getBoard())
 {
-}
-
-Pedone& Pedone::operator= (const Pedone& origin)
-{
-  if (&origin == this) return *this;
-
-  this->Pedone::operator=(origin);
-  
-  this->setX(origin.getX());
-  this->setY(origin.getY());
-  this->setColor(origin.getColor());
-  this->setBoard(origin.getBoard());
-  this->setDir(origin.getDir());
-
-  return *this;
 }
 
 Pedone::~Pedone()
 {
-}
-
-void Pedone::setX(int x)
-{
-  _x = x;
-}
-
-void Pedone::setY(int y)
-{
-  _y = y;
-}
-
-int Pedone::getX() const
-{
-  return _x;
-}
-
-int Pedone::getY() const
-{
-  return _y;
-}
-
-void Pedone::setColor(std::string color)
-{
-  _color = color;
-}
-
-std::string Pedone::getColor() const
-{
-  return _color;
-}
-
-void Pedone::setBoard(Board* board)
-{
-  _board = board;
-}
-
-Board* Pedone::getBoard() const
-{
-  return _board;
-}
-
-void Pedone::setDir(int dir)
-{
-  _dir = dir;
-}
-
-int Pedone::getDir() const
-{
-  return _dir;
-}
-
-void Pedone::Move(int x, int y)
-{
-  this->setX(x);
-  this->setY(y);
 }
 
 bool Pedone::CheckMove(const std::string pos)
@@ -133,9 +59,9 @@ bool Pedone::CheckMove(const std::string pos)
         flag &= false;
       
       else
-        if(yStart+this->getDir() == yStop && abs(xStart-xStop) == 1)
+        if(abs(yStart-yStop) == 1 && abs(xStart-xStop) == 1)
           flag &= true;
-        else if(yStart+2*this->getDir() == yStop && abs(xStart-xStop) == 2)
+        else if(abs(yStart-yStop) == 2 && abs(xStart-xStop) == 2)
           {
             status = this->getBoard()->getStatus((xStart+xStop)/2, (yStart+yStop)/2);
             if(status != ' ' && status != this->getColor()[0])
@@ -151,47 +77,48 @@ bool Pedone::CheckMove(const std::string pos)
 }
 
 
-std::string Pedone::CheckEat(const Position oldPos, const Position newPos)
+std::string Pedone::CheckEat(const Position oldPos, const Position eatPos)
 {
   std::string steps = "";
-  int oldX = 0, newX = 0, oldY =0, newY = 0;
-  int nextX[Nmoves_pedone], nextY = 0;
+  int oldX = 0, eatX = 0, oldY =0, eatY = 0;
+  int newX[Nmoves_pedone], newY[Nmoves_pedone];
   int prevX = 0, prevY = 0;
   Position prevPos, nextPos;
   char status = ' ';
  
   oldX = oldPos.first;
   oldY = oldPos.second;
-  newX = newPos.first;
-  newY = newPos.second;
+  eatX = eatPos.first;
+  eatY = eatPos.second;
 
-  nextX[0] = 2*newX-oldX;
-  nextY = newY+this->getDir();
+  newX[0] = 2*eatX-oldX;
+  newY[0] = 2*eatY-oldY;
   
-  if(nextX[0] > 8 || nextX[0] < 1 || nextY < 1 || nextY > 8)
+  if(newX[0] > 8 || newX[0] < 1 || newY[0] < 1 || newY[0] > 8)
     steps = "";
-  else if(this->getBoard()->getStatus(nextX[0], nextY) == ' ')
+  else if(this->getBoard()->getStatus(newX[0], newY[0]) == ' ')
     { 
-      steps += intToString(nextY) + this->getBoard()->getAlpha(nextX[0]);
+      steps += intToString(newY[0]) + this->getBoard()->getAlpha(newX[0]);
       
       //std::cout << "POSSO MANGIARE!!!" << std::endl;
-      prevX = nextX[0];
-      prevY = nextY;
-      nextY = newY+2*this->getDir();
-      nextX[0] = 2*newX-oldX-1;
-      nextX[1] = 2*newX-oldX+1;
+      prevX = newX[0];
+      prevY = newY[0];
+      newY[0] = 2*eatY-oldY-1;
+      newY[1] = 2*eatY-oldY+1;
+      newX[0] = 2*eatX-oldX-1;
+      newX[1] = 2*eatX-oldX+1;
       
       for(int i=0; i<Nmoves_pedone; i++)
 	{
-	  if(nextX[i] > 8 || nextX[i] < 1 || nextY < 1 || nextY > 8)
+	  if(newX[i] > 8 || newX[i] < 1 || newY[i] < 1 || newY[i] > 8)
 	    continue;
 	  
-	  status = this->getBoard()->getStatus(nextX[i], nextY);
+	  status = this->getBoard()->getStatus(newX[i], newY[i]);
 
 	  if(status != (this->getColor())[0] && status != ' ')
 	   {
 	     prevPos = std::pair<int, int>(prevX, prevY);
-	     nextPos = std::pair<int, int>(nextX[i], nextY);
+	     nextPos = std::pair<int, int>(newX[i], newY[i]);
 	     steps += CheckEat(prevPos, nextPos);    	
 	   }
 	} 
@@ -203,13 +130,14 @@ std::string Pedone::CheckEat(const Position oldPos, const Position newPos)
 
 Moves Pedone::Check()
 {
-  int new_x[Nmoves_pedone], new_y = 0;
+  int new_x[Nmoves_pedone], new_y[Nmoves_pedone];
   Moves moves;
   Position oldPos, newPos;
   char status = ' ';
   std::string steps = "", action = "";
 
-  new_y  = this->getY() + this->getDir();
+  new_y[0] = this->getY() - 1;
+  new_y[1] = this->getY() + 1;
   new_x[0] = this->getX() - 1;
   new_x[1] = this->getX() + 1;
  
@@ -217,16 +145,16 @@ Moves Pedone::Check()
     {
       action = intToString(this->getY()) + this->getBoard()->getAlpha(this->getX());
 
-      if(new_x[i] > 8 || new_x[i] < 1 || new_y < 1 || new_y > 8)
+      if(new_x[i] > 8 || new_x[i] < 1 || new_y[i] < 1 || new_y[i] > 8)
 	continue;
       
-      status = this->getBoard()->getStatus(new_x[i], new_y);
-      newPos = std::pair<int, int>(new_x[i], new_y);
+      status = this->getBoard()->getStatus(new_x[i], new_y[i]);
+      newPos = std::pair<int, int>(new_x[i], new_y[i]);
 
       if(status == this->getColor()[0])
         continue;
       else if(status == ' ')
-	action += intToString(new_y) + this->getBoard()->getAlpha(new_x[i]);
+	action += intToString(new_y[i]) + this->getBoard()->getAlpha(new_x[i]);
       else
         {
           oldPos = std::pair<int, int>(this->getX(), this->getY());

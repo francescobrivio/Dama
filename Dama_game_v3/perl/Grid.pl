@@ -23,6 +23,7 @@ sub createGrid2
                                           {
                                             $user_move->configure(-textvariable=>$testo_move.$testo_bott);
                                           }
+                                          #highlightMove(); # HERE
                                         }
                                     );
 
@@ -70,6 +71,7 @@ sub loopOnButtons
     $k = 0;
     foreach (@buttons)
     {
+        $_->configure(-relief=>'flat'); # HERE
         if      ($inner_positions[$k] eq "w") {$_->configure(-image=> $dama_bianca_scaled)  ;}
         elsif   ($inner_positions[$k] eq 'b') {$_->configure(-image=> $dama_nera_scaled)    ;}
         elsif   ($inner_positions[$k] eq 'W') {$_->configure(-image=> $damone_bianco_scaled);}
