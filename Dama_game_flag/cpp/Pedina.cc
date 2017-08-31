@@ -10,14 +10,16 @@ Pedina::Pedina()
   _color = "red";
   _board = board;
   _dir = 0;
+  _isPedone = false;
 }
 
-Pedina::Pedina(const std::string color, int x, int y, Board* board, const int dir):
+Pedina::Pedina(const std::string color, int x, int y, Board* board, const int dir, bool isPedone):
   _x (x),
   _y (y),
   _color (color),
   _board (board),
-  _dir (dir)
+  _dir (dir),
+  _isPedone (isPedone)
 {
 }
 
@@ -26,7 +28,8 @@ Pedina::Pedina(const Pedina& origin):
   _y (origin.getY()),
   _color (origin.getColor()),
   _board (origin.getBoard()),
-  _dir (origin.getDir())
+  _dir (origin.getDir()),
+  _isPedone (origin.getPedone())
 {
 }
 
@@ -41,6 +44,7 @@ Pedina& Pedina::operator= (const Pedina& origin)
   this->setColor(origin.getColor());
   this->setBoard(origin.getBoard());
   this->setDir(origin.getDir());
+  this->setPedone(origin.getPedone());
 
   return *this;
 }
@@ -97,6 +101,16 @@ void Pedina::setDir(int dir)
 int Pedina::getDir() const
 {
   return _dir;
+}
+
+void Pedina::setPedone(bool isPedone)
+{
+  _isPedone = isPedone;
+}
+
+bool Pedina::getPedone() const
+{
+  return _isPedone;
 }
 
 void Pedina::Move(int x, int y)

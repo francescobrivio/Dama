@@ -1,13 +1,6 @@
 #include "Board.cc"
 #include "Pedina.cc"
-#include "Pedone.cc"
 #include "Moves.h"
-
-/*Pedina* findPedina(std::vector<Pedina> *pawns, int x, int y);
-void updatePositions(Board* board, std::vector<Pedina> *P1pawns, std::vector<Pedina> *P2pawns);
-std::vector<Pedina>* erasePawns(std::vector<Pedina> *pawns, std::string move);
-std::string autoMove(std::vector<Pedina> *pawns);
-std::string ChooseBestMove(Moves moves);*/
 
 int main(int argc, char *argv[])
 {
@@ -24,14 +17,13 @@ int main(int argc, char *argv[])
   
   board.Initialize(p1team);
 
-  board.setStatus(3,3,"W");
 
   std::string vec_positions;
   vec_positions = board.getPositions();
   std::cout << vec_positions;
   
-  std::vector<Pedina*> *P1pawns = new std::vector<Pedina*>;
-  std::vector<Pedina*> *P2pawns = new std::vector<Pedina*>;
+  std::vector<Pedina> *P1pawns = new std::vector<Pedina>;
+  std::vector<Pedina> *P2pawns = new std::vector<Pedina>;
 
   std::string turn = "";
   std::string player_flag = "";
@@ -43,29 +35,15 @@ int main(int argc, char *argv[])
 
       if(tolower(vec_positions[i]) == p1team[0])
       {
-        if (ncol == 3 && nrow == 3)
-        {
-          std::string P1team = "White";
-          Pedone pedone(P1team, 3, 3, &board);
-          P1pawns->push_back(&pedone);
-        }
-        else
-        {
-        Pedina temp(p1team, ncol, nrow, &board, 1);
-        P1pawns->push_back(&temp);
-        }
+        Pedina temp(p1team, ncol, nrow, &board, 1, false);
+        P1pawns->push_back(temp);
       }
       else if(tolower(vec_positions[i]) == p2team[0])
       {
-        Pedina temp(p2team, ncol, nrow, &board, -1);
-        P2pawns->push_back(&temp);
+        Pedina temp(p2team, ncol, nrow, &board, -1, false);
+        P2pawns->push_back(temp);
       }
     }
-
-  for(unsigned int i = 0; i<P1pawns->size(); i++)
-  {
-     std::cout << "identity: " << P1pawns->at(i)->getIdentity() << std::endl;
-  }
 
   int x = 0, y = 0;
   char xStr = ' ', yStr =  ' ';
@@ -74,12 +52,8 @@ int main(int argc, char *argv[])
 
   std::string val = "";
   std::string pos = "";
-  std::string cazzi = "";
 
-
-  int tmp_indx = -1;
-  Pedina* tmp_pawn;
-
+  Pedina* tmp_pawn = new Pedina();
   Moves moves;
   while(endGame == 0)
     {
@@ -92,11 +66,11 @@ int main(int argc, char *argv[])
 
       std::cin >> pos;
       
-      /*if(pos == "auto")
+      if(pos == "auto")
         if(turn == P1pawns->at(0).getColor())
           pos = autoMove(P1pawns);
         else if(turn == P2pawns->at(0).getColor())
-          pos = autoMove(P2pawns);*/
+          pos = autoMove(P2pawns);
 
       if(pos == "none")
         endGame = 1;
@@ -111,30 +85,20 @@ int main(int argc, char *argv[])
           x = (int)(xStr - 'a' + 1);
             
           // Select the correct pawn
-          if(turn[0] == tolower(P1pawns->at(0)->getColor()[0]))
-          {
-            //tmp_pawn = findPedina(P1pawns, x, y);
-            tmp_indx = findPedina2(P1pawns, x, y);
-            tmp_pawn = P1pawns->at(tmp_indx);
-            std::cout << "identity: " << tmp_pawn->getIdentity() << std::endl;
-          }
-          else if(turn[0] == tolower(P2pawns->at(0)->getColor()[0]))
-          {
-            //tmp_pawn = findPedina(P2pawns, x, y);
-            tmp_indx = findPedina2(P2pawns, x, y);
-            tmp_pawn = P2pawns->at(tmp_indx);
-          }
+          if(turn[0] == tolower(P1pawns->at(0).getColor()[0]))
+            tmp_pawn = findPedina(P1pawns, x, y);
+          else if(turn[0] == tolower(P2pawns->at(0).getColor()[0]))
+            tmp_pawn = findPedina(P2pawns, x, y);
           
            
           // Check if the move is allowed
-          if(tolower(tmp_pawn->getColor()[0]) == turn[0])
+          if(tmp_pawn->getColor() == turn)
             {
               flag_move = tmp_pawn->CheckMove(pos);
               player_flag = tmp_pawn->getColor();
 
               if(flag_move)
                 {
-                std::cout << "sdbiuisbs    " << std::endl;
                   // Read the new position
                   yStr = tolower(pos[pos.size()-2]);
                   xStr = tolower(pos[pos.size()-1]);
@@ -145,10 +109,10 @@ int main(int argc, char *argv[])
                   // Move the pawn
                   tmp_pawn->Move(x, y);
 
-                  /*if(turn == P1pawns->at(0)->getColor())
+                  if(turn == P1pawns->at(0).getColor())
                     P2pawns = erasePawns(P2pawns, pos);
-                  else if(turn == P2pawns->at(0)->getColor())
-                    P1pawns = erasePawns(P1pawns, pos);*/
+                  else if(turn == P2pawns->at(0).getColor())
+                    P1pawns = erasePawns(P1pawns, pos);
                 }
               else
                 {
@@ -163,7 +127,7 @@ int main(int argc, char *argv[])
           }
         }
    
-      //updatePositions(&board, P1pawns, P2pawns);
+      updatePositions(&board, P1pawns, P2pawns);
 
       std::string new_positions;
       new_positions = board.getPositions();
@@ -174,7 +138,6 @@ int main(int argc, char *argv[])
         endGame = 1;
           
       std::cout << endGame << std::endl;
-      //std::cout << "---------"  << std::endl;
     }
 
   return 0;

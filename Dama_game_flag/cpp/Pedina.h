@@ -7,7 +7,7 @@ class Pedina
 {
  public:
   Pedina();
-  Pedina(const std::string color, int x, int y, Board* board, const int dir);
+  Pedina(const std::string color, int x, int y, Board* board, const int dir, bool isPedone);
   Pedina(const Pedina& origin);
   ~Pedina();
 
@@ -17,16 +17,19 @@ class Pedina
   std::string getColor() const;
 
   void setX(int x);
-  void setY(int y);
-  
   int getX() const;
+  
+  void setY(int y);
   int getY() const;
 
-  Board* getBoard() const;
   void setBoard(Board* board);
+  Board* getBoard() const;
 
   void setDir(int dir);
   int getDir() const;
+
+  void setPedone(bool isPedone);
+  bool getPedone() const;
 
   void Move(int x, int y);
   
@@ -34,8 +37,6 @@ class Pedina
   virtual std::string CheckEat(const Position oldPos, const Position newPos);
   virtual Moves Check();
   
-  std::string getIdentity() {return "Pedina";};
-
   
  protected:
   std::string _color;
@@ -43,6 +44,7 @@ class Pedina
   int _y;
   int _dir;
   Board* _board;
+  bool _isPedone;
 
 };
 

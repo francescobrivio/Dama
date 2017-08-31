@@ -11,21 +11,21 @@ Pedone::Pedone()
   _board = board;
 }
 
-Pedone::Pedone(const std::string color, int x, int y, Board* board):
-  _x (x),
-  _y (y),
-  _color (color),
-  _board (board)
+Pedone::Pedone(const std::string color, int x, int y, Board* board)
 {
+  _x = x;
+  _y = y;
+  _color = color;
+  _board = board;
 }
 
-Pedone::Pedone(const Pedone& origin):
+/*Pedone::Pedone(const Pedone& origin):
+{
   _x (origin.getX()),
   _y (origin.getY()),
   _color (origin.getColor()),
   _board (origin.getBoard())
-{
-}
+}*/
 
 Pedone::~Pedone()
 {
@@ -33,6 +33,7 @@ Pedone::~Pedone()
 
 bool Pedone::CheckMove(const std::string pos)
 {
+  std::cout << "kjdsj" << std::endl;
   char status = ' ';
   char xStr = ' ', yStr =  ' ';
   int xStart = 0, yStart = 0;
@@ -41,6 +42,7 @@ bool Pedone::CheckMove(const std::string pos)
 
   for(unsigned int istep = 1; istep<pos.size()/2; istep++)
     {
+      std::cout << "balbalbla" << std::endl;
       yStr = tolower(pos[istep*2-2]);
       xStr = tolower(pos[istep*2-1]);
 
@@ -53,17 +55,17 @@ bool Pedone::CheckMove(const std::string pos)
       yStop = (int)(yStr - '0');
       xStop = (int)(xStr - 'a' + 1);
 
-      status = this->getBoard()->getStatus(xStop,yStop);
+      status = tolower(this->getBoard()->getStatus(xStop,yStop));
   
       if(status != ' ')
         flag &= false;
       
       else
-        if(abs(yStart-yStop) == 1 && abs(xStart-xStop) == 1)
+        if( abs(yStart-yStop) == 1 && abs(xStart-xStop) == 1)
           flag &= true;
         else if(abs(yStart-yStop) == 2 && abs(xStart-xStop) == 2)
           {
-            status = this->getBoard()->getStatus((xStart+xStop)/2, (yStart+yStop)/2);
+            status = tolower(this->getBoard()->getStatus((xStart+xStop)/2, (yStart+yStop)/2));
             if(status != ' ' && status != this->getColor()[0])
               flag &= true;
             else

@@ -9,19 +9,21 @@ class Pedone : public Pedina
  public:
   Pedone();
   Pedone(const std::string color, int x, int y, Board* board);
-  Pedone(const Pedone& origin);
+  //Pedone(const Pedone& origin);
   ~Pedone();
   
-  bool CheckMove(const std::string pos);
-  std::string CheckEat(const Position oldPos, const Position newPos);
-  Moves Check();
+  virtual bool CheckMove(const std::string pos);
+  virtual std::string CheckEat(const Position oldPos, const Position newPos);
+  virtual Moves Check();
+  
+  std::string getIdentity() {return "Pedone";};
 
   
- private:
+ /*private:
   std::string _color;
   int _x;
   int _y;
-  Board* _board;
+  Board* _board;*/
 
 };
 

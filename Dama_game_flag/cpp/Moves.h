@@ -4,24 +4,13 @@
 #include "include/configurable.h"
 
 
-Pedina* findPedina(std::vector<Pedina*> *pawns, int x, int y)
+Pedina* findPedina(std::vector<Pedina> *pawns, int x, int y)
 {
   Pedina* tmp = new Pedina();
  
   for(unsigned int i=0; i<pawns->size(); i++){
-    //std::cout << i << "] " << "getX: " << pawns->at(i).getX() << " - getY: " << pawns->at(i).getY() << std::endl;
-    if(x == pawns->at(i)->getX() && y == pawns->at(i)->getY())
-      tmp = pawns->at(i);
-  }
-  return tmp;
-}
-
-int findPedina2(std::vector<Pedina*> *pawns, int x, int y)
-{
-  int tmp = -1;
-  for(unsigned int i=0; i<pawns->size(); i++){
-    if(x == pawns->at(i)->getX() && y == pawns->at(i)->getY())
-      tmp = i;
+    if(x == pawns->at(i).getX() && y == pawns->at(i).getY())
+      tmp = &pawns->at(i);
   }
   return tmp;
 }
