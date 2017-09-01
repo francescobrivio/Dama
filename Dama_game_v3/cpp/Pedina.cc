@@ -107,7 +107,7 @@ void Pedina::Move(int x, int y)
 
 bool Pedina::CheckMove(const std::string pos)
 {
-  std::cout << "sksksks" << std::endl;
+  //std::cout << "sksksks" << std::endl;
   char status = ' ';
   char xStr = ' ', yStr =  ' ';
   int xStart = 0, yStart = 0;

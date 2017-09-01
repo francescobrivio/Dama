@@ -16,7 +16,7 @@ class Pedone : public Pedina
   virtual std::string CheckEat(const Position oldPos, const Position newPos);
   virtual Moves Check();
   
-  std::string getIdentity() {return "Pedone";};
+  virtual std::string getIdentity() {return "Pedone";};
 
   
  /*private:

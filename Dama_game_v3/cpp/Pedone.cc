@@ -33,7 +33,7 @@ Pedone::~Pedone()
 
 bool Pedone::CheckMove(const std::string pos)
 {
-  std::cout << "kjdsj" << std::endl;
+  //std::cout << "kjdsj" << std::endl;
   char status = ' ';
   char xStr = ' ', yStr =  ' ';
   int xStart = 0, yStart = 0;
@@ -42,7 +42,7 @@ bool Pedone::CheckMove(const std::string pos)
 
   for(unsigned int istep = 1; istep<pos.size()/2; istep++)
     {
-      std::cout << "balbalbla" << std::endl;
+      //std::cout << "balbalbla" << std::endl;
       yStr = tolower(pos[istep*2-2]);
       xStr = tolower(pos[istep*2-1]);
 
