@@ -24,8 +24,6 @@ int main(int argc, char *argv[])
   
   board.Initialize(p1team);
   
-  board.setStatus(3,3,"W");
-
   std::string vec_positions;
   vec_positions = board.getPositions();
   std::cout << vec_positions;
@@ -42,18 +40,9 @@ int main(int argc, char *argv[])
       int ncol = i%(Nslots-1)+1;
 
       if(tolower(vec_positions[i]) == p1team[0])
-      {
-        if (ncol == 3 && nrow == 3)
-        {
-	  std::string P1team = "White";
-	  P1pawns->push_back(new Pedone(P1team, 3, 3, &board));	  
-	}
-        else
-	  P1pawns->push_back(new Pedina(p1team, ncol, nrow, &board, 1));
-      }
+        P1pawns->push_back(new Pedina(p1team, ncol, nrow, &board, 1));
       else if(tolower(vec_positions[i]) == p2team[0])
-        P2pawns->push_back(new Pedina(p2team, ncol, nrow, &board, -1));      
-
+        P2pawns->push_back(new Pedina(p2team, ncol, nrow, &board, -1));
     }      
       
   int x = 0, y = 0;
@@ -83,7 +72,7 @@ int main(int argc, char *argv[])
         //if(turn == P1pawns->at(0).getColor())
           //pos = autoMove(P1pawns);
         //else if(turn == P2pawns->at(0).getColor())
-	//pos = autoMove(P2pawns);
+          //pos = autoMove(P2pawns);
 
       if(pos == "none")
         endGame = 1;
@@ -132,8 +121,8 @@ int main(int argc, char *argv[])
 
                   //if(turn == P1pawns->at(0)->getColor())
                     //P2pawns = erasePawns(P2pawns, pos);
-		    //else if(turn == P2pawns->at(0)->getColor())
-		  //P1pawns = erasePawns(P1pawns, pos);
+                  //else if(turn == P2pawns->at(0)->getColor())
+                    //P1pawns = erasePawns(P1pawns, pos);
                 }
               else
                 {
@@ -148,8 +137,16 @@ int main(int argc, char *argv[])
           }
         }
    
+      // Change pawns into big_pawns
+      if(turn == P1pawns->at(0)->getColor())
+        evolvePedina(P1pawns);
+      else if(turn == P2pawns->at(0)->getColor())
+        evolvePedina(P2pawns);
+
+      // Update the board positions
       updatePositions(&board, P1pawns, P2pawns);
 
+      // Pass the new board positions to perl (cpp thread)
       std::string new_positions;
       new_positions = board.getPositions();
       std::cout << flag_move << player_flag[0] <<std::endl;
@@ -159,7 +156,6 @@ int main(int argc, char *argv[])
         endGame = 1;
           
       std::cout << endGame << std::endl;
-      //std::cout << "---------"  << std::endl;
     }
   
   return 0;

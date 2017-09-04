@@ -2,6 +2,7 @@
 #define Moves_H
 
 #include "include/configurable.h"
+#include <typeinfo>
 
 
 Pedina* findPedina(std::vector<Pedina*> *pawns, int x, int y)
@@ -25,9 +26,9 @@ int findPedina2(std::vector<Pedina*> *pawns, int x, int y)
   return tmp;
 }
 
-std::vector<Pedina>* erasePawns(std::vector<Pedina> *pawns, std::string move)
+std::vector<Pedina>* erasePawns(std::vector<Pedina*> *pawns, std::string move)
 {
-  std::vector<Pedina> *tmp_pawns = new std::vector<Pedina>;
+  std::vector<Pedina*> *tmp_pawns = new std::vector<Pedina*>;
   
   int old_x = 0, old_y = 0, new_x = 0, new_y = 0, med_x = 0, med_y = 0;
   char old_xStr = ' ', old_yStr =  ' ', new_xStr = ' ', new_yStr =  ' ';
@@ -52,6 +53,28 @@ std::vector<Pedina>* erasePawns(std::vector<Pedina> *pawns, std::string move)
   return tmp_pawns;
 }
 
+void evolvePedina(std::vector<Pedina*> *pawns)
+{
+    for(unsigned int i=0; i<pawns->size(); i++)
+    {
+      if (typeid(*pawns->at(i)) != typeid(Pedina))
+        continue;
+      else
+      {
+        if (pawns->at(i)->getY()+pawns->at(i)->getDir() < 1 || pawns->at(i)->getY()+pawns->at(i)->getDir() > 8)
+        {
+          // Pushback a new Pedone
+          if(pawns->at(i)->getColor()[0] == 'w')
+            pawns->push_back( new Pedone("W", pawns->at(i)->getX(), pawns->at(i)->getY(), pawns->at(i)->getBoard()) );
+          else if (pawns->at(i)->getColor()[0] == 'b')
+            pawns->push_back( new Pedone("B", pawns->at(i)->getX(), pawns->at(i)->getY(), pawns->at(i)->getBoard()) );
+
+          // Erase the old Pedina
+          pawns->erase(pawns->begin() + i);
+        }
+      }
+    }
+}
 
 void updatePositions(Board* board, std::vector<Pedina*> *P1pawns, std::vector<Pedina*> *P2pawns)
 {

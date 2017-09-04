@@ -66,11 +66,11 @@ sub TKthread
     $dama_nera_scaled = $mw->Photo(-file=>"");
     $dama_nera_scaled->copy($dama_nera, -subsample=>2,2);
 
-    $damone_bianco = $mw->Photo(-file=> "../../Images/damone_bianco.png");
+    $damone_bianco = $mw->Photo(-file=> "../../Images/damone_bianco_2.png");
     $damone_bianco_scaled = $mw->Photo(-file=>"");
     $damone_bianco_scaled->copy($damone_bianco, -subsample=>2,2);
 
-    $damone_nero = $mw->Photo(-file=> "../../Images/damone_nero.png");
+    $damone_nero = $mw->Photo(-file=> "../../Images/damone_nero_2.png");
     $damone_nero_scaled = $mw->Photo(-file=>"");
     $damone_nero_scaled->copy($damone_nero, -subsample=>2,2);
 
@@ -109,8 +109,8 @@ sub TKthread
         $log->tagConfigure('green', -foreground=>"green");
         $log->tagConfigure('under', -underline=>1);
         $log->insert('end', "----------- WELCOME TO DAMA -----------\n", 'green');
-        $log->insert('end', " Remeber, WHITE always starts first.\n");
-        $log->insert('end', " Select \"File->NewGame\" to begin.\n");
+        $log->insert('end', " Select \"File->NewGame\" to begin and\n");
+        $log->insert('end', " remember, WHITE always starts first.\n");
         $log->insert('end', "---------------------------------------\n", 'green');
     
         # Simple text
@@ -140,12 +140,12 @@ sub TKthread
                                         if ($flag_msg == 1)
                                         {
                                           @log_move = split //, $user_move->cget(-textvariable);
-                                          if (@flag_split[1] eq 'w')
+                                          if (@flag_split[1] eq 'w' || @flag_split[1] eq 'W')
                                           {
                                             $log->insert('end', " Player1: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
                                             $log->see('end');
                                           }
-                                          elsif (@flag_split[1] eq 'b')
+                                          elsif (@flag_split[1] eq 'b' || @flag_split[1] eq 'B')
                                           {
                                             $log->insert('end', " Player2: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
                                             $log->see('end');
