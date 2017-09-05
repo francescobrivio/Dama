@@ -107,7 +107,6 @@ void Pedina::Move(int x, int y)
 
 bool Pedina::CheckMove(const std::string pos)
 {
-  //std::cout << "sksksks" << std::endl;
   char status = ' ';
   char xStr = ' ', yStr =  ' ';
   int xStart = 0, yStart = 0;
@@ -132,14 +131,13 @@ bool Pedina::CheckMove(const std::string pos)
   
       if(status != ' ')
         flag &= false;
-      
       else
         if(yStart+this->getDir() == yStop && abs(xStart-xStop) == 1)
           flag &= true;
         else if(yStart+2*this->getDir() == yStop && abs(xStart-xStop) == 2)
           {
             status = this->getBoard()->getStatus((xStart+xStop)/2, (yStart+yStop)/2);
-            if(status != ' ' && status != this->getColor()[0])
+            if(status != ' ' && status != this->getColor()[0] && status != 'W' && status != 'B')
               flag &= true;
             else
               flag &= false;

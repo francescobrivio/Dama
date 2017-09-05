@@ -119,10 +119,10 @@ int main(int argc, char *argv[])
                   // Move the pawn
                   tmp_pawn->Move(x, y);
 
-                  //if(turn == P1pawns->at(0)->getColor())
-                    //P2pawns = erasePawns(P2pawns, pos);
-                  //else if(turn == P2pawns->at(0)->getColor())
-                    //P1pawns = erasePawns(P1pawns, pos);
+                  if(turn == P1pawns->at(0)->getColor())
+                    P2pawns = erasePawns(P2pawns, pos);
+                  else if(turn == P2pawns->at(0)->getColor())
+                    P1pawns = erasePawns(P1pawns, pos);
                 }
               else
                 {

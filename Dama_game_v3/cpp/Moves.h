@@ -2,8 +2,6 @@
 #define Moves_H
 
 #include "include/configurable.h"
-#include <typeinfo>
-
 
 Pedina* findPedina(std::vector<Pedina*> *pawns, int x, int y)
 {
@@ -26,7 +24,7 @@ int findPedina2(std::vector<Pedina*> *pawns, int x, int y)
   return tmp;
 }
 
-std::vector<Pedina>* erasePawns(std::vector<Pedina*> *pawns, std::string move)
+std::vector<Pedina*>* erasePawns(std::vector<Pedina*> *pawns, std::string move)
 {
   std::vector<Pedina*> *tmp_pawns = new std::vector<Pedina*>;
   
@@ -47,7 +45,7 @@ std::vector<Pedina>* erasePawns(std::vector<Pedina*> *pawns, std::string move)
   med_y = (old_y + new_y)/2;
   
   for (unsigned int i=0; i<pawns->size(); i++)
-    if (med_x != pawns->at(i).getX() || med_y != pawns->at(i).getY())
+    if (med_x != pawns->at(i)->getX() || med_y != pawns->at(i)->getY())
       tmp_pawns->push_back(pawns->at(i));
   
   return tmp_pawns;
