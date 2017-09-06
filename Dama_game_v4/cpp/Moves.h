@@ -129,8 +129,9 @@ std::string ChooseBestMove(Moves moves)
   for(int i=0; i<nMoves; i++)
     {
       // If the lenght is different from the maximum then continue
+      // i.e. take only the longest moves
       if(moves.at(i).size() != max_lenght)
-	continue;
+        continue;
 
       // else evaluate the difference long the y axis 
       diff = abs(moves.at(i)[max_lenght-2]-moves.at(i)[0]);
@@ -143,7 +144,7 @@ std::string ChooseBestMove(Moves moves)
           max_diff = diff;
           best_move = moves.at(i);
           max_y = best_move[0];
-	}
+        }
       // else if diff is equal to the maximum, then I'm eating the same 
       // number of pawns, so I choose moving the pawn with higher y
       else if(diff == max_diff)
