@@ -49,14 +49,14 @@ int main(int argc, char *argv[])
   char xStr = ' ', yStr =  ' ';
   int endGame = 0;
   bool flag_move = false;
-
-  std::string val = "";
+  bool isCPU_log = false;
+  
   std::string pos = "";
 
   int tmp_indx = -1;
   Pedina* tmp_pawn = new Pedina();
 
-  Moves moves;
+  //Moves moves;
   while(endGame == 0)
     {
       board.setNmoves(board.getNmoves()+1);
@@ -69,10 +69,13 @@ int main(int argc, char *argv[])
       std::cin >> pos;
       
       if(pos == "auto")
-        if(turn == P1pawns->at(0)->getColor())
-          pos = autoMove(P1pawns);
-        else if(turn == P2pawns->at(0)->getColor())
-          pos = autoMove(P2pawns);
+        {
+          isCPU_log = true;
+          if(turn == P1pawns->at(0)->getColor())
+            pos = autoMove(P1pawns);
+          else if(turn == P2pawns->at(0)->getColor())
+            pos = autoMove(P2pawns);
+        }
 
       //std::cout << " auto pos: " << pos <<std::endl;
 
@@ -93,13 +96,17 @@ int main(int argc, char *argv[])
 	        tmp_pawn = findPedina(P1pawns, x, y);
           else if(turn[0] == tolower(P2pawns->at(0)->getColor()[0]))
             tmp_pawn = findPedina(P2pawns, x, y);
-          
            
+          // Log to know who is playing, player or PC?
+          if (isCPU_log == true)
+            player_flag = "auto";
+          else
+            player_flag = tmp_pawn->getColor();
+
           // Check if the move is allowed
           if(tolower(tmp_pawn->getColor()[0]) == turn[0])
             {
               flag_move = tmp_pawn->CheckMove(pos);
-              player_flag = tmp_pawn->getColor();
 
               if(flag_move)
                 {
@@ -143,15 +150,18 @@ int main(int argc, char *argv[])
       updatePositions(&board, P1pawns, P2pawns);
 
       // Pass the new board positions to perl (cpp thread)
+      std::cout << pos <<std::endl;
+      std::cout << flag_move << player_flag[0] <<std::endl;
       std::string new_positions;
       new_positions = board.getPositions();
-      std::cout << flag_move << player_flag[0] <<std::endl;
       std::cout << new_positions;
 
       if(P2pawns->size() == 0 || P1pawns->size() == 0)
         endGame = 1;
           
       std::cout << endGame << std::endl;
+      
+      isCPU_log = false;
     }
   
   return 0;

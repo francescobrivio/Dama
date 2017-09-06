@@ -43,23 +43,26 @@ sub beginGame
 {
     my $inner_team = shift;
     my $isCPU = shift;
-    print "cristo cpu:". $isCPU . "\n";
+
     $log->insert('end', " Team chosen: $inner_team");
     $log->insert('end', "------------- GOOD LUCK! -------------\n", 'green');
     $log->insert('end', " MOVES LOG:\n", 'under');
 
     print WRITETO_C $inner_team;
-    $d1->destroy();
     $d0->destroy();
+    $d1->destroy();
     
     chomp($newPositions = <READFROM_C>);
     @positions = split//, $newPositions;            
     &loopOnButtons(\@positions);
     &countPawns(\@positions);
     $mw->update;
-    sleep(1);
     chomp($inner_team);
-    if (($inner_team eq 'black') and ($isCPU)) {print "PC play\n"; &doTheMove("auto\n");}
+    if (($inner_team eq 'black') and ($isCPU))
+      {
+        sleep(1);
+        &doTheMove("auto\n");
+      }
 }
 
 sub gameMode
@@ -102,35 +105,35 @@ sub doTheMove
 {
     my $move = shift;
     
-    print "---- doing the move: $move \n";
     print WRITETO_C $move;
     
+    chomp($pos_fromC = <READFROM_C>);
     chomp($flag_msg = <READFROM_C>);
-    print "---- flag from C : $flag_msg \n" ;
     
     @flag_split = split //, $flag_msg;
-    if (@flag_split[0] == 1)
+    if ($flag_split[0] == 1)
     {
-      @log_move = split //, $user_move->cget(-textvariable);
-      if (@flag_split[1] eq 'w' || @flag_split[1] eq 'W')
+      @log_move = split //, $pos_fromC;
+
+      if ($flag_split[1] eq 'w' || $flag_split[1] eq 'W')
       {
-        $log->insert('end', " Player1: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
+        $log->insert('end', " White: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
         $log->see('end');
       }
-      elsif (@flag_split[1] eq 'b' || @flag_split[1] eq 'B')
+      elsif ($flag_split[1] eq 'b' || $flag_split[1] eq 'B')
       {
-        $log->insert('end', " Player2: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
+        $log->insert('end', " Black: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
         $log->see('end');
       }
       else
       {
-        $log->insert('end', " PC: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
+        $log->insert('end', " PC   : $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
         $log->see('end');
       }
     }
     else
     {
-      $log->insert('end', " $move: Move not allowed!Try again!\n", 'red');
+      $log->insert('end', " Move not allowed!Try again!\n", 'red');
       $log->see('end');
     }
 
