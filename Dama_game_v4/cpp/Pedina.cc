@@ -173,7 +173,6 @@ std::string Pedina::CPUCheckEat(const Position oldPos, const Position newPos)
     { 
       steps += intToString(nextY) + this->getBoard()->getAlpha(nextX[0]);
       
-      //std::cout << "POSSO MANGIARE!!!" << std::endl;
       prevX = nextX[0];
       prevY = nextY;
       nextY = newY+2*this->getDir();
@@ -181,19 +180,19 @@ std::string Pedina::CPUCheckEat(const Position oldPos, const Position newPos)
       nextX[1] = 2*newX-oldX+1;
       
       for(int i=0; i<Nmoves_pedina; i++)
-	{
-	  if(nextX[i] > 8 || nextX[i] < 1 || nextY < 1 || nextY > 8)
-	    continue;
-	  
-	  status = this->getBoard()->getStatus(nextX[i], nextY);
+        {
+          if(nextX[i] > 8 || nextX[i] < 1 || nextY < 1 || nextY > 8)
+            continue;
+  
+          status = this->getBoard()->getStatus(nextX[i], nextY);
 
-	  if(status != (this->getColor())[0] && status != ' ')
-	   {
-	     prevPos = std::pair<int, int>(prevX, prevY);
-	     nextPos = std::pair<int, int>(nextX[i], nextY);
-	     steps += CPUCheckEat(prevPos, nextPos);
-	   }
-	} 
+          if(status != (this->getColor())[0] && status != ' ')
+            {
+              prevPos = std::pair<int, int>(prevX, prevY);
+              nextPos = std::pair<int, int>(nextX[i], nextY);
+              steps += CPUCheckEat(prevPos, nextPos);
+            }
+        }
     }
 
   return steps; 
@@ -217,21 +216,21 @@ Moves Pedina::CPUCheck()
       action = intToString(this->getY()) + this->getBoard()->getAlpha(this->getX());
 
       if(new_x[i] > 8 || new_x[i] < 1 || new_y < 1 || new_y > 8)
-	continue;
+        continue;
       
       status = this->getBoard()->getStatus(new_x[i], new_y);
       newPos = std::pair<int, int>(new_x[i], new_y);
 
-      if(status == this->getColor()[0])
+      if(status == this->getColor()[0] || status == 'W' || status == 'B' )
         continue;
       else if(status == ' ')
-	action += intToString(new_y) + this->getBoard()->getAlpha(new_x[i]);
+        action += intToString(new_y) + this->getBoard()->getAlpha(new_x[i]);
       else
         {
           oldPos = std::pair<int, int>(this->getX(), this->getY());
           steps = this->CPUCheckEat(oldPos, newPos);
           if(steps != "")
-            action += steps;
+          action += steps;
         }
 
       moves.push_back(action);
