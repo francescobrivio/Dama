@@ -107,6 +107,15 @@ sub doTheMove
     
     print WRITETO_C $move;
     
+    chomp($endGame = <READFROM_C>);
+    if($endGame == 1)
+    {
+      print "END GAME\n";
+      $log->insert('end',"---------- GAME FINISHED!! ----------\n", 'red');
+      $log->insert('end'," who's the winner??\n");
+      $log->see('end');
+    }
+    
     chomp($pos_fromC = <READFROM_C>);
     chomp($flag_msg = <READFROM_C>);
     
@@ -141,17 +150,8 @@ sub doTheMove
     @positions = split//, $newPositions;            
     &loopOnButtons(\@positions);
     &countPawns(\@positions);
-    chomp($endGame = <READFROM_C>);
     $user_move->delete(0,30);
-
-    if($endGame == 1)
-    {
-      print "END GAME\n";
-      $log->insert('end',"---------- GAME FINISHED!! ----------\n", 'red');
-      $log->insert('end'," who's the winner??\n");
-      $log->see('end');
-    }
-
+    
 }
 
 

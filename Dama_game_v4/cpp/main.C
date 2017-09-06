@@ -3,14 +3,10 @@
 #include "Pedone.cc"
 #include "Moves.h"
 
-/*Pedina* findPedina(std::vector<Pedina> *pawns, int x, int y);
-void updatePositions(Board* board, std::vector<Pedina> *P1pawns, std::vector<Pedina> *P2pawns);
-std::vector<Pedina>* erasePawns(std::vector<Pedina> *pawns, std::string move);
-std::string autoMove(std::vector<Pedina> *pawns);
-std::string ChooseBestMove(Moves moves);*/
-
 int main(int argc, char *argv[])
 {
+  srand(time(NULL));
+
   Board board;
   
   std::string p1team = "";

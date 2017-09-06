@@ -13,5 +13,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <map>
+#include <ctime>
 
-#endif // CPPINCLUDE_H     
+#endif // CPPINCLUDE_H

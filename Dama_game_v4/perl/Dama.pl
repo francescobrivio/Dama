@@ -272,10 +272,10 @@ sub CPPthread
       $endgame = <$Reader>;
         
       # Pass move_flag, updated_positions and endgame_flag to Tk
+      print WRITETO_TK $endGame."\n";
       print WRITETO_TK $pos_fromCPP;
       print WRITETO_TK $flag_fromCPP;
       print WRITETO_TK $new_positions;
-      print WRITETO_TK $endGame."\n";
     }
     
     # Close the pipes to exe

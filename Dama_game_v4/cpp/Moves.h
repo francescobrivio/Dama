@@ -124,7 +124,6 @@ std::string ChooseBestMove(Moves moves)
     if(moves.at(i).size() > max_lenght)
       max_lenght = moves.at(i).size();
   
-  //best_move = moves[0];
   // Loop on the possible moves
   for(int i=0; i<nMoves; i++)
     {
@@ -133,7 +132,7 @@ std::string ChooseBestMove(Moves moves)
       if(moves.at(i).size() != max_lenght)
         continue;
 
-      // else evaluate the difference long the y axis 
+      // else evaluate the difference long the y axis
       diff = abs(moves.at(i)[max_lenght-2]-moves.at(i)[0]);
 
       // Look for the best move
@@ -146,17 +145,73 @@ std::string ChooseBestMove(Moves moves)
           max_y = best_move[0];
         }
       // else if diff is equal to the maximum, then I'm eating the same 
-      // number of pawns, so I choose moving the pawn with higher y
+      // number of pawns
       else if(diff == max_diff)
-        if(moves.at(i)[0] > max_y)
-          {
-            best_move = moves.at(i);
-            max_y = best_move[0];
-          }
-    }
+        {
+          // first I choose the one that has the higher y,
+          // i.e. the one that is more advanced
+          if(moves.at(i)[0] > max_y)
+            {
+              best_move = moves.at(i);
+              max_y = best_move[0];
+            }
+        }
+      }
   
   // If the lenght of the best move is equal to 2 it means that 
   // I'm not moving anything, so I have lost
+  if(best_move.size() == 2)
+    best_move = "none";
+
+  return best_move;       
+}
+
+// Function to choose the best move for the CPU player
+std::string ChooseBestMoveRand(Moves moves)
+{
+  std::string best_move = "";
+  Moves eating_moves, longer_moves;
+  unsigned int max_lenght = 0;
+  int max_diff = 0, diff = 0;
+
+  // Find the longest moves, i.e. that eat more pawns
+  for (unsigned int i=0; i<moves.size(); i++)
+    {
+      if (moves.at(i).size() > max_lenght)
+        max_lenght = moves.at(i).size();
+    }
+    
+  // Fill eating_moves with all moves that have same lenght == max_lenght
+  for (unsigned int j=0; j<moves.size(); j++)
+    {
+      if (moves.at(j).size() == max_lenght)
+        eating_moves.push_back(moves.at(j));
+    }
+
+  if (eating_moves.size() == 1)
+    best_move = eating_moves[0];
+  else
+    {
+      // Find the longest diff, i.e. pawns that go
+      for (unsigned int k=0; k<eating_moves.size(); k++)
+        {
+          diff = abs(eating_moves.at(k)[max_lenght-2]-eating_moves.at(k)[0]);
+          if (diff > max_diff)
+            max_diff = diff;
+        }
+      // Fill longer_moves with moves with longest diff
+      for (unsigned int h=0; h<eating_moves.size(); h++)
+        {
+          if(abs(eating_moves.at(h)[max_lenght-2]-eating_moves.at(h)[0]) == max_diff)
+            longer_moves.push_back(eating_moves.at(h));
+        }
+        
+      if (longer_moves.size() == 1)
+        best_move = longer_moves[0];
+      else
+        best_move = longer_moves.at( rand()%(longer_moves.size()) );
+    }
+
   if(best_move.size() == 2)
     best_move = "none";
 
@@ -183,7 +238,8 @@ std::string autoMove(std::vector<Pedina*> *pawns)
     }
 
   // Get the best move for CPU player
-  best_move = ChooseBestMove(moves);
+  //best_move = ChooseBestMove(moves);
+  best_move = ChooseBestMoveRand(moves);
 
   return best_move;
 }
