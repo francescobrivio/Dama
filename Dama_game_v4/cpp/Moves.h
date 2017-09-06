@@ -84,10 +84,12 @@ void updatePositions(Board* board, std::vector<Pedina*> *P1pawns, std::vector<Pe
   
   std::string color = "";  
   
+  // Begin with all empty positions
   for(int nx=Nslots-1; nx>0; nx--)                                                                                                                    
     for(int ny=1; ny<Nslots; ny++) 
       board->setStatus(nx, ny, " ");
 
+  // Fill board with the first team
   for(unsigned int i=0; i<P1pawns->size(); i++)
     {      
       x = P1pawns->at(i)->getX();
@@ -97,6 +99,7 @@ void updatePositions(Board* board, std::vector<Pedina*> *P1pawns, std::vector<Pe
       board->setStatus(x, y, color);      
     }  
 
+  // Fill the board with the second team
   for(unsigned int i=0; i<P2pawns->size(); i++)
     {
       x = P2pawns->at(i)->getX();
@@ -119,7 +122,7 @@ std::string ChooseBestMove(Moves moves)
   for(int i=0; i<nMoves; i++)
     // Look for the maximum move lenght -> longer means that it eats more pawns 
     if(moves.at(i).size() > max_lenght)
-      max_lenght = moves.at(i).size();	
+      max_lenght = moves.at(i).size();
   
   //best_move = moves[0];
   // Loop on the possible moves

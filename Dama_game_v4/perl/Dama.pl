@@ -262,17 +262,17 @@ sub CPPthread
       # Read the move from Tk
       chomp ($move = <READFROM_TK>);
       
-      print " gesu from tk: $move \n";
       # Pass the move to exe
       print $Writer("$move\n");
       
       # Read move_flag, updated_positions and endgame_flag from exe
+      $pos_fromCPP   = <$Reader>;
       $flag_fromCPP  = <$Reader>;
-      print "flag from cpp cazzo: $flag_fromCPP \n";
       $new_positions = <$Reader>;
       $endgame = <$Reader>;
         
       # Pass move_flag, updated_positions and endgame_flag to Tk
+      print WRITETO_TK $pos_fromCPP;
       print WRITETO_TK $flag_fromCPP;
       print WRITETO_TK $new_positions;
       print WRITETO_TK $endGame."\n";
