@@ -38,6 +38,7 @@ Board::~Board()
 
 void Board::Initialize(std::string team)
 {
+  // Fill bottom row with letters and left column with numbers
   char buffer[10];
   int tmp = 0;
   for(int n=1; n<Nslots; n++)
@@ -47,14 +48,15 @@ void Board::Initialize(std::string team)
       this->setStatus(n, 0, this->getAlpha(n));
     }
 
+  // Fill with player's chosen color in the bottom
   if (team == "white")
   {
     for(int nx=Nslots-1; nx>0; nx--) // colonne
       for(int ny=1; ny<Nslots; ny++) // righe
         {
-          if(ny<4 && (ny+nx)%2==0)
+          if(ny<4 && (ny+nx)%2==1)
             this->setStatus(nx, ny, "w");
-          else if(ny>5 && (nx+ny)%2==0)
+          else if(ny>5 && (nx+ny)%2==1)
             this->setStatus(nx, ny, "b");
 	      else
             this->setStatus(nx, ny, " ");
@@ -65,9 +67,9 @@ void Board::Initialize(std::string team)
     for(int nx=Nslots-1; nx>0; nx--) // colonne
       for(int ny=1; ny<Nslots; ny++) // righe
         {
-          if(ny<4 && (ny+nx)%2==0)
+          if(ny<4 && (ny+nx)%2==1)
             this->setStatus(nx, ny, "b");
-          else if(ny>5 && (nx+ny)%2==0)
+          else if(ny>5 && (nx+ny)%2==1)
             this->setStatus(nx, ny, "w");
 	      else
             this->setStatus(nx, ny, " ");

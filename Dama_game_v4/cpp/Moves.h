@@ -115,11 +115,47 @@ std::string ChooseBestMove(Moves moves)
   char max_y = '0';
   unsigned int max_lenght = 0, max_diff = 0, diff = 0;
 
+  // Loop on the possible moves 
   for(int i=0; i<nMoves; i++)
+    // Look for the maximum move lenght -> longer means that it eats more pawns 
     if(moves.at(i).size() > max_lenght)
       max_lenght = moves.at(i).size();	
   
-  best_move = moves[0];
+  //best_move = moves[0];
+  // Loop on the possible moves
+  for(int i=0; i<nMoves; i++)
+    {
+      // If the lenght is different from the maximum then continue
+      if(moves.at(i).size() != max_lenght)
+	continue;
+
+      // else evaluate the difference long the y axis 
+      diff = abs(moves.at(i)[max_lenght-2]-moves.at(i)[0]);
+
+      // Look for the best move
+      // If diff is greater than max_diff, it means that I'm eating more pawns
+      // So this should be my best move
+      if(diff > max_diff)
+        {
+          max_diff = diff;
+          best_move = moves.at(i);
+          max_y = best_move[0];
+	}
+      // else if diff is equal to the maximum, then I'm eating the same 
+      // number of pawns, so I choose moving the pawn with higher y
+      else if(diff == max_diff)
+        if(moves.at(i)[0] > max_y)
+          {
+            best_move = moves.at(i);
+            max_y = best_move[0];
+          }
+    }
+  
+  // If the lenght of the best move is equal to 2 it means that 
+  // I'm not moving anything, so I have lost
+  if(best_move.size() == 2)
+    best_move = "none";
+
   return best_move;       
 }
 
