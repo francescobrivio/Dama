@@ -111,14 +111,14 @@ char Board::getStatus(int nx, int ny) const
 std::string Board::getAlpha(int idx) const
 {
   std::map<int, std::string> numToAlpha;
-  numToAlpha.insert(std::pair<int, std::string>(1, "A"));
-  numToAlpha.insert(std::pair<int, std::string>(2, "B"));
-  numToAlpha.insert(std::pair<int, std::string>(3, "C"));
-  numToAlpha.insert(std::pair<int, std::string>(4, "D"));
-  numToAlpha.insert(std::pair<int, std::string>(5, "E"));
-  numToAlpha.insert(std::pair<int, std::string>(6, "F"));
-  numToAlpha.insert(std::pair<int, std::string>(7, "G"));
-  numToAlpha.insert(std::pair<int, std::string>(8, "H"));
+  numToAlpha.insert(std::pair<int, std::string>(1, "a"));
+  numToAlpha.insert(std::pair<int, std::string>(2, "b"));
+  numToAlpha.insert(std::pair<int, std::string>(3, "c"));
+  numToAlpha.insert(std::pair<int, std::string>(4, "d"));
+  numToAlpha.insert(std::pair<int, std::string>(5, "e"));
+  numToAlpha.insert(std::pair<int, std::string>(6, "f"));
+  numToAlpha.insert(std::pair<int, std::string>(7, "g"));
+  numToAlpha.insert(std::pair<int, std::string>(8, "h"));
 
   std::string temp = numToAlpha[idx];
   return temp;
