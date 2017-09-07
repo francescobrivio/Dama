@@ -12,7 +12,11 @@ Pedina* findPedina(std::vector<Pedina*> *pawns, int x, int y)
     if(x == pawns->at(i)->getX() && y == pawns->at(i)->getY())
       tmp = pawns->at(i);
 
-  return tmp;
+  // Return pawn if found, else return NULL (i.e. when the starting position was empty)
+  if (tmp->getColor() == "red")
+    return NULL;
+  else
+    return tmp;
 }
 
 // Function to delete eatend pawns
