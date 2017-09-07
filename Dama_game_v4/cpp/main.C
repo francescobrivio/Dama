@@ -49,21 +49,24 @@ int main(int argc, char *argv[])
   
   std::string pos = "";
 
-  int tmp_indx = -1;
   Pedina* tmp_pawn = new Pedina();
 
-  //Moves moves;
   while(endGame == 0)
     {
       board.setNmoves(board.getNmoves()+1);
 
+      // Whose turn is it?
       if(board.getNmoves()%2==1)
         turn = "white";
       else
         turn = "black";
 
+      player_flag = turn[0];
+
+      // Read the position from perl (Player or PC)
       std::cin >> pos;
-      
+        
+      // If the PC is playing, make its move
       if(pos == "auto")
         {
           isCPU_log = true;
@@ -72,13 +75,15 @@ int main(int argc, char *argv[])
           else if(turn == P2pawns->at(0)->getColor())
             pos = autoMove(P2pawns);
         }
+      else
+        isCPU_log = false;
 
-      //std::cout << " auto pos: " << pos <<std::endl;
-
+      // If the PC returns "none" (i.e. cannot move, i.e. PC loses) endGame=1
       if(pos == "none")
         endGame = 1;
       
-      if(endGame == 0)
+      // If "pos" is ok and the game isn't finished, go on
+      if(pos != "none" && endGame == 0)
         {
           // Read starting position
           yStr = tolower(pos[0]);
@@ -93,35 +98,47 @@ int main(int argc, char *argv[])
           else if(turn[0] == tolower(P2pawns->at(0)->getColor()[0]))
             tmp_pawn = findPedina(P2pawns, x, y);
            
-          // Log to know who is playing, player or PC?
-          if (isCPU_log == true)
-            player_flag = "auto";
-          else
-            player_flag = tmp_pawn->getColor();
-
-          // Check if the move is allowed
-          if(tolower(tmp_pawn->getColor()[0]) == turn[0])
+          // Check if the pawn is found or the starting position was empty
+          if (!tmp_pawn)
             {
-              flag_move = tmp_pawn->CheckMove(pos);
+              board.setNmoves(board.getNmoves()-1);
+              flag_move = false;
+            }
+          // If the starting position is good (i.e. the pawn exist), go on
+          else
+            {
+              // Log to know who is playing, black or white?
+              player_flag = tmp_pawn->getColor();
 
-              if(flag_move)
+              // Check if the move is allowed
+              if(tolower(tmp_pawn->getColor()[0]) == turn[0])
                 {
-                  // Read the new position
-                  yStr = tolower(pos[pos.size()-2]);
-                  xStr = tolower(pos[pos.size()-1]);
-		  
-                  y = (int)(yStr - '0');
-                  x = (int)(xStr - 'a' + 1);
-		  
-                  // Move the pawn
-                  tmp_pawn->Move(x, y);
+                  flag_move = tmp_pawn->CheckMove(pos);
 
-                  if(turn == P1pawns->at(0)->getColor())
-                    //P2pawns = erasePawns(P2pawns, pos);
-                    erasePawns(P2pawns, pos);
-                  else if(turn == P2pawns->at(0)->getColor())
-                    //P1pawns = erasePawns(P1pawns, pos);
-                    erasePawns(P1pawns, pos);
+                  if(flag_move)
+                    {
+                      // Read the new position
+                      yStr = tolower(pos[pos.size()-2]);
+                      xStr = tolower(pos[pos.size()-1]);
+		  
+                      y = (int)(yStr - '0');
+                      x = (int)(xStr - 'a' + 1);
+		  
+                      // Move the pawn
+                      tmp_pawn->Move(x, y);
+
+                      if(turn == P1pawns->at(0)->getColor())
+                        //P2pawns = erasePawns(P2pawns, pos);
+                        erasePawns(P2pawns, pos);
+                      else if(turn == P2pawns->at(0)->getColor())
+                        //P1pawns = erasePawns(P1pawns, pos);
+                        erasePawns(P1pawns, pos);
+                    }
+                  else
+                    {
+                      board.setNmoves(board.getNmoves()-1);
+                      flag_move = false;
+                    }
                 }
               else
                 {
@@ -129,11 +146,6 @@ int main(int argc, char *argv[])
                   flag_move = false;
                 }
             }
-          else
-            {
-              board.setNmoves(board.getNmoves()-1);
-              flag_move = false;
-          }
         }
    
       // Change pawns into big_pawns
@@ -145,7 +157,12 @@ int main(int argc, char *argv[])
       // Update the board positions
       updatePositions(&board, P1pawns, P2pawns);
 
-      // Pass the new board positions to perl (cpp thread)
+      // Player or PC playing?
+      if (isCPU_log == true)
+        player_flag = "auto";
+      
+
+      // Pass informations to perl (cpp thread)
       std::cout << pos <<std::endl;
       std::cout << flag_move << player_flag[0] <<std::endl;
       std::string new_positions;
@@ -160,6 +177,8 @@ int main(int argc, char *argv[])
       isCPU_log = false;
     }
   
+  // if endGame == 1 , the while loop ends and the program returns endGame
+  std::cout << endGame << std::endl;
   return 0;
 }
   

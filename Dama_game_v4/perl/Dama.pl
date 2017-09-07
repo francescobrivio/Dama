@@ -24,6 +24,7 @@ my $input = '';
 @positions ;
 $team;
 $CPU;
+$CPUgoON=1;
 
 # Pipes declaration
 pipe (READFROM_TK, WRITETO_C);
@@ -57,7 +58,7 @@ sub TKthread
     $mw->geometry("800x650");
     $mw->title ("Test Dama");
 
-    # Images to represent the pawns
+    # Images of the pawns
     $dama_bianca = $mw->Photo(-file=> "../../Images/dama_bianca.png");
     $dama_bianca_scaled = $mw->Photo(-file=>"");
     $dama_bianca_scaled->copy($dama_bianca, -subsample=>2,2);
@@ -133,7 +134,9 @@ sub TKthread
         # Confirm the move
         my $printing = $movesframe->Button(-text=>"Enter Move",, -width=>9, -command=>sub{
                                         &doTheMove($user_move->cget(-textvariable)."\n");
-                                        if($CPU==1) {&doTheMove("auto\n");}
+                                        $mw->update;
+                                        sleep(1);
+                                        if($CPU==1 and $CPUgoON==1) {&doTheMove("auto\n");}
             
 =pod
                                         print WRITETO_C $user_move->cget(-textvariable)."\n";
@@ -269,7 +272,7 @@ sub CPPthread
       $pos_fromCPP   = <$Reader>;
       $flag_fromCPP  = <$Reader>;
       $new_positions = <$Reader>;
-      $endgame = <$Reader>;
+      $endgame       = <$Reader>;
         
       # Pass move_flag, updated_positions and endgame_flag to Tk
       print WRITETO_TK $endGame."\n";

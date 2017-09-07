@@ -12,57 +12,23 @@ sub quit
     my $tk_pid = shift;
     my $cpp_pid = shift;
     my $exe_pid = shift;
-    #print "Quitting Game...\n";
     system("kill $exe_pid");
     system("kill $cpp_pid");
     system("kill $tk_pid");
     exit(0);
 }
 
-sub clear
-{
-    $gf = shift;
-    my @w = $gf->packSlaves;
-    foreach (@w) { $_->packForget; }
-}
+#sub clear
+#{
+#    $gf = shift;
+#    my @w = $gf->packSlaves;
+#    foreach (@w) { $_->packForget; }
+#}
 
 sub newGame
 {
     createGrid2();
     $d0->Show;
-}
-
-sub printFunc
-{
-    #print "$userEntry \n";
-    print "$input \n";
-}
-
-
-sub beginGame
-{
-    my $inner_team = shift;
-    my $isCPU = shift;
-
-    $log->insert('end', " Team chosen: $inner_team");
-    $log->insert('end', "------------- GOOD LUCK! -------------\n", 'green');
-    $log->insert('end', " MOVES LOG:\n", 'under');
-
-    print WRITETO_C $inner_team;
-    $d0->destroy();
-    $d1->destroy();
-    
-    chomp($newPositions = <READFROM_C>);
-    @positions = split//, $newPositions;            
-    &loopOnButtons(\@positions);
-    &countPawns(\@positions);
-    $mw->update;
-    chomp($inner_team);
-    if (($inner_team eq 'black') and ($isCPU))
-      {
-        sleep(1);
-        &doTheMove("auto\n");
-      }
 }
 
 sub gameMode
@@ -82,8 +48,35 @@ sub gameMode
       }
 
     $d1->Show;
-    
 }
+
+sub beginGame
+{
+    my $inner_team = shift;
+    my $isCPU = shift;
+
+    $log->insert('end', " Team chosen: $inner_team");
+    $log->insert('end', "------------- GOOD LUCK! -------------\n", 'green');
+    $log->insert('end', " MOVES LOG:\n", 'under');
+
+    print WRITETO_C $inner_team;
+    $d0->destroy();
+    $d1->destroy();
+    
+    chomp($newPositions = <READFROM_C>);
+    @positions = split//, $newPositions;            
+    &loopOnButtons(\@positions);
+    &countPawns(\@positions);
+    $mw->update;
+    
+    chomp($inner_team);
+    if (($inner_team eq 'black') and ($isCPU))
+      {
+        sleep(1);
+        &doTheMove("auto\n");
+      }
+}
+
 
 sub countPawns
 {
@@ -108,6 +101,13 @@ sub doTheMove
     print WRITETO_C $move;
     
     chomp($endGame = <READFROM_C>);
+    chomp($move_fromC = <READFROM_C>);
+    chomp($flag_msg = <READFROM_C>);
+    chomp($newPositions = <READFROM_C>);
+    
+    @flag_split = split //, $flag_msg;
+    @log_move   = split //, $move_fromC;
+    
     if($endGame == 1)
     {
       print "END GAME\n";
@@ -115,45 +115,57 @@ sub doTheMove
       $log->insert('end'," who's the winner??\n");
       $log->see('end');
     }
-    
-    chomp($pos_fromC = <READFROM_C>);
-    chomp($flag_msg = <READFROM_C>);
-    
-    @flag_split = split //, $flag_msg;
-    if ($flag_split[0] == 1)
+    else
     {
-      @log_move = split //, $pos_fromC;
+      &loggingMove(@flag_split, @log_move);
 
-      if ($flag_split[1] eq 'w' || $flag_split[1] eq 'W')
-      {
-        $log->insert('end', " White: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
-        $log->see('end');
-      }
-      elsif ($flag_split[1] eq 'b' || $flag_split[1] eq 'B')
-      {
-        $log->insert('end', " Black: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
-        $log->see('end');
-      }
-      else
-      {
-        $log->insert('end', " PC   : $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
-        $log->see('end');
-      }
+      @positions = split//, $newPositions;
+      &loopOnButtons(\@positions);
+      &countPawns(\@positions);
+      $user_move->delete(0,30);
+      
+      # If flag is 0 (i.e. not a good move), tell PC to wait
+      if   ($flag_split[0] == 1) {$CPUgoON = 1;}
+      else                       {$CPUgoON = 0;}
+    }
+}
+
+
+sub loggingMove
+{
+  my $flag_split = shift;
+  my $log_move = shift;
+  
+  if ($flag_split[0] == 1)
+  {
+    if    ($flag_split[1] eq 'w' || $flag_split[1] eq 'W')
+    {
+      $log->insert('end', " White: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
+      $log->see('end');
+    }
+    elsif ($flag_split[1] eq 'b' || $flag_split[1] eq 'B')
+    {
+      $log->insert('end', " Black: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
+      $log->see('end');
+    }
+    elsif ($flag_split[1] eq 'a')
+    {
+      $log->insert('end', " PC   : $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
+      $log->see('end');
     }
     else
     {
-      $log->insert('end', " Move not allowed!Try again!\n", 'red');
+      $log->insert('end', " WTF is going on?!?! who is playing?!?! \n", 'red');
       $log->see('end');
     }
+  }
+  else
+  {
+    $log->insert('end', " Move not allowed! Try again! \n", 'red');
+    $log->see('end');
+  }
 
-    chomp($newPositions = <READFROM_C>);
-    @positions = split//, $newPositions;            
-    &loopOnButtons(\@positions);
-    &countPawns(\@positions);
-    $user_move->delete(0,30);
-    
 }
-
 
 1;
 
