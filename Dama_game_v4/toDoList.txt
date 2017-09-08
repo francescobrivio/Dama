@@ -1,0 +1,16 @@
+-------- NEEDED --------
+
+- spostare “enter move” sotto la griglia
+- evidenziare i tasti che vengono schiacciati
+
+- log più dettagliato (non solo “move not allowed...”)  --> però così bisogna cambiare/aggiungere cosa si passa da cpp a tk mi sa
+
+- migliorare intelligenza di CPU
+
+-------- OPTIONAL --------
+
+- pedine mangiate rappresentate di fianco    -->  non banale implementare dei nuovi bottoni, 
+						     magari è meglio in qualche altro modo
+- clessidra con il tempo (dall’inizio della partita o per ogni mossa) / o che mette un limite di tempo alle mosse  
+						-->  il tempo totale/di ogni mossa è facile credo, più difficile mettere un limite di 
+						     tempo alle mosse, forse questo cambia un po’ la logica del gioco
