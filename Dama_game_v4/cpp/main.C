@@ -65,88 +65,98 @@ int main(int argc, char *argv[])
 
       // Read the position from perl (Player or PC)
       std::cin >> pos;
-        
-      // If the PC is playing, make its move
-      if(pos == "auto")
+    
+      // Check if the move passed has at least size 4, i.e. is 2 cells
+      if (pos.size() < 4)
         {
-          isCPU_log = true;
-          if(turn == P1pawns->at(0)->getColor())
-            pos = autoMove(P1pawns);
-          else if(turn == P2pawns->at(0)->getColor())
-            pos = autoMove(P2pawns);
+          isCPU_log = false;
+          board.setNmoves(board.getNmoves()-1);
+          flag_move = false;
         }
       else
-        isCPU_log = false;
+      {
+        // If the PC is playing, make its move
+        if(pos == "auto")
+          {
+            isCPU_log = true;
+            if(turn == P1pawns->at(0)->getColor())
+              pos = autoMove(P1pawns);
+            else if(turn == P2pawns->at(0)->getColor())
+              pos = autoMove(P2pawns);
+          }
+        else
+          isCPU_log = false;
 
-      // If the PC returns "none" (i.e. cannot move, i.e. PC loses) endGame=1
-      if(pos == "none")
-        endGame = 1;
+        // If the PC returns "none" (i.e. cannot move, i.e. PC loses) endGame=1
+        if(pos == "none")
+          endGame = 1;
       
-      // If "pos" is ok and the game isn't finished, go on
-      if(pos != "none" && endGame == 0)
-        {
-          // Read starting position
-          yStr = tolower(pos[0]);
-          xStr = tolower(pos[1]);
-	  
-          y = (int)(yStr - '0');
-          x = (int)(xStr - 'a' + 1);
+        // If "pos" is ok and the game isn't finished, go on
+        if(pos != "none" && endGame == 0)
+          {
+            // Read starting position
+            yStr = tolower(pos[0]);
+            xStr = tolower(pos[1]);
+	    
+            y = (int)(yStr - '0');
+            x = (int)(xStr - 'a' + 1);
             
-          // Select the correct pawn
-          if(turn[0] == tolower(P1pawns->at(0)->getColor()[0]))
-	        tmp_pawn = findPedina(P1pawns, x, y);
-          else if(turn[0] == tolower(P2pawns->at(0)->getColor()[0]))
-            tmp_pawn = findPedina(P2pawns, x, y);
+            // Select the correct pawn
+            if(turn[0] == tolower(P1pawns->at(0)->getColor()[0]))
+	          tmp_pawn = findPedina(P1pawns, x, y);
+            else if(turn[0] == tolower(P2pawns->at(0)->getColor()[0]))
+              tmp_pawn = findPedina(P2pawns, x, y);
            
-          // Check if the pawn is found or the starting position was empty
-          if (!tmp_pawn)
-            {
-              board.setNmoves(board.getNmoves()-1);
-              flag_move = false;
-            }
-          // If the starting position is good (i.e. the pawn exist), go on
-          else
-            {
-              // Log to know who is playing, black or white?
-              player_flag = tmp_pawn->getColor();
+            // Check if the pawn is found or the starting position was empty
+            if (!tmp_pawn)
+              {
+                board.setNmoves(board.getNmoves()-1);
+                flag_move = false;
+              }
+            // If the starting position is good (i.e. the pawn exist), go on
+            else
+              {
+                // Log to know who is playing, black or white?
+                player_flag = tmp_pawn->getColor();
 
-              // Check if the move is allowed
-              if(tolower(tmp_pawn->getColor()[0]) == turn[0])
-                {
-                  flag_move = tmp_pawn->CheckMove(pos);
+                // Check if the move is allowed
+                if(tolower(tmp_pawn->getColor()[0]) == turn[0])
+                  {
+                    flag_move = tmp_pawn->CheckMove(pos);
 
-                  if(flag_move)
-                    {
-                      // Read the new position
-                      yStr = tolower(pos[pos.size()-2]);
-                      xStr = tolower(pos[pos.size()-1]);
+                    if(flag_move)
+                      {
+                        // Read the new position
+                        yStr = tolower(pos[pos.size()-2]);
+                        xStr = tolower(pos[pos.size()-1]);
 		  
-                      y = (int)(yStr - '0');
-                      x = (int)(xStr - 'a' + 1);
+                        y = (int)(yStr - '0');
+                        x = (int)(xStr - 'a' + 1);
 		  
-                      // Move the pawn
-                      tmp_pawn->Move(x, y);
+                        // Move the pawn
+                        tmp_pawn->Move(x, y);
 
-                      if(turn == P1pawns->at(0)->getColor())
-                        //P2pawns = erasePawns(P2pawns, pos);
-                        erasePawns(P2pawns, pos);
-                      else if(turn == P2pawns->at(0)->getColor())
-                        //P1pawns = erasePawns(P1pawns, pos);
-                        erasePawns(P1pawns, pos);
-                    }
-                  else
-                    {
-                      board.setNmoves(board.getNmoves()-1);
-                      flag_move = false;
-                    }
-                }
-              else
-                {
-                  board.setNmoves(board.getNmoves()-1);
-                  flag_move = false;
-                }
-            }
-        }
+                        if(turn == P1pawns->at(0)->getColor())
+                          //P2pawns = erasePawns(P2pawns, pos);
+                          erasePawns(P2pawns, pos);
+                        else if(turn == P2pawns->at(0)->getColor())
+                          //P1pawns = erasePawns(P1pawns, pos);
+                          erasePawns(P1pawns, pos);
+                      }
+                    else
+                      {
+                        board.setNmoves(board.getNmoves()-1);
+                        flag_move = false;
+                      }
+                  }
+                else
+                  {
+                    board.setNmoves(board.getNmoves()-1);
+                    flag_move = false;
+                  }
+              }
+          }
+      }
    
       // Change pawns into big_pawns
       if(turn == P1pawns->at(0)->getColor())

@@ -17,3 +17,7 @@
 - clessidra con il tempo (dall’inizio della partita o per ogni mossa) / o che mette un limite di tempo alle mosse  
 						-->  il tempo totale/di ogni mossa è facile credo, più difficile mettere un limite di 
 						     tempo alle mosse, forse questo cambia un po’ la logica del gioco
+
+
+
+--> DONE: baco trovato da fra ferr merda -> se passi una mossa sola si impalla
