@@ -7,6 +7,9 @@
 
 - migliorare intelligenza di CPU
 
+- sistemare endGame (ora si chiude tutto il programma)
+- sistemare newGame (ora si impalla, invece deve cancellare log,nPedine e la griglia, ed essere pronto a ricominciare)
+
 -------- OPTIONAL --------
 
 - pedine mangiate rappresentate di fianco    -->  non banale implementare dei nuovi bottoni, 
