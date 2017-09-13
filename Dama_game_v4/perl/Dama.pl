@@ -111,11 +111,16 @@ sub TKthread
         $log->tagConfigure('green', -foreground=>"green");
         $log->tagConfigure('under', -underline=>1);
         $log->insert('end', "----------- WELCOME TO DAMA -----------\n", 'green');
-        $log->insert('end', " Select \"File->NewGame\" to begin and\n");
+        $log->insert('end', "-SELECT \"File->NewGame\" to begin and\n");
         $log->insert('end', " remember, WHITE always starts first.\n");
+        $log->insert('end', "\n");
+        $log->insert('end', "-INSTRUCTIONS: click on the pawn to\n");
+        $log->insert('end', " select it and then click where you\n");
+        $log->insert('end', " you want to move it. Finally just\n");
+        $log->insert('end', " click \"Enter Move\" \n");
         $log->insert('end', "---------------------------------------\n", 'green');
 
-        # Counters to show the numbero of pawns remaining
+        # Counters to show the number of pawns remaining
         $nWhite_label = $pawnsframe->Label(-text=>'White:')->pack(-side=>'left');
         $nWhite_entry = $pawnsframe->Entry(-width=>3, -state=>'disabled', -disabledforeground=>'black', -disabledbackground=>'white')->pack(-side=>'left');
         $nBlack_label = $pawnsframe->Label(-text=>'        Black:')->pack(-side=>'left');
@@ -129,14 +134,13 @@ sub TKthread
         $user_move = $movesframe->Entry(-width=>17)->pack(-side => 'left', -fill=>'x');
 
         # Delete the move
-        my $clearing = $movesframe->Button(-text=>"Clear Move", -width=>8, -command=>sub{$user_move->delete(0,30);} )->pack(-side => 'left', -fill=>'x');
+        my $clearing = $movesframe->Button(-text=>"Clear Move", -width=>8, -command=>sub{&restoreColors();$user_move->delete(0,30);} )->pack(-side => 'left', -fill=>'x');
 
         # Confirm the move
         my $printing = $movesframe->Button(-text=>"Enter Move",, -width=>9, -command=>sub{
                                         &doTheMove($user_move->cget(-textvariable)."\n");
                                         $mw->update;
-                                        sleep(1);
-                                        if($CPU==1 and $CPUgoON==1) {&doTheMove("auto\n");}
+                                        if($CPU==1 and $CPUgoON==1) {sleep(1); &doTheMove("auto\n");}
             
 =pod
                                         print WRITETO_C $user_move->cget(-textvariable)."\n";

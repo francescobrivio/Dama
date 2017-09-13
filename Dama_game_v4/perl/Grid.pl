@@ -16,14 +16,14 @@ sub createGrid2
                                           my $testo_bott = $buttons[$position]->cget(-text);
                                           if ($testo_move =~ /$testo_bott/g)
                                           {
-                                            my $pos = pos($testo_move);
+                                            my $pos = pos($testo_move); # "pos" gives the position in the variable of the regex m//g
                                             $user_move->delete($pos-2,$pos);
                                           }
                                           else
                                           {
                                             $user_move->configure(-textvariable=>$testo_move.$testo_bott);
                                           }
-                                          #highlightMove(); # HERE
+                                          &highlightMove($user_move->cget(-textvariable));
                                         }
                                     );
 
@@ -68,10 +68,12 @@ sub createGrid2
 sub loopOnButtons
 {
     my @inner_positions = @{$_[0]};
-    $k = 0;
+    my $k = 0;
+    &restoreColors();
+    
+    # Fill the board cell with the correct figure (pawn, pedone, empty)
     foreach (@buttons)
     {
-        $_->configure(-relief=>'flat'); # HERE
         if      ($inner_positions[$k] eq "w") {$_->configure(-image=> $dama_bianca_scaled)  ;}
         elsif   ($inner_positions[$k] eq 'b') {$_->configure(-image=> $dama_nera_scaled)    ;}
         elsif   ($inner_positions[$k] eq 'W') {$_->configure(-image=> $damone_bianco_scaled);}
@@ -80,6 +82,43 @@ sub loopOnButtons
 
         $k++;
     }
+}
+
+# Highlight the board cell when the user presses the button
+sub highlightMove
+{
+  my $moveToColor = shift;
+  my @moves_array = ( $moveToColor =~ m/../g );
+  foreach (@buttons)
+  {
+    foreach $move_array (@moves_array)
+    {
+      if ($_->cget(-text) eq $move_array)
+      {
+        $_->configure(-bg=>'red');
+      }
+    }
+  }
+}
+
+# Restore the original colors of the board cells
+sub restoreColors
+{
+  my $k = 0;
+  foreach (@buttons)
+  {
+    if ( ($k/8) % 2 == 0)
+    {
+    if ($k % 2 == 0) {$_->configure(-bg=>'sienna');}
+    else             {$_->configure(-bg=>'moccasin');}
+    }
+    else
+    {
+    if ($k % 2 == 1) {$_->configure(-bg=>'sienna');}
+    else             {$_->configure(-bg=>'moccasin');}
+    }
+    $k++;
+  }
 }
 
 1;
