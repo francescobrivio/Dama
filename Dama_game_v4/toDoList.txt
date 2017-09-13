@@ -1,7 +1,8 @@
 -------- NEEDED --------
 
 - spostare “enter move” sotto la griglia
-- evidenziare i tasti che vengono schiacciati
+
+- evidenziare i tasti che vengono schiacciati --> DONE, ma quando li rischiacci non tornano al colore inizale
 
 - log più dettagliato (non solo “move not allowed...”)  --> però così bisogna cambiare/aggiungere cosa si passa da cpp a tk mi sa
 
@@ -9,6 +10,7 @@
 
 - sistemare endGame (ora si chiude tutto il programma)
 - sistemare newGame (ora si impalla, invece deve cancellare log,nPedine e la griglia, ed essere pronto a ricominciare)
+
 
 -------- OPTIONAL --------
 
@@ -19,5 +21,12 @@
 						     tempo alle mosse, forse questo cambia un po’ la logica del gioco
 
 
+- modificare CPU: il suo primo obiettivo dovrebbe essere fare damone
+
+----------- ERRORI -------
+
+- quando il PC ha un damone non lo muove più
 
 --> DONE: baco trovato da fra ferr merda -> se passi una mossa sola si impalla
+
+- se scelgo player vs player ma poi scelgo nero, il PC fa la prima mossa del bianco! da sistemare!

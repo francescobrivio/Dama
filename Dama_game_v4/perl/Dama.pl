@@ -86,6 +86,7 @@ sub TKthread
         # Menu bar
         my $filemenu = $menuframe->Menubutton(-text=>'File', -activebackground=>"aquamarine", -foreground=>"black");
         $filemenu->command(-label=>"New Game", -command=>\&newGame);
+        $filemenu->command(-label=>"Help", -command=>\&showHelpPanel);
         $filemenu->command( -label=>"Quit", -command=>[\&quit,$pid,$pid_cpp]);
         $filemenu->pack(-side=>"left", -fill=>"x");
 
@@ -111,13 +112,13 @@ sub TKthread
         $log->tagConfigure('green', -foreground=>"green");
         $log->tagConfigure('under', -underline=>1);
         $log->insert('end', "----------- WELCOME TO DAMA -----------\n", 'green');
-        $log->insert('end', "-SELECT \"File->NewGame\" to begin and\n");
+        $log->insert('end', " Select \"File->NewGame\" to begin and\n");
         $log->insert('end', " remember, WHITE always starts first.\n");
-        $log->insert('end', "\n");
-        $log->insert('end', "-INSTRUCTIONS: click on the pawn to\n");
-        $log->insert('end', " select it and then click where you\n");
-        $log->insert('end', " you want to move it. Finally just\n");
-        $log->insert('end', " click \"Enter Move\" \n");
+        #$log->insert('end', "\n");
+        #$log->insert('end', "-INSTRUCTIONS: click on the pawn to\n");
+        #$log->insert('end', " select it and then click where you\n");
+        #$log->insert('end', " you want to move it. Finally just\n");
+        #$log->insert('end', " click \"Enter Move\" \n");
         $log->insert('end', "---------------------------------------\n", 'green');
 
         # Counters to show the number of pawns remaining

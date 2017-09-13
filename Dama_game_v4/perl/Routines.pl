@@ -155,7 +155,7 @@ sub loggingMove
     }
     else
     {
-      $log->insert('end', " WTF is going on?!?! who is playing?!?! \n", 'red');
+      $log->insert('end', " WTF is going on?!?! who is playing?!?! \n Machines are taking over...", 'red');
       $log->see('end');
     }
   }
@@ -165,6 +165,29 @@ sub loggingMove
     $log->see('end');
   }
 
+}
+
+sub showHelpPanel
+{
+  $helpText = <<END_MESSAGE;
+-- MAIN INSTRUCTIONS --
+1. Wins whoever eats all the opponent's pawns or if the opponent can't move anymore
+2. Pawns move only forward and diagonally
+3. You can eat an opponent pawn by "jumping" over it, multiple "jump" are allowed
+4. Big pawns can also move backwards
+5. Pawns can not eat big pawns
+6. White team always moves first
+
+-- HOW TO PLAY --
+1. Click on a pawn to select it
+2. Click on the cell where you want to move the selected pawn
+3. If you want to make a multiple "jump", select all the intermediate cells
+4. Once you chose your move, click "Enter Move" to play your move
+5. If you want to change your move, click "Clear Move" or click again on the cell
+END_MESSAGE
+
+  $helpPanel = $mw->Scrolled("Dialog", -scrollbars => 'e', -title=>'Help message', -text=>$helpText, -width=>40);
+  $helpPanel->Show;
 }
 
 1;
