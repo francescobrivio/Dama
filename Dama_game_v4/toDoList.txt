@@ -6,10 +6,9 @@
 
 - log più dettagliato (non solo “move not allowed...”)  --> però così bisogna cambiare/aggiungere cosa si passa da cpp a tk mi sa
 
-- migliorare intelligenza di CPU
-
 - sistemare endGame (ora si chiude tutto il programma)
-- sistemare newGame (ora si impalla, invece deve cancellare log,nPedine e la griglia, ed essere pronto a ricominciare)
+
+- sistemare newGame (ora si impalla, invece deve cancellare log,nPedine e la griglia, ed essere pronto a ricominciare, anche l’exe)
 
 
 -------- OPTIONAL --------
@@ -29,4 +28,4 @@
 
 --> DONE: baco trovato da fra ferr merda -> se passi una mossa sola si impalla
 
-- se scelgo player vs player ma poi scelgo nero, il PC fa la prima mossa del bianco! da sistemare!
+--> DONE: se scelgo player vs player ma poi scelgo nero, il PC fa la prima mossa del bianco! da sistemare!

@@ -23,7 +23,7 @@ my $input = '';
 @buttons;
 @positions ;
 $team;
-$CPU;
+$CPU=0;
 $CPUgoON=1;
 
 # Pipes declaration
@@ -225,9 +225,9 @@ sub TKthread
 
         # Dialog for team color decision
         $d1 = $mw->Dialog(-title=>"",-text=>"Choose the color of you team!", -popover=>$gridframe, -buttons=>[]);
-        my $black_team = $d1->Radiobutton(-text=>'black', -value=>'black', -variable=>\$team, -image=> $dama_nera_scaled  , -command=>[\&beginGame,"black\n",\$CPU]);
+        my $black_team = $d1->Radiobutton(-text=>'black', -value=>'black', -variable=>\$team, -image=> $dama_nera_scaled  , -command=>[\&beginGame,"black\n",$CPU]);
         $black_team->pack();
-        my $white_team = $d1->Radiobutton(-text=>'white', -value=>'white', -variable=>\$team, -image=> $dama_bianca_scaled, -command=>[\&beginGame,"white\n",\$CPU]);
+        my $white_team = $d1->Radiobutton(-text=>'white', -value=>'white', -variable=>\$team, -image=> $dama_bianca_scaled, -command=>[\&beginGame,"white\n",$CPU]);
         $white_team->pack();
 
 
