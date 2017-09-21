@@ -61,7 +61,7 @@ void evolvePedina(std::vector<Pedina*> *pawns)
     for(unsigned int i=0; i<pawns->size(); i++)
     {
       // Only pawns can change, not the "big_pawns"
-      if (typeid(*pawns->at(i)) != typeid(Pedina))
+      if (typeid(pawns->at(i)) != typeid(Pedina*))
         continue;
       else
       {

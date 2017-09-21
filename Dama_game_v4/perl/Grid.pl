@@ -2,7 +2,7 @@
 
 sub createGrid2
 {
-    my $counter;
+    #my $counter;
     foreach $num (1 .. 8)
     {
         my $counter = 0;
@@ -79,7 +79,7 @@ sub loopOnButtons
         elsif   ($inner_positions[$k] eq 'b') {$_->configure(-image=> $dama_nera_scaled)    ;}
         elsif   ($inner_positions[$k] eq 'W') {$_->configure(-image=> $damone_bianco_scaled);}
         elsif   ($inner_positions[$k] eq 'B') {$_->configure(-image=> $damone_nero_scaled)  ;}
-        else                                  {$_->configure(-image=> $dama_empty_scaled); }
+        else                                  {$_->configure(-image=> $dama_empty_scaled)   ;}
 
         $k++;
     }

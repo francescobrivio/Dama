@@ -83,59 +83,63 @@ sub TKthread
     my $menuframe = $mw->Frame(-background=>"aquamarine4", -bd=>2, -relief=>'raised');
     $menuframe->pack(-side=>"top", -fill=>"x");
 
-        # Menu bar
-        my $filemenu = $menuframe->Menubutton(-text=>'File', -activebackground=>"aquamarine", -foreground=>"black");
-        $filemenu->command(-label=>"New Game", -command=>\&newGame);
-        $filemenu->command(-label=>"Help", -command=>\&showHelpPanel);
-        $filemenu->command( -label=>"Quit", -command=>[\&quit,$pid,$pid_cpp]);
-        $filemenu->pack(-side=>"left", -fill=>"x");
-
-        # Quit button
-        my $quitmenu = $menuframe->Button( -text=>"Quit", -command=>[\&quit,$$,$pid,$pid_cpp])->pack;
-        $quitmenu->pack(-side=>"right");
-
+    # Menu bar
+    my $filemenu = $menuframe->Menubutton(-text=>'File', -activebackground=>"aquamarine", -foreground=>"black");
+    $filemenu->command(-label=>"New Game", -command=>\&newGame);
+    $filemenu->command(-label=>"Help", -command=>\&showHelpPanel);
+    $filemenu->command( -label=>"Quit", -command=>[\&quit,$pid,$pid_cpp]);
+    $filemenu->pack(-side=>"left", -fill=>"x");
+    
+    # Quit button
+    my $quitmenu = $menuframe->Button( -text=>"Quit", -command=>[\&quit,$$,$pid,$pid_cpp])->pack;
+    $quitmenu->pack(-side=>"right");
+    
     # logFrame
     my $logframe = $mw->LabFrame(-label=>"", -bd=>2, -relief=>'raised', -padx=>"10");
     $logframe->pack(-side=>"right", -fill=>"both");
     
-        $pawns_left_title = $logframe->Label(-text=>"\n ------------------- PAWNS LEFT ------------------ \n")->pack();
-        my $pawnsframe  = $logframe->Frame()->pack();
-        my $loglogframe = $logframe->Frame()->pack();
-        my $movesframe  = $logframe->Frame()->pack();
+    $pawns_left_title = $logframe->Label(-text=>"\n ------------------- PAWNS LEFT ------------------ \n")->pack();
+    my $pawnsframe  = $logframe->Frame()->pack();
+    my $loglogframe = $logframe->Frame()->pack();
     
-        # Simple text
-        $log_title = $loglogframe->Label(-text=>"\n\n ------------------- MOVES LOG ------------------ \n")->pack();
+    # Simple text
+    $log_title = $loglogframe->Label(-text=>"\n\n ------------------- MOVES LOG ------------------ \n")->pack();
     
-        # Scrolled button to keep the log of the moves
-        $log = $loglogframe->Scrolled("Text", -scrollbars => 'e', -width=>40, -height=>25, -bg=>"black", -fg=>"white")->pack();
-        $log->tagConfigure('red'  , -foreground=>"red");
-        $log->tagConfigure('green', -foreground=>"green");
-        $log->tagConfigure('under', -underline=>1);
-        $log->insert('end', "----------- WELCOME TO DAMA -----------\n", 'green');
-        $log->insert('end', " Select \"File->NewGame\" to begin and\n");
-        $log->insert('end', " remember, WHITE always starts first.\n");
-        #$log->insert('end', "\n");
-        #$log->insert('end', "-INSTRUCTIONS: click on the pawn to\n");
-        #$log->insert('end', " select it and then click where you\n");
-        #$log->insert('end', " you want to move it. Finally just\n");
-        #$log->insert('end', " click \"Enter Move\" \n");
-        $log->insert('end', "---------------------------------------\n", 'green');
+    # Scrolled button to keep the log of the moves
+    $log = $loglogframe->Scrolled("Text", -scrollbars => 'e', -width=>40, -height=>25, -bg=>"black", -fg=>"white")->pack();
+    $log->tagConfigure('red'  , -foreground=>"red");
+    $log->tagConfigure('green', -foreground=>"green");
+    $log->tagConfigure('under', -underline=>1);
+    $log->insert('end', "----------- WELCOME TO DAMA -----------\n", 'green');
+    $log->insert('end', " Select \"File->NewGame\" to begin and\n");
+    $log->insert('end', " remember, WHITE always starts first.\n");
+    #$log->insert('end', "\n");
+    #$log->insert('end', "-INSTRUCTIONS: click on the pawn to\n");
+    #$log->insert('end', " select it and then click where you\n");
+    #$log->insert('end', " you want to move it. Finally just\n");
+    #$log->insert('end', " click \"Enter Move\" \n");
+    $log->insert('end', "---------------------------------------\n", 'green');
 
-        # Counters to show the number of pawns remaining
-        $nWhite_label = $pawnsframe->Label(-text=>'White:')->pack(-side=>'left');
-        $nWhite_entry = $pawnsframe->Entry(-width=>3, -state=>'disabled', -disabledforeground=>'black', -disabledbackground=>'white')->pack(-side=>'left');
-        $nBlack_label = $pawnsframe->Label(-text=>'        Black:')->pack(-side=>'left');
-        $nBlack_entry = $pawnsframe->Entry(-width=>3, -state=>'disabled', -disabledforeground=>'black', -disabledbackground=>'white')->pack(-side=>'left');
-    
-        # Simple text
-        $separation_line = $movesframe->Label(-text=>"\n\n ------------------- USER MOVE ------------------ \n")->pack();
-    
-    
-        # Container for the move
-        $user_move = $movesframe->Entry(-width=>17)->pack(-side => 'left', -fill=>'x');
+    # Counters to show the number of pawns remaining
+    $nWhite_label = $pawnsframe->Label(-text=>'White:', -image=>$dama_bianca_scaled)->pack(-side=>'left');
+    $nWhite_entry = $pawnsframe->Entry(-width=>3, -state=>'disabled', -disabledforeground=>'black', -disabledbackground=>'white')->pack(-side=>'left');
+    $nWhite_label = $pawnsframe->Label(-text=>'           ')->pack(-side=>'left');
+    $nBlack_label = $pawnsframe->Label(-text=>'Black:', -image=> $dama_nera_scaled)->pack(-side=>'right');
+    $nBlack_entry = $pawnsframe->Entry(-width=>3, -state=>'disabled', -disabledforeground=>'black', -disabledbackground=>'white')->pack(-side=>'right');
 
-        # Delete the move
-        my $clearing = $movesframe->Button(-text=>"Clear Move", -width=>8, -command=>sub{&restoreColors();$user_move->delete(0,30);} )->pack(-side => 'left', -fill=>'x');
+
+    #my $movesframe  = $logframe->Frame()->pack();  
+    my $movesframe = $mw->LabFrame(-label=>"User Move", -bd=>2, -relief=>'raised');
+    $movesframe->pack(-side=>"bottom", -fill=>"both");
+
+    # Simple text
+    #$separation_line = $movesframe->Label(-text=>"\n\n ------------------- USER MOVE ------------------ \n")->pack();    
+    
+    # Container for the move
+    $user_move = $movesframe->Entry(-width=>30)->pack(-side => 'left', -fill=>'x');
+    
+    # Delete the move
+    my $clearing = $movesframe->Button(-text=>"Clear Move", -width=>8, -command=>sub{&restoreColors();$user_move->delete(0,30);} )->pack(-side => 'left', -fill=>'x');
 
         # Confirm the move
         my $printing = $movesframe->Button(-text=>"Enter Move",, -width=>9, -command=>sub{
@@ -209,27 +213,27 @@ sub TKthread
                                         }
 =cut
 
-                                        })->pack(-side => 'left', -fill=>'x');
+				    })->pack(-side => 'left', -fill=>'x');
 
 
     # gridFrame
-    $gridframe = $mw->LabFrame(-label=>"DamaGame", -bd=>2, -relief=>'raised');
+    $gridframe = $mw->LabFrame(-label=>"DamaGame", -bd=>2, -relief=>'raised');    
     $gridframe->pack(-side=>"left", -fill=>"both", -expand=>1, -pady=>'0');
     
-        # Dialog for game mode decision
-        $d0 = $mw->Dialog(-title=>"",-text=>"Choose the game mode!", -popover=>$gridframe, -buttons=>[]);
-        my $PvsP = $d0->Radiobutton(-text=>'Player vs Player', -value=>0, -variable=>\$CPU, -command=>[\&gameMode, 0]);
-        $PvsP->pack();
-        my $PvsC = $d0->Radiobutton(-text=>'Player vs CPU', -value=>1, -variable=>\$CPU, -command=>[\&gameMode, 1]);
-        $PvsC->pack();
+    # Dialog for game mode decision
+    #$d0 = $mw->Dialog(-text=>"Choose the game mode!", -popover=>$gridframe, -buttons=>[]);
+    #my $PvsP = $d0->Radiobutton(-text=>'Player vs Player', -value=>0, -variable=>\$CPU, -command=>[\&gameMode, 0]);
+    #$PvsP->pack();
+    #my $PvsC = $d0->Radiobutton(-text=>'Player vs CPU', -value=>1, -variable=>\$CPU, -command=>[\&gameMode, 1]);
+    #$PvsC->pack();
 
-        # Dialog for team color decision
-        $d1 = $mw->Dialog(-title=>"",-text=>"Choose the color of you team!", -popover=>$gridframe, -buttons=>[]);
-        my $black_team = $d1->Radiobutton(-text=>'black', -value=>'black', -variable=>\$team, -image=> $dama_nera_scaled  , -command=>[\&beginGame,"black\n",$CPU]);
-        $black_team->pack();
-        my $white_team = $d1->Radiobutton(-text=>'white', -value=>'white', -variable=>\$team, -image=> $dama_bianca_scaled, -command=>[\&beginGame,"white\n",$CPU]);
-        $white_team->pack();
-
+    # Dialog for team color decision
+    #$d1 = $mw->Dialog(-text=>"Choose the color of you team!", -popover=>$gridframe, -buttons=>[]);
+    #my $black_team = $d1->Radiobutton(-text=>'black', -value=>'black', -variable=>\$team, -image=> $dama_nera_scaled  , -command=>[\&beginGame,"black\n",$CPU]);
+    #$black_team->pack();
+    #my $white_team = $d1->Radiobutton(-text=>'white', -value=>'white', -variable=>\$team, -image=> $dama_bianca_scaled, -command=>[\&beginGame,"white\n",$CPU]);
+    #$white_team->pack();
+    
 
     # Tk MainLoop
     $mw->MainLoop;

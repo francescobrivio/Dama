@@ -27,7 +27,23 @@ sub quit
 
 sub newGame
 {
-    createGrid2();
+    if (@buttons[0] == 0){createGrid2();}
+    else{
+	$user_move->delete('0.0','end');
+	$log->delete('0.0','end');	
+	$log->insert('end', "----------- WELCOME TO DAMA -----------\n", 'green');
+	$log->insert('end', " Select \"File->NewGame\" to begin and\n");
+	$log->insert('end', " remember, WHITE always starts first.\n");
+	$log->insert('end', "---------------------------------------\n", 'green');
+    }
+    
+     # Dialog for game mode decision    
+    $d0 = $mw->Dialog(-text=>"Choose the game mode!", -popover=>$gridframe, -buttons=>[]);
+    my $PvsP = $d0->Radiobutton(-text=>'Player vs Player', -value=>0, -variable=>\$CPU, -command=>[\&gameMode, 0]);
+    $PvsP->pack();
+    my $PvsC = $d0->Radiobutton(-text=>'Player vs CPU', -value=>1, -variable=>\$CPU, -command=>[\&gameMode, 1]);
+    $PvsC->pack();
+
     $d0->Show;
 }
 
@@ -46,6 +62,13 @@ sub gameMode
       {
         $log->insert('end', " Undefined mode, please try again!\n");
       }
+
+    # Dialog for team color decision                                                                                                                              
+    $d1 = $mw->Dialog(-text=>"Choose the color of you team!", -popover=>$gridframe, -buttons=>[]);
+    my $black_team = $d1->Radiobutton(-text=>'black', -value=>'black', -variable=>\$team, -image=> $dama_nera_scaled  , -command=>[\&beginGame,"black\n",$CPU]);
+    $black_team->pack();
+    my $white_team = $d1->Radiobutton(-text=>'white', -value=>'white', -variable=>\$team, -image=> $dama_bianca_scaled, -command=>[\&beginGame,"white\n",$CPU]);
+    $white_team->pack();
 
     $d1->Show;
 }

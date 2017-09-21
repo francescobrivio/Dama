@@ -1,8 +1,8 @@
 -------- NEEDED --------
 
-- spostare “enter move” sotto la griglia
+- spostare “enter move” sotto la griglia --> DONE
 
-- evidenziare i tasti che vengono schiacciati --> DONE, ma quando li rischiacci non tornano al colore inizale
+- evidenziare i tasti che vengono schiacciati --> DONE, ma quando li rischiacci non tornano al colore inizale  --> DONE
 
 - log più dettagliato (non solo “move not allowed...”)  --> però così bisogna cambiare/aggiungere cosa si passa da cpp a tk mi sa
 
