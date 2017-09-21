@@ -23,7 +23,8 @@ sub createGrid2
                                           {
                                             $user_move->configure(-textvariable=>$testo_move.$testo_bott);
                                           }
-                                          &highlightMove($user_move->cget(-textvariable));
+                                          #&highlightMove($user_move->cget(-textvariable));
+                                          &highlightMove($testo_bott);
                                         }
                                     );
 
@@ -89,15 +90,23 @@ sub highlightMove
 {
   my $moveToColor = shift;
   my @moves_array = ( $moveToColor =~ m/../g );
+  my $color = '';
+  my $k = 0;
   foreach (@buttons)
   {
     foreach $move_array (@moves_array)
     {
       if ($_->cget(-text) eq $move_array)
       {
-        $_->configure(-bg=>'red');
+	  if ($_->cget(-bg) eq 'red')
+	  {
+	      $color = getColor($k);
+	      $_->configure(-bg=>$color);
+	  }
+	  else {$_->configure(-bg=>'red');}
       }
     }
+    $k++;
   }
 }
 
@@ -105,20 +114,43 @@ sub highlightMove
 sub restoreColors
 {
   my $k = 0;
+  my $color = '';
+
   foreach (@buttons)
   {
-    if ( ($k/8) % 2 == 0)
-    {
-    if ($k % 2 == 0) {$_->configure(-bg=>'sienna');}
-    else             {$_->configure(-bg=>'moccasin');}
-    }
-    else
-    {
-    if ($k % 2 == 1) {$_->configure(-bg=>'sienna');}
-    else             {$_->configure(-bg=>'moccasin');}
-    }
+      #if ( ($k/8) % 2 == 0)
+      #{
+      #if ($k % 2 == 0) {$_->configure(-bg=>'sienna');}
+      #else             {$_->configure(-bg=>'moccasin');}
+      #}
+      #else
+      #{
+      #if ($k % 2 == 1) {$_->configure(-bg=>'sienna');}
+      #else             {$_->configure(-bg=>'moccasin');}
+      #}
+    $color = getColor($k);
+    $_->configure(-bg=>$color);
     $k++;
   }
+}
+
+sub getColor
+{
+  my $k = shift;
+  my $color = '';
+  
+  if ( ($k/8) % 2 == 0)
+  {
+    if ($k % 2 == 0) {$color = 'sienna';}
+    else             {$color = 'moccasin';}
+  }
+  else
+  {
+    if ($k % 2 == 1) {$color = 'sienna';}
+    else             {$color = 'moccasin';}
+  }
+
+  return $color;
 }
 
 1;
