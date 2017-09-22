@@ -3,19 +3,19 @@
 ##### Functions #####
 sub BEGIN
 {
-	print "Starting Game...\n";
+  print "Starting Game...\n";
 }
 
 sub quit
 {
-    print "Quitting Game...\n";
-    my $tk_pid = shift;
-    my $cpp_pid = shift;
-    my $exe_pid = shift;
-    system("kill $exe_pid");
-    system("kill $cpp_pid");
-    system("kill $tk_pid");
-    exit(0);
+  print "Quitting Game...\n";
+  my $tk_pid = shift;
+  my $cpp_pid = shift;
+  my $exe_pid = shift;
+  system("kill $exe_pid");
+  system("kill $cpp_pid");
+  system("kill $tk_pid");
+  exit(0);
 }
 
 #sub clear
@@ -27,10 +27,10 @@ sub quit
 
 sub newGame
 {
-    if ($d2){$d2->destroy();}
-    if (@buttons[0] == 0){createGrid2();}
-    else{
-	print WRITETO_C "end\n";
+  if ($d2){$d2->destroy();}
+  if (@buttons[0] == 0){createGrid2();}
+  else{
+        print WRITETO_C "end\n";
 
 	chomp($endGame = <READFROM_C>);
 	chomp($endMatch = <READFROM_C>);
@@ -189,28 +189,33 @@ sub loggingMove
 {
   my $flag_split = shift;
   my $log_move = shift;
-  
+  my $npawns = 0;
+  my $player = ' ';
+
   if ($flag_split[0] == 1)
   {
-    if    ($flag_split[1] eq 'w' || $flag_split[1] eq 'W')
-    {
-      $log->insert('end', " White: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
-      $log->see('end');
-    }
+    if($flag_split[1] eq 'w' || $flag_split[1] eq 'W')
+      {$player = 'White';}
     elsif ($flag_split[1] eq 'b' || $flag_split[1] eq 'B')
-    {
-      $log->insert('end', " Black: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
-      $log->see('end');
-    }
+      {$player = 'Black';}
     elsif ($flag_split[1] eq 'a')
-    {
-      $log->insert('end', " PC   : $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
-      $log->see('end');
-    }
+      {$player = 'PC';}
     else
     {
       $log->insert('end', " WTF is going on?!?! who is playing?!?! \n Machines are taking over...", 'red');
       $log->see('end');
+    }
+    
+    if($player ne ' ');
+    {
+	if($log_move[2]-$log_move[0] == 1)
+	{$log->insert('end', "$player moves: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");}
+	else
+	{
+	    $npawns = ($log_move[2]-$log_move[0])/2;
+	    $log->insert('end', "$player eats $npawns pawns: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
+	}
+	$log->see('end');
     }
   }
   else

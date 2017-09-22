@@ -118,7 +118,7 @@ void updatePositions(Board* board, std::vector<Pedina*> *P1pawns, std::vector<Pe
 std::string ChooseBestMove(Moves moves)
 {
   const int nMoves = moves.size();
-  std::string best_move = "";
+  std::string best_move = "none";
   char max_y = '0';
   unsigned int max_lenght = 0, max_diff = 0, diff = 0;
 
@@ -173,7 +173,7 @@ std::string ChooseBestMove(Moves moves)
 // Function to choose the best move for the CPU player
 std::string ChooseBestMoveRand(Moves moves)
 {
-  std::string best_move = "";
+  std::string best_move = "none";
   Moves eating_moves, longer_moves;
   unsigned int max_lenght = 0;
   int max_diff = 0, diff = 0;
@@ -192,7 +192,9 @@ std::string ChooseBestMoveRand(Moves moves)
         eating_moves.push_back(moves.at(j));
     }
 
-  if (eating_moves.size() == 1)
+  if (eating_moves.size() == 0)
+    best_move = "none";
+  else if (eating_moves.size() == 1)
     best_move = eating_moves[0];
   else
     {
@@ -211,7 +213,7 @@ std::string ChooseBestMoveRand(Moves moves)
         }
         
       if (longer_moves.size() == 1)
-        best_move = longer_moves[0];
+        best_move = longer_moves.at(0);
       else
         best_move = longer_moves.at( rand()%(longer_moves.size()) );
     }
