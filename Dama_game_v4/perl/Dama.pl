@@ -256,40 +256,49 @@ sub CPPthread
     $Writer->autoflush(1);
     $Reader->autoflush(1);
 
-    # Read the team chosen from Tk in order to initialize the game
-    chomp ($team = <READFROM_TK>);
-
-    # Starting positions
-    print $Writer("$team\n");
-    my $new_positions = <$Reader>;
-    print WRITETO_TK $new_positions;#."\n";
-
-    # Declare flags and useful variables
+    # Declare flags and useful variables     
     my $endgame = 0;
+    my $endmatch = 0;
     my $move = "";
-    
-    # Main loop for the game
+
     while($endgame == 0)
     {
-      # Read the move from Tk
-      chomp ($move = <READFROM_TK>);
-      
-      # Pass the move to exe
-      print $Writer("$move\n");
-      
-      # Read move_flag, updated_positions and endgame_flag from exe
-      $pos_fromCPP   = <$Reader>;
-      $flag_fromCPP  = <$Reader>;
-      $new_positions = <$Reader>;
-      $endgame       = <$Reader>;
-        
-      # Pass move_flag, updated_positions and endgame_flag to Tk
-      print WRITETO_TK $endGame."\n";
-      print WRITETO_TK $pos_fromCPP;
-      print WRITETO_TK $flag_fromCPP;
-      print WRITETO_TK $new_positions;
-    }
+      $endmatch = 0;
+      # Read the team chosen from Tk in order to initialize the game
+      chomp ($team = <READFROM_TK>);
+
+      # Starting positions
+      print $Writer("$team\n");
+      my $new_positions = <$Reader>;
+      print WRITETO_TK $new_positions;#."\n";
     
+      # Main loop for the game
+      while($endmatch == 0)
+      {
+	# Read the move from Tk
+	chomp ($move = <READFROM_TK>);
+      
+        # Pass the move to exe
+        print $Writer("$move\n");
+      
+        # Read move_flag, updated_positions and endgame_flag from exe
+        $pos_fromCPP   = <$Reader>;
+        $flag_fromCPP  = <$Reader>;
+        $new_positions = <$Reader>;
+        $endmatch      = <$Reader>;
+        $endgame       = <$Reader>;
+        
+        # Pass move_flag, updated_positions and endgame_flag to Tk
+        print WRITETO_TK $endgame;
+        print WRITETO_TK $endmatch;
+        print WRITETO_TK $pos_fromCPP;
+        print WRITETO_TK $flag_fromCPP;
+        print WRITETO_TK $new_positions;
+
+	if(($move ne 'end') and ($move ne 'quit'))
+	{$endmatch = 0;}
+      }
+    }
     # Close the pipes to exe
     close($Writer);
     close($Reader);

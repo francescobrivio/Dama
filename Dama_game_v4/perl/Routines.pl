@@ -27,8 +27,17 @@ sub quit
 
 sub newGame
 {
+    if ($d2){$d2->destroy();}
     if (@buttons[0] == 0){createGrid2();}
     else{
+	print WRITETO_C "end\n";
+
+	chomp($endGame = <READFROM_C>);
+	chomp($endMatch = <READFROM_C>);
+	chomp($move_fromC = <READFROM_C>);
+	chomp($flag_msg = <READFROM_C>);
+	chomp($newPositions = <READFROM_C>);
+
 	$user_move->delete('0.0','end');
 	$log->delete('0.0','end');	
 	$log->insert('end', "----------- WELCOME TO DAMA -----------\n", 'green');
@@ -49,9 +58,9 @@ sub newGame
 
 sub gameMode
 {
-    $cpu = shift;
+    my $cpu = shift;
     if($cpu == 0)
-      {
+    {
         $log->insert('end', " Game mode chosen: Player vs Player\n");
       }
     elsif($cpu == 1)
@@ -65,9 +74,11 @@ sub gameMode
 
     # Dialog for team color decision                                                                                                                              
     $d1 = $mw->Dialog(-text=>"Choose the color of you team!", -popover=>$gridframe, -buttons=>[]);
-    my $black_team = $d1->Radiobutton(-text=>'black', -value=>'black', -variable=>\$team, -image=> $dama_nera_scaled  , -command=>[\&beginGame,"black\n",$CPU]);
+    my $black_team = $d1->Radiobutton(-text=>'black', -value=>'black', -variable=>\$team, 
+				      -image=> $dama_nera_scaled  , -command=>[\&beginGame,"black\n",$CPU]);
     $black_team->pack();
-    my $white_team = $d1->Radiobutton(-text=>'white', -value=>'white', -variable=>\$team, -image=> $dama_bianca_scaled, -command=>[\&beginGame,"white\n",$CPU]);
+    my $white_team = $d1->Radiobutton(-text=>'white', -value=>'white', -variable=>\$team, 
+				      -image=> $dama_bianca_scaled, -command=>[\&beginGame,"white\n",$CPU]);
     $white_team->pack();
 
     $d1->Show;
@@ -122,34 +133,54 @@ sub doTheMove
     my $move = shift;
     
     print WRITETO_C $move;
-    
+
     chomp($endGame = <READFROM_C>);
+    chomp($endMatch = <READFROM_C>);
     chomp($move_fromC = <READFROM_C>);
     chomp($flag_msg = <READFROM_C>);
     chomp($newPositions = <READFROM_C>);
-    
+
     @flag_split = split //, $flag_msg;
     @log_move   = split //, $move_fromC;
     
-    if($endGame == 1)
-    {
-      print "END GAME\n";
-      $log->insert('end',"---------- GAME FINISHED!! ----------\n", 'red');
-      $log->insert('end'," who's the winner??\n");
-      $log->see('end');
-    }
-    else
-    {
-      &loggingMove(@flag_split, @log_move);
+    #if($endMatch == 1)
+    #{
+    #print "END GAME\n";
+    #$log->insert('end',"---------- GAME FINISHED!! ----------\n", 'red');
+    #$log->insert('end'," who's the winner??\n");
+    #$log->see('end');
+    #}
+    #else
+    #{
+    &loggingMove(@flag_split, @log_move);
 
-      @positions = split//, $newPositions;
-      &loopOnButtons(\@positions);
-      &countPawns(\@positions);
-      $user_move->delete(0,30);
-      
-      # If flag is 0 (i.e. not a good move), tell PC to wait
-      if   ($flag_split[0] == 1) {$CPUgoON = 1;}
-      else                       {$CPUgoON = 0;}
+    @positions = split//, $newPositions;
+    &loopOnButtons(\@positions);
+    &countPawns(\@positions);
+    $user_move->delete(0,30);
+    
+     if($endMatch == 1)
+     {
+	 #print "END GAME\n";
+	 $log->insert('end',"---------- GAME FINISHED!! ----------\n", 'red');
+	 $log->insert('end'," who's the winner??\n");
+	 $log->see('end');
+
+	 $CPUgoON = 0;
+	 my $playVar = 0;
+	 $d2 = $mw->Dialog(-text=>"Do you want play again?", -popover=>$gridframe, -buttons=>[]);
+	 my $play_buttom = $d2->Radiobutton(-text=>'Play again', -value=> 1, -variable=>\$playVar,
+					    -command=>[\&newGame]);
+	 $play_buttom->pack();
+	 my $quit_buttom = $d2->Radiobutton(-text=>'Quit', -value=> 0, -variable=>\$playVar,
+					    -command=>[\&quit]);
+	 $quit_buttom->pack();
+	 $d2->Show;
+     }
+    else{
+	# If flag is 0 (i.e. not a good move), tell PC to wait
+	if   ($flag_split[0] == 1) {$CPUgoON = 1;}
+	else                       {$CPUgoON = 0;}
     }
 }
 

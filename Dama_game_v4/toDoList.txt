@@ -6,26 +6,33 @@
 
 - log più dettagliato (non solo “move not allowed...”)  --> però così bisogna cambiare/aggiungere cosa si passa da cpp a tk mi sa
 
-- sistemare endGame (ora si chiude tutto il programma)
+- sistemare endGame (ora si chiude tutto il programma) --> In che senso???
 
-- sistemare newGame (ora si impalla, invece deve cancellare log,nPedine e la griglia, ed essere pronto a ricominciare, anche l’exe)
+- sistemare newGame (ora si impalla, invece deve cancellare log,nPedine e la griglia, ed essere pronto a ricominciare, anche l’exe) --> DONE
 
 
 -------- OPTIONAL --------
 
 - pedine mangiate rappresentate di fianco    -->  non banale implementare dei nuovi bottoni, 
-						     magari è meglio in qualche altro modo
+						     magari è meglio in qualche altro modo  --> Possiamo mettere solo le immagini?
+
 - clessidra con il tempo (dall’inizio della partita o per ogni mossa) / o che mette un limite di tempo alle mosse  
 						-->  il tempo totale/di ogni mossa è facile credo, più difficile mettere un limite di 
 						     tempo alle mosse, forse questo cambia un po’ la logica del gioco
 
 
-- modificare CPU: il suo primo obiettivo dovrebbe essere fare damone
+- modificare CPU: il suo primo obiettivo dovrebbe essere fare damone -->     se non può mangiare muove la pedina che si trova più
+  	        	     	       		 	  	      	     vicino alla fine della scacchiera, quindi in un certo senso
+									     dovrebbe andare bene, no?
+
+- aumentare l'AI del damone.... così non serve a niente.....
 
 ----------- ERRORI -------
 
-- quando il PC ha un damone non lo muove più
+- quando il PC ha un damone non lo muove più  --> DONE 
 
 --> DONE: baco trovato da fra ferr merda -> se passi una mossa sola si impalla
 
 --> DONE: se scelgo player vs player ma poi scelgo nero, il PC fa la prima mossa del bianco! da sistemare!
+
+--> Se il player non può più muovere non c'è modo di far andare avanti il gioco

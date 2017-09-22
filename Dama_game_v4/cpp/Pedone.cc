@@ -127,7 +127,7 @@ std::string Pedone::CheckEat(const Position oldPos, const Position eatPos)
 }
 
 
-Moves Pedone::Check()
+Moves Pedone::CPUCheck()
 {
   int new_x[Nmoves_pedone], new_y[Nmoves_pedone];
   Moves moves;
