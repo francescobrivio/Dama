@@ -4,7 +4,7 @@
 
 - evidenziare i tasti che vengono schiacciati --> DONE, ma quando li rischiacci non tornano al colore inizale  --> DONE
 
-- log più dettagliato (non solo “move not allowed...”)  --> però così bisogna cambiare/aggiungere cosa si passa da cpp a tk mi sa
+- log più dettagliato (non solo “move not allowed...”)  --> però così bisogna cambiare/aggiungere cosa si passa da cpp a tk mi sa ---> DONE
 
 - sistemare endGame (ora si chiude tutto il programma) --> In che senso???
 
@@ -35,4 +35,6 @@
 
 --> DONE: se scelgo player vs player ma poi scelgo nero, il PC fa la prima mossa del bianco! da sistemare!
 
---> Se il player non può più muovere non c'è modo di far andare avanti il gioco
+--> Se il player non può più muovere non c'è modo di far andare avanti il gioco --> DONE
+
+- Se schiacci i bottoni a cazzo prima di iniziare il gioco crash tutto

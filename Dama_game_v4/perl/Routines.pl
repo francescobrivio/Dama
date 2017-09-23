@@ -32,11 +32,13 @@ sub newGame
   else{
         print WRITETO_C "end\n";
 
-	chomp($endGame = <READFROM_C>);
-	chomp($endMatch = <READFROM_C>);
-	chomp($move_fromC = <READFROM_C>);
-	chomp($flag_msg = <READFROM_C>);
-	chomp($newPositions = <READFROM_C>);
+	chomp(my $endGame = <READFROM_C>);
+	chomp(my $endMatch = <READFROM_C>);
+	chomp(my $winner = <READFROM_C>);
+	chomp(my $move_fromC = <READFROM_C>);
+	chomp(my $flag_msg = <READFROM_C>);
+	chomp(my $error_msg = <READFROM_C>);
+	chomp(my $newPositions = <READFROM_C>);
 
 	$user_move->delete('0.0','end');
 	$log->delete('0.0','end');	
@@ -96,8 +98,8 @@ sub beginGame
     print WRITETO_C $inner_team;
     $d0->destroy();
     $d1->destroy();
-    
-    chomp($newPositions = <READFROM_C>);
+
+    chomp(my $newPositions = <READFROM_C>);
     @positions = split//, $newPositions;            
     &loopOnButtons(\@positions);
     &countPawns(\@positions);
@@ -116,8 +118,8 @@ sub countPawns
 {
     my @inner_positions = @{$_[0]};
     
-    $nwhite = 0;
-    $nblack = 0;
+    my $nwhite = 0;
+    my $nblack = 0;
     foreach (@inner_positions)
     {
         if ($_ eq 'w' || $_ eq 'W') {$nwhite = $nwhite + 1;}
@@ -134,27 +136,19 @@ sub doTheMove
     
     print WRITETO_C $move;
 
-    chomp($endGame = <READFROM_C>);
-    chomp($endMatch = <READFROM_C>);
-    chomp($move_fromC = <READFROM_C>);
-    chomp($flag_msg = <READFROM_C>);
-    chomp($newPositions = <READFROM_C>);
+    chomp(my $endGame = <READFROM_C>);
+    chomp(my $endMatch = <READFROM_C>);
+    chomp(my $winner = <READFROM_C>);
+    chomp(my $move_fromC = <READFROM_C>);
+    chomp(my $flag_msg = <READFROM_C>);
+    chomp(my $error_msg = <READFROM_C>);
+    chomp(my $newPositions = <READFROM_C>);
 
-    @flag_split = split //, $flag_msg;
-    @log_move   = split //, $move_fromC;
-    
-    #if($endMatch == 1)
-    #{
-    #print "END GAME\n";
-    #$log->insert('end',"---------- GAME FINISHED!! ----------\n", 'red');
-    #$log->insert('end'," who's the winner??\n");
-    #$log->see('end');
-    #}
-    #else
-    #{
-    &loggingMove(@flag_split, @log_move);
+    my @flag_split = split //, $flag_msg;
 
-    @positions = split//, $newPositions;
+    &loggingMove($flag_msg, $move_fromC, $error_msg);
+      
+    my @positions = split//, $newPositions;
     &loopOnButtons(\@positions);
     &countPawns(\@positions);
     $user_move->delete(0,30);
@@ -163,7 +157,10 @@ sub doTheMove
      {
 	 #print "END GAME\n";
 	 $log->insert('end',"---------- GAME FINISHED!! ----------\n", 'red');
-	 $log->insert('end'," who's the winner??\n");
+	 if($winner eq 'draw')
+	 {$log->insert('end',"The game is drawn!!\n");}
+	 else
+	 {$log->insert('end',"The $winner win!!\n");}
 	 $log->see('end');
 
 	 $CPUgoON = 0;
@@ -173,13 +170,14 @@ sub doTheMove
 					    -command=>[\&newGame]);
 	 $play_buttom->pack();
 	 my $quit_buttom = $d2->Radiobutton(-text=>'Quit', -value=> 0, -variable=>\$playVar,
-					    -command=>[\&quit]);
+					    -command=>[\&quit,$$,$pid,$pid_cpp]);
 	 $quit_buttom->pack();
 	 $d2->Show;
      }
-    else{
+    else
+    {
 	# If flag is 0 (i.e. not a good move), tell PC to wait
-	if   ($flag_split[0] == 1) {$CPUgoON = 1;}
+	if   (@flag_split[0] == 1) {$CPUgoON = 1;}
 	else                       {$CPUgoON = 0;}
     }
 }
@@ -187,8 +185,13 @@ sub doTheMove
 
 sub loggingMove
 {
-  my $flag_split = shift;
-  my $log_move = shift;
+  my $flag_msg = shift;
+  my $move_fromC = shift;
+  my $error_log = shift;
+
+  my @flag_split = split //, $flag_msg;
+  my @log_move   = split //, $move_fromC;
+
   my $npawns = 0;
   my $player = ' ';
 
@@ -206,13 +209,13 @@ sub loggingMove
       $log->see('end');
     }
     
-    if($player ne ' ');
+    if($player ne ' ')
     {
-	if($log_move[2]-$log_move[0] == 1)
+	if(abs($log_move[2]-$log_move[0]) == 1)
 	{$log->insert('end', "$player moves: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");}
 	else
 	{
-	    $npawns = ($log_move[2]-$log_move[0])/2;
+	    $npawns = abs($log_move[2]-$log_move[0])/2;
 	    $log->insert('end', "$player eats $npawns pawns: $log_move[0]$log_move[1] --> $log_move[2]$log_move[3] \n");
 	}
 	$log->see('end');
@@ -220,7 +223,10 @@ sub loggingMove
   }
   else
   {
-    $log->insert('end', " Move not allowed! Try again! \n", 'red');
+    $log->insert('end', "Move not allowed! \n", 'red');
+    $log->insert('end', "ERROR: ", 'red');
+    $log->insert('end', "$error_log \n", 'white');
+    $log->insert('end', "Try again! \n", 'green');
     $log->see('end');
   }
 

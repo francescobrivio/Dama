@@ -18,13 +18,15 @@ int main(int argc, char *argv[])
   
   std::string p1team = "";
   std::string p2team = "";
+  
+  std::string error_log = "ok";
+  std::string winner = "";
 
   while(endGame == 0)
     {
       endMatch = 0;
       board.setNmoves(0);
-
-      //std::cout << "tell me the team!!" << std::endl;
+      error_log = "ok";
       std::cin >> p1team;
 
       if(p1team == " ") 
@@ -39,8 +41,7 @@ int main(int argc, char *argv[])
 	p2team = "white";
   
       board.Initialize(p1team);
-      //board.Print("");
-
+      
       std::string vec_positions;
       vec_positions = board.getPositions();
       std::cout << vec_positions;
@@ -67,6 +68,8 @@ int main(int argc, char *argv[])
       while(endMatch == 0)
 	{
 	  flag_move = true;
+	  error_log = "ok";
+
 	  board.setNmoves(board.getNmoves()+1);
 
 	  // Whose turn is it?
@@ -89,24 +92,33 @@ int main(int argc, char *argv[])
                 pos = autoMove(P1pawns);
               else if(turn == P2pawns->at(0)->getColor())
                 pos = autoMove(P2pawns);
-              //std::cout << "Auto move!!!    " << pos <<std::endl; 
-            }
+	    }
 
 	  // If the PC returns "none" (i.e. cannot move, i.e. PC loses) 
 	  // or the Player stops the match --> endMatch=1 
-	  if(pos == "none" || pos == "end")
+	  if(pos == "none")
 	    {
-	      //std::cout << "End Match!!!    " << pos << std::endl;
 	      endMatch = 1;
 	      flag_move = false;
+	      error_log = "No moves available!";
+	      if(turn == "white")
+		winner = "black";
+	      else
+		winner = "white";
 	    }
+	  else if(pos == "end")
+            {
+              endMatch = 1;
+              flag_move = false;
+	      error_log = "Game over!";
+            }
 	  // If the Player returns "quit" --> endGame=1 
 	  else if(pos == "quit")
 	    {
-	      //std::cout << "End Game!!!    " << pos <<std::endl;
 	      endMatch = 1;
 	      endGame = 1;
 	      flag_move = false;
+	      error_log = "Quitting game!";
 	    }
 	  // Check if the move passed has at least size 4, i.e. is 2 cells
 	  else if (pos.size() < 4) 
@@ -114,15 +126,13 @@ int main(int argc, char *argv[])
 	      isCPU_log = false;
 	      board.setNmoves(board.getNmoves()-1);
 	      flag_move = false;
-	      //std::cout << "Move too short!!    " << pos <<std::endl;
+	      error_log = "Move too short!! Select at least two blocks!";
 	    }
 
 	  // If "pos" is ok and the game isn't finished, go on   
 	  if(flag_move)
 	    {
 	      isCPU_log = false;
-      
-	      //std::cout << "MOssa Ok!!!    " << pos <<std::endl;
 
               // Read starting position
               yStr = tolower(pos[0]);
@@ -142,6 +152,10 @@ int main(int argc, char *argv[])
                 {
                   board.setNmoves(board.getNmoves()-1);
                   flag_move = false;
+		  if(board.getStatus(x,y) != ' ')
+		    error_log = "This is not your turn!";
+		  else
+		    error_log = "The starting block is empty! Select one with a pawn of your team!";
                 }
               // If the starting position is good (i.e. the pawn exist), go on
               else
@@ -174,15 +188,16 @@ int main(int argc, char *argv[])
                             erasePawns(P1pawns, pos);
                         }
                       else
-                        {
+			{
                           board.setNmoves(board.getNmoves()-1);
-                          flag_move = false;
-                        }
+			  error_log = "You can't do this move!";
+			}
                     }
                   else
                     {
                       board.setNmoves(board.getNmoves()-1);
                       flag_move = false;
+		      error_log = "This is not your turn!";
                     }
                 }
    
@@ -194,7 +209,13 @@ int main(int argc, char *argv[])
 
 	      // Update the board positions
 	      updatePositions(&board, P1pawns, P2pawns);
-	      //board.Print("");
+	      
+	      if(P1pawns->size() > P2pawns->size())
+		winner = p1team;
+	      else if(P2pawns->size() > P1pawns->size())
+		winner = p2team;
+	      else 
+		winner = "draw";
 
 	      if(P2pawns->size() == 0 || P1pawns->size() == 0)
 		endMatch = 1;
@@ -210,8 +231,10 @@ int main(int argc, char *argv[])
 
 	  std::cout << pos << std::endl;
 	  std::cout << flag_move << player_flag[0] << std::endl;
+	  std::cout << error_log << std::endl;
 	  std::cout << new_positions;
           std::cout << endMatch << std::endl;
+	  std::cout << winner << std::endl;
 	  std::cout << endGame << std::endl;
       
 	  if(pos != "end" && pos != "quit")

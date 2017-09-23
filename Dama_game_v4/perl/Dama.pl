@@ -51,7 +51,7 @@ sub TKthread
 {
     # Fork sanity check
     my $pid = shift;
-    chomp($pid_cpp = <READFROM_C>);
+    chomp(my $pid_cpp = <READFROM_C>);
     
     # Tk MainWindow
     $mw = MainWindow->new;
@@ -59,23 +59,23 @@ sub TKthread
     $mw->title ("Test Dama");
 
     # Images of the pawns
-    $dama_bianca = $mw->Photo(-file=> "../../Images/dama_bianca.png");
+    my $dama_bianca = $mw->Photo(-file=> "../../Images/dama_bianca.png");
     $dama_bianca_scaled = $mw->Photo(-file=>"");
     $dama_bianca_scaled->copy($dama_bianca, -subsample=>2,2);
 
-    $dama_nera = $mw->Photo(-file=> "../../Images/dama_nera.png");
+    my $dama_nera = $mw->Photo(-file=> "../../Images/dama_nera.png");
     $dama_nera_scaled = $mw->Photo(-file=>"");
     $dama_nera_scaled->copy($dama_nera, -subsample=>2,2);
 
-    $damone_bianco = $mw->Photo(-file=> "../../Images/damone_bianco_2.png");
+    my $damone_bianco = $mw->Photo(-file=> "../../Images/damone_bianco_2.png");
     $damone_bianco_scaled = $mw->Photo(-file=>"");
     $damone_bianco_scaled->copy($damone_bianco, -subsample=>2,2);
 
-    $damone_nero = $mw->Photo(-file=> "../../Images/damone_nero_2.png");
+    my $damone_nero = $mw->Photo(-file=> "../../Images/damone_nero_2.png");
     $damone_nero_scaled = $mw->Photo(-file=>"");
     $damone_nero_scaled->copy($damone_nero, -subsample=>2,2);
 
-    $dama_empty = $mw->Photo(-file=> "../../Images/dama_empty.png");
+    my $dama_empty = $mw->Photo(-file=> "../../Images/dama_empty.png");
     $dama_empty_scaled = $mw->Photo(-file=>"");
     $dama_empty_scaled->copy($dama_empty, -subsample=>2,2);
 
@@ -136,17 +136,22 @@ sub TKthread
     #$separation_line = $movesframe->Label(-text=>"\n\n ------------------- USER MOVE ------------------ \n")->pack();    
     
     # Container for the move
-    $user_move = $movesframe->Entry(-width=>30)->pack(-side => 'left', -fill=>'x');
+    $user_move = $movesframe->Entry(-width=>25)->pack(-side => 'left', -fill=>'x');
     
     # Delete the move
     my $clearing = $movesframe->Button(-text=>"Clear Move", -width=>8, -command=>sub{&restoreColors();$user_move->delete(0,30);} )->pack(-side => 'left', -fill=>'x');
 
-        # Confirm the move
-        my $printing = $movesframe->Button(-text=>"Enter Move",, -width=>9, -command=>sub{
-                                        &doTheMove($user_move->cget(-textvariable)."\n");
-                                        $mw->update;
-                                        if($CPU==1 and $CPUgoON==1) {sleep(1); &doTheMove("auto\n");}
-            
+    # Confirm the move
+    my $printing = $movesframe->Button(-text=>"Enter Move", -width=>9, 
+				       -command=>sub{
+					   &doTheMove($user_move->cget(-textvariable)."\n");
+					   $mw->update;
+					   if($CPU==1 and $CPUgoON==1) {sleep(1); &doTheMove("auto\n");}
+				       })->pack(-side => 'left', -fill=>'x');
+    
+    my $giveUp_buttom = $movesframe->Button(-text=>"Give Up",, -width=>9, 
+					    -command=>sub{&doTheMove("none\n");}
+	)->pack(-side => 'left', -fill=>'x');       
 =pod
                                         print WRITETO_C $user_move->cget(-textvariable)."\n";
             
@@ -213,9 +218,6 @@ sub TKthread
                                         }
 =cut
 
-				    })->pack(-side => 'left', -fill=>'x');
-
-
     # gridFrame
     $gridframe = $mw->LabFrame(-label=>"DamaGame", -bd=>2, -relief=>'raised');    
     $gridframe->pack(-side=>"left", -fill=>"both", -expand=>1, -pady=>'0');
@@ -260,13 +262,14 @@ sub CPPthread
     my $endgame = 0;
     my $endmatch = 0;
     my $move = "";
+    my $team = "";
 
     while($endgame == 0)
     {
       $endmatch = 0;
       # Read the team chosen from Tk in order to initialize the game
       chomp ($team = <READFROM_TK>);
-
+      
       # Starting positions
       print $Writer("$team\n");
       my $new_positions = <$Reader>;
@@ -276,25 +279,29 @@ sub CPPthread
       while($endmatch == 0)
       {
 	# Read the move from Tk
-	chomp ($move = <READFROM_TK>);
+	chomp($move = <READFROM_TK>);
       
         # Pass the move to exe
         print $Writer("$move\n");
       
         # Read move_flag, updated_positions and endgame_flag from exe
-        $pos_fromCPP   = <$Reader>;
-        $flag_fromCPP  = <$Reader>;
-        $new_positions = <$Reader>;
-        $endmatch      = <$Reader>;
-        $endgame       = <$Reader>;
-        
+        my $pos_fromCPP   = <$Reader>;
+        my $flag_fromCPP  = <$Reader>;
+	my $error_fromCPP = <$Reader>;
+        my $new_positions = <$Reader>;
+        $endmatch         = <$Reader>;
+	my $winner        = <$Reader>;
+        $endgame          = <$Reader>;
+
         # Pass move_flag, updated_positions and endgame_flag to Tk
         print WRITETO_TK $endgame;
         print WRITETO_TK $endmatch;
+	print WRITETO_TK $winner;
         print WRITETO_TK $pos_fromCPP;
         print WRITETO_TK $flag_fromCPP;
+	print WRITETO_TK $error_fromCPP;
         print WRITETO_TK $new_positions;
-
+	
 	if(($move ne 'end') and ($move ne 'quit'))
 	{$endmatch = 0;}
       }
@@ -304,6 +311,5 @@ sub CPPthread
     close($Reader);
     
     exit(0);
-
 }
 
