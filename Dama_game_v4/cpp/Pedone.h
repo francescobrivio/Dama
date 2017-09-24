@@ -13,7 +13,7 @@ class Pedone : public Pedina
   ~Pedone();
   
   virtual bool CheckMove(const std::string pos);
-  virtual std::string CheckEat(const Position oldPos, const Position newPos);
+  virtual std::string CPUCheckEat(const Position oldPos, const Position newPos);
   virtual Moves CPUCheck();
   
   virtual std::string getIdentity() {return "Pedone";};

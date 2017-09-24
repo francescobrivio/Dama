@@ -144,13 +144,19 @@ sub TKthread
     # Confirm the move
     my $printing = $movesframe->Button(-text=>"Enter Move", -width=>9, 
 				       -command=>sub{
-					   &doTheMove($user_move->cget(-textvariable)."\n");
-					   $mw->update;
-					   if($CPU==1 and $CPUgoON==1) {sleep(1); &doTheMove("auto\n");}
+					   if(@buttons[0] != 0 and 
+					      $user_move->cget(-textvariable) ne ''){ 
+					       &doTheMove($user_move->cget(-textvariable)."\n");
+					       $mw->update;
+					       if($CPU==1 and $CPUgoON==1){
+						   sleep(1); 
+						   &doTheMove("auto\n");}
+					   }
 				       })->pack(-side => 'left', -fill=>'x');
     
-    my $giveUp_buttom = $movesframe->Button(-text=>"Give Up",, -width=>9, 
-					    -command=>sub{&doTheMove("none\n");}
+    my $giveUp_buttom = $movesframe->Button(-text=>"Give Up", -width=>9, 
+					    -command=>sub{
+						if(@buttons[0] != 0){&doTheMove("none\n");}}
 	)->pack(-side => 'left', -fill=>'x');       
 =pod
                                         print WRITETO_C $user_move->cget(-textvariable)."\n";
@@ -293,7 +299,7 @@ sub CPPthread
 	my $winner        = <$Reader>;
         $endgame          = <$Reader>;
 
-        # Pass move_flag, updated_positions and endgame_flag to Tk
+	# Pass move_flag, updated_positions and endgame_flag to Tk
         print WRITETO_TK $endgame;
         print WRITETO_TK $endmatch;
 	print WRITETO_TK $winner;

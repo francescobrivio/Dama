@@ -70,9 +70,9 @@ void evolvePedina(std::vector<Pedina*> *pawns)
         {
           // Pushback a new Pedone
           if(pawns->at(i)->getColor()[0] == 'w')
-            pawns->push_back( new Pedone("W", pawns->at(i)->getX(), pawns->at(i)->getY(), pawns->at(i)->getBoard()) );
+            pawns->push_back( new Pedone("White", pawns->at(i)->getX(), pawns->at(i)->getY(), pawns->at(i)->getBoard()) );
           else if (pawns->at(i)->getColor()[0] == 'b')
-            pawns->push_back( new Pedone("B", pawns->at(i)->getX(), pawns->at(i)->getY(), pawns->at(i)->getBoard()) );
+            pawns->push_back( new Pedone("Black", pawns->at(i)->getX(), pawns->at(i)->getY(), pawns->at(i)->getBoard()) );
 
           // Erase the old Pedina
           pawns->erase(pawns->begin() + i);

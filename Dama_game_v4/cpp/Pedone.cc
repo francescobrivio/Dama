@@ -64,7 +64,7 @@ bool Pedone::CheckMove(const std::string pos)
         else if(abs(yStart-yStop) == 2 && abs(xStart-xStop) == 2)
           {
             status = tolower(this->getBoard()->getStatus((xStart+xStop)/2, (yStart+yStop)/2));
-            if(status != ' ' && status != this->getColor()[0])
+            if(status != ' ' && status != tolower(this->getColor()[0]))
               flag &= true;
             else
               flag &= false;
@@ -77,7 +77,7 @@ bool Pedone::CheckMove(const std::string pos)
 }
 
 
-std::string Pedone::CheckEat(const Position oldPos, const Position eatPos)
+std::string Pedone::CPUCheckEat(const Position oldPos, const Position eatPos)
 {
   std::string steps = "";
   int oldX = 0, eatX = 0, oldY =0, eatY = 0;
@@ -93,7 +93,7 @@ std::string Pedone::CheckEat(const Position oldPos, const Position eatPos)
 
   newX[0] = 2*eatX-oldX;
   newY[0] = 2*eatY-oldY;
-  
+
   if(newX[0] > 8 || newX[0] < 1 || newY[0] < 1 || newY[0] > 8)
     steps = "";
   else if(this->getBoard()->getStatus(newX[0], newY[0]) == ' ')
@@ -109,24 +109,30 @@ std::string Pedone::CheckEat(const Position oldPos, const Position eatPos)
       
       for(int i=0; i<Nmoves_pedone; i++)
 	{
-	  if(newX[i] > 8 || newX[i] < 1 || newY[i] < 1 || newY[i] > 8)
-	    continue;
-	  
-	  status = this->getBoard()->getStatus(newX[i], newY[i]);
+	  for(int j=0; j<Nmoves_pedone; j++)
+	    {
+	      if(newX[i] > 8 || newX[i] < 1 || newY[j] < 1 || newY[j] > 8)
+		continue;
+	      
+	      if(newX[i] == eatX && newY[j] == eatY)
+		continue;
 
-	  if(status != (this->getColor())[0] && status != ' ')
-	   {
-	     prevPos = std::pair<int, int>(prevX, prevY);
-	     nextPos = std::pair<int, int>(newX[i], newY[i]);
-	     steps += CheckEat(prevPos, nextPos);    	
-	   }
-	} 
+	      status = tolower(this->getBoard()->getStatus(newX[i], newY[j]));
+	      
+	      if(status != tolower((this->getColor())[0]) && status != ' ')
+		{
+		  prevPos = std::pair<int, int>(prevX, prevY);
+		  nextPos = std::pair<int, int>(newX[i], newY[j]);
+		  steps += CPUCheckEat(prevPos, nextPos);    	
+		}
+	    } 
+	}
     }
 
   return steps; 
 }
 
-
+/*
 Moves Pedone::CPUCheck()
 {
   int new_x[Nmoves_pedone], new_y[Nmoves_pedone];
@@ -157,12 +163,219 @@ Moves Pedone::CPUCheck()
       else
         {
           oldPos = std::pair<int, int>(this->getX(), this->getY());
-          steps = this->CheckEat(oldPos, newPos);
+          steps = this->CPUCheckEat(oldPos, newPos);
           if(steps != "")
             action += steps;
         }
 
       moves.push_back(action);
+    }
+
+  return moves;
+}
+
+*/
+
+Moves Pedone::CPUCheck() 
+{                          
+  int new_x = 0, new_y = 0, new_x2 = 0, new_y2 = 0;   
+  int x = 0, y = 0;
+  Moves moves, pawns_pos;  
+  Position oldPos, newPos;  
+  char status = ' ';    
+  std::string steps = "", action = "", pos = "";  
+  bool flag = false;
+  int rad = 1, side = 0;
+  char xStr = ' ', yStr = ' ';
+
+  srand (time(NULL));
+
+  while(!flag)
+    {
+      // Number of blocks around the big pawn at radius = rad
+      side = 2*rad + 1; // lenght of the square side around the big pawn
+
+      // look for opponent pawns on the circle of radius rad around the big
+      // look into the top and the bottom sides
+      for(int i=0; i<side; i++)
+	{
+	  x = this->getX()-rad+i;
+	  if(x > 8 || x < 1)
+	    continue;
+	
+	  y = this->getY()+rad;	  
+	  if(y > 0 && y < 9) 
+	    {
+	      status = tolower(this->getBoard()->getStatus(x, y));
+
+	      if(status != ' ' && status != tolower(this->getColor()[0]))
+		{
+		  pos = intToString(y) + this->getBoard()->getAlpha(x); 
+		  pawns_pos.push_back(pos);
+		}
+	    }
+	  
+	  y = this->getY()-rad;
+	  if(y > 0 && y < 9)
+            {
+	      status = tolower(this->getBoard()->getStatus(x, y));
+
+	      if(status != ' ' && status != tolower(this->getColor()[0]))
+		{
+		  pos = intToString(y) + this->getBoard()->getAlpha(x);
+		  pawns_pos.push_back(pos);
+		}
+	    }
+	}
+      
+      side = 2*(rad-1)+1;
+      // look into the right and the left side, but no the corners (already checked);
+      for(int i=0; i<side; i++)
+        {
+          y = this->getY()-(rad-1)+i;
+          if(y > 8 || y < 1)
+            continue;
+
+          x = this->getX()+rad;
+          if(x > 0 && x < 9)
+            {
+	      status = tolower(this->getBoard()->getStatus(x, y));
+	      if(status != ' ' && status != tolower(this->getColor()[0]))
+		{
+		  pos = intToString(y) + this->getBoard()->getAlpha(x);
+		  pawns_pos.push_back(pos);
+		}
+	    }
+	  
+          x = this->getX()-rad;
+          if(x > 0 && x < 9)
+            {
+	      status = tolower(this->getBoard()->getStatus(x, y));
+	      if(status != ' '&& status != tolower(this->getColor()[0]))
+		{
+		  pos = intToString(y) + this->getBoard()->getAlpha(x);
+		  pawns_pos.push_back(pos);
+		}
+	    }
+	}
+
+      if(pawns_pos.size() > 0)
+	{
+	  for(unsigned int i=0; i<pawns_pos.size(); i++)
+	    {
+	      action = intToString(this->getY())+this->getBoard()->getAlpha(this->getX());
+
+	      if(rad == 1)
+		{     
+		  pos = pawns_pos[i];
+		  yStr = tolower(pos[0]);
+		  xStr = tolower(pos[1]);
+		  y = (int)(yStr - '0');
+		  x = (int)(xStr - 'a' + 1);
+
+		  oldPos = std::pair<int, int>(this->getX(), this->getY()); 
+		  newPos = std::pair<int, int>(x, y);
+		  steps = this->CPUCheckEat(oldPos, newPos);       
+		  if(steps != "") 
+		    {
+		      action += steps;  
+		      moves.push_back(action);	
+		    }
+		}
+	      else
+		{
+	     	  pos = pawns_pos[i];
+                  yStr = tolower(pos[0]);
+                  xStr = tolower(pos[1]);
+		  y = (int)(yStr - '0');
+		  x = (int)(xStr - 'a' + 1);
+
+		  new_x2 = 0, new_y2 = 0;
+		  
+		  if(x>this->getX())
+		    new_x = this->getX()+1;
+		  else if(x == this->getX())
+		    {
+		      new_x  = this->getX()+1;
+		      new_x2 = this->getX()-1;
+		    }
+		  else
+		    new_x = this->getX()-1;
+		  		  
+		  if(y>this->getY())
+                    new_y = this->getY()+1;
+                  else if(y == this->getY())
+                    {
+		      new_y  = this->getY()+1;
+                      new_y2 = this->getY()-1;
+		    }
+                  else
+                    new_y = this->getY()-1;
+
+		  if(new_x2 != 0)
+		    {
+		      if(new_x2 > 0 && new_x2 < 9)
+			{
+			  if(new_x > 0 && new_x < 9)
+			    {
+			      status = tolower(this->getBoard()->getStatus(new_x, new_y));
+			      if(status != ' ')
+				new_x = new_x2;
+			      else
+				{
+				  status = tolower(this->getBoard()->getStatus(new_x2, new_y));
+				  if(status == ' ')
+				    if(rand()%100 > 50)
+				      new_x = new_x2;
+				}
+			    }
+			  else
+			    new_x = new_x2;
+			}
+		    }
+	
+		  if(new_y2 != 0)
+                    {
+                      if(new_y2 > 0 && new_y2 < 9)
+			{
+                          if(new_y > 0 && new_y < 9)
+                            {
+                              status = tolower(this->getBoard()->getStatus(new_x, new_y));
+                              if(status != ' ')
+				new_y = new_y2;
+                              else
+				{
+                                  status = tolower(this->getBoard()->getStatus(new_x, new_y2));
+                                  if(status == ' ')
+                                    if(rand()%100 > 50)
+                                      new_y = new_y2;
+                                }
+                            }
+                          else
+                            new_y = new_y2;
+                        }
+		    }
+
+		  status = tolower(this->getBoard()->getStatus(new_x, new_y));
+		  
+		  if(status == ' ')
+		    {
+		      steps = intToString(new_y) + this->getBoard()->getAlpha(new_x);
+		      action += steps;
+		      moves.push_back(action);		  
+		    }
+		}
+	    }
+	}
+      
+      if(moves.size() > 0)
+	flag = true;
+      
+      pawns_pos.clear();
+      rad++;
+
+      if(rad>Nslots-1)
+	break;
     }
 
   return moves;

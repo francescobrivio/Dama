@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
 	  // Pass informations to perl (cpp thread)         
 	  std::string new_positions;
           new_positions = board.getPositions();
-
+	  
 	  std::cout << pos << std::endl;
 	  std::cout << flag_move << player_flag[0] << std::endl;
 	  std::cout << error_log << std::endl;

@@ -186,7 +186,8 @@ std::string Pedina::CPUCheckEat(const Position oldPos, const Position newPos)
   
           status = this->getBoard()->getStatus(nextX[i], nextY);
 
-          if(status != (this->getColor())[0] && status != ' ')
+          if(status != (this->getColor())[0] && status != ' ' && 
+	     status != 'W' && status != 'B')
             {
               prevPos = std::pair<int, int>(prevX, prevY);
               nextPos = std::pair<int, int>(nextX[i], nextY);

@@ -25,7 +25,9 @@
   	        	     	       		 	  	      	     vicino alla fine della scacchiera, quindi in un certo senso
 									     dovrebbe andare bene, no?
 
-- aumentare l'AI del damone.... così non serve a niente.....
+- aumentare l' AI del gioco
+
+- mettere una dialog di conferma prima di quit e give up
 
 ----------- ERRORI -------
 
@@ -37,4 +39,4 @@
 
 --> Se il player non può più muovere non c'è modo di far andare avanti il gioco --> DONE
 
-- Se schiacci i bottoni a cazzo prima di iniziare il gioco crash tutto
+- Se schiacci i bottoni a cazzo prima di iniziare il gioco crash tutto --> DONE
