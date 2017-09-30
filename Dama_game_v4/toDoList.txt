@@ -27,7 +27,7 @@
 
 - aumentare l' AI del gioco  --> ONGOING
 
-- mettere una dialog di conferma prima di quit e give up
+- mettere una dialog di conferma prima di quit e give up --> DONE
 
 ----------- ERRORI -------
 

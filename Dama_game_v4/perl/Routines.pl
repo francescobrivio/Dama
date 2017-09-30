@@ -132,8 +132,10 @@ sub countPawns
 
 sub doTheMove
 {
+    if($d3){$d3->destroy();}
+
     my $move = shift;
-    
+
     print WRITETO_C $move;
 
     chomp(my $endGame = <READFROM_C>);
@@ -253,6 +255,39 @@ END_MESSAGE
 
   $helpPanel = $mw->Scrolled("Dialog", -scrollbars => 'e', -title=>'Help message', -text=>$helpText, -width=>40);
   $helpPanel->Show;
+}
+
+
+sub GiveUpConfirm
+{
+    #Dialog for give up decision                                                                                 
+    my $quit_var;
+    $d3 = $mw->Dialog(-text=>"Do you really want to give up?", -popover=>$gridframe, -buttons=>[]);
+    my $yes_buttom = $d3->Radiobutton(-text=>'Yes', -value=>1, -variable=>\$quit_var, -command=>[\&doTheMove, "none\n"]);
+    $yes_buttom->pack();
+    my $no_buttom = $d3->Radiobutton(-text=>'No', -value=>0, -variable=>\$quit_var, -command=>[\&Resume]);
+    $no_buttom->pack();
+    
+    $d3->Show;
+}
+
+sub QuitConfirm
+{
+    #Dialog for quit decision  
+    my $quit_var;
+    $d4 = $mw->Dialog(-text=>"Do you really want to quit?", -popover=>$gridframe, -buttons=>[]);
+    my $yes_buttom = $d4->Radiobutton(-text=>'Yes', -value=>1, -variable=>\$quit_var, -command=>[\&quit,$$,$pid,$pid_cpp]);
+    $yes_buttom->pack();
+    my $no_buttom = $d4->Radiobutton(-text=>'No', -value=>0, -variable=>\$quit_var, -command=>[\&Resume]);
+    $no_buttom->pack();
+
+    $d4->Show; 
+}
+
+sub Resume
+{
+    if($d3){$d3->destroy();}
+    if($d4){$d4->destroy();}
 }
 
 1;

@@ -87,11 +87,11 @@ sub TKthread
     my $filemenu = $menuframe->Menubutton(-text=>'File', -activebackground=>"aquamarine", -foreground=>"black");
     $filemenu->command(-label=>"New Game", -command=>\&newGame);
     $filemenu->command(-label=>"Help", -command=>\&showHelpPanel);
-    $filemenu->command( -label=>"Quit", -command=>[\&quit,$pid,$pid_cpp]);
+    $filemenu->command( -label=>"Quit", -command=>[\&QuitConfirm]); #\&quit,$$,$pid,$pid_cpp
     $filemenu->pack(-side=>"left", -fill=>"x");
     
     # Quit button
-    my $quitmenu = $menuframe->Button( -text=>"Quit", -command=>[\&quit,$$,$pid,$pid_cpp])->pack;
+    my $quitmenu = $menuframe->Button( -text=>"Quit", -command=>[\&QuitConfirm])->pack;
     $quitmenu->pack(-side=>"right");
     
     # logFrame
@@ -156,8 +156,8 @@ sub TKthread
     
     my $giveUp_buttom = $movesframe->Button(-text=>"Give Up", -width=>9, 
 					    -command=>sub{
-						if(@buttons[0] != 0){&doTheMove("none\n");}}
-	)->pack(-side => 'left', -fill=>'x');       
+						if(@buttons[0] != 0){&GiveUpConfirm();}
+					    })->pack(-side => 'left', -fill=>'x'); 
 =pod
                                         print WRITETO_C $user_move->cget(-textvariable)."\n";
             
