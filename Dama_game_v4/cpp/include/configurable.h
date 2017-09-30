@@ -6,6 +6,7 @@
 #define Nplayers 2
 #define Nmoves_pedina 2
 #define Nmoves_pedone 2
+#define Nmatch 100
 
 #include "cppinclude.h"
 

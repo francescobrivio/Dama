@@ -4,7 +4,6 @@
 Pedone::Pedone()
 {
   Board* board = new Board(); 
-  srand (time(NULL));
   _x = rand() % (Nslots-1) + 1;
   _y = rand() % (Nslots-1) + 1;
   _color = "blue";
@@ -187,8 +186,6 @@ Moves Pedone::CPUCheck()
   bool flag = false;
   int rad = 1, side = 0;
   char xStr = ' ', yStr = ' ';
-
-  srand (time(NULL));
 
   while(!flag)
     {

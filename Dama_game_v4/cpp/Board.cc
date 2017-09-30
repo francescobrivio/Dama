@@ -129,8 +129,7 @@ void Board::autoMove(const char team)
   int tmp = 0;
   std::string val = "";
   bool flag = false;
-  srand (time(NULL));
-
+  
   for(int ny=Nslots-1; ny>=0; ny--) // colonne      
     {
       if(flag)
@@ -219,6 +218,24 @@ std::string Board::getPositions()
     return output_vec;
 }
 
+void Board::setPositions(std::string pos)
+{
+  std::string val = " ";
+  int idx = 0;
 
+  if(pos.length() >= (Nslots-1)*(Nslots-1))
+    {
+      for(int ny=1; ny<Nslots; ny++)
+	for(int nx=1; nx<Nslots; nx++)
+	  {
+	    val = pos[idx];
+	    if(val == "e")
+	      val = " ";
+	    
+	    this->setStatus(nx, ny, val);
+	    idx++;
+	  }
+    }
+}
 
-
+  

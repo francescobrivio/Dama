@@ -3,6 +3,19 @@
 
 #include "include/configurable.h"
 
+// Forward declaration of the implemented functions
+Pedina* findPedina(std::vector<Pedina*>*, int, int);
+void erasePawns(std::vector<Pedina*>*, std::string);
+void evolvePedina(std::vector<Pedina*>*);
+void updatePositions(Board*, std::vector<Pedina*>*, std::vector<Pedina*>*);
+std::string ChooseBestMoveRand(Moves);
+Moves SelectMoves(Moves);
+std::string ChooseBestMoveAI(Moves, std::string, std::string, int);
+std::string autoMove(std::vector<Pedina*>*, bool);
+
+
+
+
 // Function to find the selected pawn to be moved
 Pedina* findPedina(std::vector<Pedina*> *pawns, int x, int y)
 {
@@ -115,62 +128,6 @@ void updatePositions(Board* board, std::vector<Pedina*> *P1pawns, std::vector<Pe
 }
 
 // Function to choose the best move for the CPU player
-std::string ChooseBestMove(Moves moves)
-{
-  const int nMoves = moves.size();
-  std::string best_move = "none";
-  char max_y = '0';
-  unsigned int max_lenght = 0, max_diff = 0, diff = 0;
-
-  // Loop on the possible moves 
-  for(int i=0; i<nMoves; i++)
-    // Look for the maximum move lenght -> longer means that it eats more pawns 
-    if(moves.at(i).size() > max_lenght)
-      max_lenght = moves.at(i).size();
-  
-  // Loop on the possible moves
-  for(int i=0; i<nMoves; i++)
-    {
-      // If the lenght is different from the maximum then continue
-      // i.e. take only the longest moves
-      if(moves.at(i).size() != max_lenght)
-        continue;
-
-      // else evaluate the difference long the y axis
-      diff = abs(moves.at(i)[max_lenght-2]-moves.at(i)[0]);
-
-      // Look for the best move
-      // If diff is greater than max_diff, it means that I'm eating more pawns
-      // So this should be my best move
-      if(diff > max_diff)
-        {
-          max_diff = diff;
-          best_move = moves.at(i);
-          max_y = best_move[0];
-        }
-      // else if diff is equal to the maximum, then I'm eating the same 
-      // number of pawns
-      else if(diff == max_diff)
-        {
-          // first I choose the one that has the higher y,
-          // i.e. the one that is more advanced
-          if(moves.at(i)[0] > max_y)
-            {
-              best_move = moves.at(i);
-              max_y = best_move[0];
-            }
-        }
-      }
-  
-  // If the lenght of the best move is equal to 2 it means that 
-  // I'm not moving anything, so I have lost
-  if(best_move.size() == 2)
-    best_move = "none";
-
-  return best_move;       
-}
-
-// Function to choose the best move for the CPU player
 std::string ChooseBestMoveRand(Moves moves)
 {
   std::string best_move = "none";
@@ -180,22 +137,18 @@ std::string ChooseBestMoveRand(Moves moves)
 
   // Find the longest moves, i.e. that eat more pawns
   for (unsigned int i=0; i<moves.size(); i++)
-    {
-      if (moves.at(i).size() > max_lenght)
-        max_lenght = moves.at(i).size();
-    }
+    if (moves.at(i).size() > max_lenght)
+      max_lenght = moves.at(i).size();
     
   // Fill eating_moves with all moves that have same lenght == max_lenght
   for (unsigned int j=0; j<moves.size(); j++)
-    {
-      if (moves.at(j).size() == max_lenght)
-        eating_moves.push_back(moves.at(j));
-    }
+    if (moves.at(j).size() == max_lenght)
+      eating_moves.push_back(moves.at(j));
 
   if (eating_moves.size() == 0)
     best_move = "none";
   else if (eating_moves.size() == 1)
-    best_move = eating_moves[0];
+    best_move = eating_moves.at(0);
   else
     {
       // Find the longest diff, i.e. pawns that go
@@ -207,15 +160,13 @@ std::string ChooseBestMoveRand(Moves moves)
         }
       // Fill longer_moves with moves with longest diff
       for (unsigned int h=0; h<eating_moves.size(); h++)
-        {
-          if(abs(eating_moves.at(h)[max_lenght-2]-eating_moves.at(h)[0]) == max_diff)
-            longer_moves.push_back(eating_moves.at(h));
-        }
-        
+	if(abs(eating_moves.at(h)[max_lenght-2]-eating_moves.at(h)[0]) == max_diff)
+	  longer_moves.push_back(eating_moves.at(h));
+      
       if (longer_moves.size() == 1)
         best_move = longer_moves.at(0);
       else
-        best_move = longer_moves.at( rand()%(longer_moves.size()) );
+	best_move = longer_moves.at(rand()%(longer_moves.size()));
     }
 
   if(best_move.size() == 2)
@@ -224,32 +175,239 @@ std::string ChooseBestMoveRand(Moves moves)
   return best_move;       
 }
 
-// Function to make the CPU make its move
-std::string autoMove(std::vector<Pedina*> *pawns)
+// Function to select the more useful moves for the CPU player                                                                                                    
+Moves SelectMoves(Moves moves)
 {
-  // Vector with all possible moves for CPU player
-  Moves moves;
-  std::string best_move = "";
+  Moves eating_moves, longer_moves;
+  unsigned int max_lenght = 0;
+  int max_diff = 0, diff = 0;
 
-  // Loop on pawns
+  // Find the longest moves, i.e. that eat more pawns                                                                                                             
+  for (unsigned int i=0; i<moves.size(); i++)
+    if (moves.at(i).size() > max_lenght)
+      max_lenght = moves.at(i).size();
+
+  // Fill eating_moves with all moves that have same lenght == max_lenght                                                                                         
+  for (unsigned int j=0; j<moves.size(); j++)
+    if (moves.at(j).size() == max_lenght)
+      eating_moves.push_back(moves.at(j));
+
+  // Find the longest diff, i.e. pawns that go                                                                                                                    
+  for (unsigned int k=0; k<eating_moves.size(); k++)
+    {
+      diff = abs(eating_moves.at(k)[max_lenght-2]-eating_moves.at(k)[0]);
+      if (diff > max_diff)
+	max_diff = diff;
+    }
+  // Fill longer_moves with moves with longest diff                                                                                                               
+  for (unsigned int h=0; h<eating_moves.size(); h++)
+    if(abs(eating_moves.at(h)[max_lenght-2]-eating_moves.at(h)[0]) == max_diff)
+      longer_moves.push_back(eating_moves.at(h));
+
+  return longer_moves;
+}
+
+std::string ChooseBestMoveAI(Moves moves, 
+			     std::string positions, 
+			     std::string team,
+			     int dir)
+{
+  std::string best_move = "none";
+  std::string team2 = "", pos = "";
+  std::string test_move = "";
+  std::string team_tmp = "";
+
+  char xStr  = ' ', yStr   = ' ';
+  int x = 0, y = 0, imove = 0;
+  int val = 0, max_val = -Nmatch;
+  std::map<std::string, int> list_moves;
+  bool endgame = false;
+  bool flag_move = true;
+
+  if(team == "white")
+    team2 = "black";
+  else
+    team2 = "white";
+
+  Board board;
+  std::string vec_positions;
+
+  std::vector<Pedina*> *P1pawns = new std::vector<Pedina*>;
+  std::vector<Pedina*> *P2pawns = new std::vector<Pedina*>;
+
+  std::string turn = "";
+
+  Pedina* tmp_pawn = new Pedina();
+
+  for(unsigned int idx = 0; idx < moves.size(); idx++)
+    list_moves.insert(std::pair<std::string, int>(moves[idx], val));
+
+  for(int imatch = 0; imatch < Nmatch; imatch++)
+    {
+      imove = rand() % moves.size();
+      test_move = moves[imove];
+      flag_move = true;
+      endgame = false;
+
+      P1pawns->clear();
+      P2pawns->clear();
+      
+      board.setNmoves(0);
+      board.setPositions(positions);
+      vec_positions = board.getPositions();
+
+      for(unsigned int i=0; i<vec_positions.size(); i++)
+	{
+	  int nrow = i/(Nslots-1)+1;
+	  int ncol = i%(Nslots-1)+1;
+	  
+	  if(vec_positions[i] == 'w') team_tmp = "white";
+	  else if(vec_positions[i] == 'W') team_tmp = "White";
+	  else if(vec_positions[i] == 'b') team_tmp = "black";
+	  else if(vec_positions[i] == 'B') team_tmp = "Black";
+
+	  if(vec_positions[i] == team[0])
+	    P1pawns->push_back(new Pedina(team_tmp, ncol, nrow, &board, dir));
+	  else if(tolower(vec_positions[i]) == team[0])
+	    P1pawns->push_back(new Pedone(team_tmp, ncol, nrow, &board));
+	  else if(vec_positions[i] == team2[0])
+	    P2pawns->push_back(new Pedina(team_tmp, ncol, nrow, &board, -dir));
+	  else if(tolower(vec_positions[i]) == team2[0])
+	    P2pawns->push_back(new Pedone(team_tmp, ncol, nrow, &board));
+	}
+        
+      while(!endgame)
+	{
+	  board.setNmoves(board.getNmoves()+1);
+	  
+	  // Whose turn is it?  
+	  if(board.getNmoves()%2==1)
+	    turn = team;
+	  else
+	    turn = team2;
+
+	  if(board.getNmoves()==1)
+	    pos = test_move;
+	  else if(turn[0] == tolower(P1pawns->at(0)->getColor()[0]))
+	    pos = autoMove(P1pawns, true);
+	    //std::cin >> pos;
+	  else if(turn[0] == tolower(P2pawns->at(0)->getColor()[0]))
+	    pos = autoMove(P2pawns, true);
+	    //std::cin >> pos;
+
+	  if(pos == "none")
+	    {
+	      endgame = true;
+	      flag_move = false;
+	      if(turn == team)
+		list_moves[test_move] -= 1;
+	      else
+		list_moves[test_move] += 1;
+	    }
+
+	  if(flag_move)
+	    {
+	      // Read starting position  
+	      yStr = tolower(pos[0]);
+	      xStr = tolower(pos[1]);
+
+	      y = (int)(yStr - '0');
+	      x = (int)(xStr - 'a' + 1);
+
+	      // Select the correct pawn  
+	      if(turn[0] == tolower(P1pawns->at(0)->getColor()[0]))
+		tmp_pawn = findPedina(P1pawns, x, y);
+	      else if(turn[0] == tolower(P2pawns->at(0)->getColor()[0]))
+		tmp_pawn = findPedina(P2pawns, x, y);
+
+	      // Read the new position   
+	      yStr = tolower(pos[pos.size()-2]);
+	      xStr = tolower(pos[pos.size()-1]);
+	      
+	      y = (int)(yStr - '0');
+	      x = (int)(xStr - 'a' + 1);
+	      
+	      // Move the pawn   
+	      tmp_pawn->Move(x, y);
+	      
+	      // Change pawns into big_pawns 
+	      if(turn == P1pawns->at(0)->getColor())
+		evolvePedina(P1pawns);
+	      else if(turn == P2pawns->at(0)->getColor())
+		evolvePedina(P2pawns);
+	      
+	      if(turn[0] == tolower(P1pawns->at(0)->getColor()[0]))
+		erasePawns(P2pawns, pos);
+	      else if(turn[0] == tolower(P2pawns->at(0)->getColor()[0]))
+		erasePawns(P1pawns, pos);
+	    }
+
+	  // Update the board positions  
+	  updatePositions(&board, P1pawns, P2pawns);
+	    
+	  if(P2pawns->size() == 0 || P1pawns->size() == 0)
+	    {
+	      endgame = true;
+	      if(P1pawns->size() == 0)
+		list_moves[test_move] -= 1;
+	      else
+		list_moves[test_move] += 1;
+	    }
+	}
+    }
+
+  std::map<std::string,int>::iterator it = list_moves.begin();
+  for (it=list_moves.begin(); it!=list_moves.end(); ++it)
+    {
+      if(it->second > max_val)
+	{
+	  max_val = it->second;
+	  best_move = it->first;
+	}
+    }
+
+  return best_move;
+}
+
+// Function to make the CPU make its move   
+std::string autoMove(std::vector<Pedina*> *pawns, bool flag_sim = false)
+{
+  // Vector with all possible moves for CPU player   
+  Moves moves, longer_moves;
+  std::string best_move = "none";
+  std::string team = "", positions = "";
+  int dir = 0;
+
+  // Loop on pawns     
   for(unsigned int ipawn = 0; ipawn < pawns->size(); ipawn++)
     {
       // For each pawn get the possible moves (vec of strings)
       Moves tmp_moves;
       tmp_moves = pawns->at(ipawn)->CPUCheck();
-      
+
       // Push each element of the possible moves in vec of all possible moves for CPU player
       for(unsigned int imove = 0; imove < tmp_moves.size(); imove++)
         moves.push_back(tmp_moves.at(imove));
     }
 
-  // Get the best move for CPU player
-  //best_move = ChooseBestMove(moves);
-  best_move = ChooseBestMoveRand(moves);
+  // Get the best move for CPU player  
+  if(flag_sim)
+    best_move = ChooseBestMoveRand(moves);
+  else
+    {
+      team = pawns->at(0)->getColor();
+      if(team == "White") team = "white";
+      else if (team == "Black") team = "black";
+
+      positions = pawns->at(0)->getBoard()->getPositions();
+      dir = pawns->at(0)->getDir();
+
+      longer_moves = SelectMoves(moves);
+      best_move = ChooseBestMoveAI(longer_moves, positions, team, dir);
+    }
 
   return best_move;
 }
-
 
 
 #endif // Moves_H

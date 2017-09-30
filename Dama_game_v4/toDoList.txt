@@ -6,7 +6,7 @@
 
 - log più dettagliato (non solo “move not allowed...”)  --> però così bisogna cambiare/aggiungere cosa si passa da cpp a tk mi sa ---> DONE
 
-- sistemare endGame (ora si chiude tutto il programma) --> In che senso???
+- sistemare endGame (ora si chiude tutto il programma) --> DONE
 
 - sistemare newGame (ora si impalla, invece deve cancellare log,nPedine e la griglia, ed essere pronto a ricominciare, anche l’exe) --> DONE
 
@@ -25,7 +25,7 @@
   	        	     	       		 	  	      	     vicino alla fine della scacchiera, quindi in un certo senso
 									     dovrebbe andare bene, no?
 
-- aumentare l' AI del gioco
+- aumentare l' AI del gioco  --> ONGOING
 
 - mettere una dialog di conferma prima di quit e give up
 

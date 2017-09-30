@@ -4,7 +4,6 @@
 Pedina::Pedina()
 {
   Board* board = new Board(); 
-  srand (time(NULL));
   _x = rand() % (Nslots-1) + 1;
   _y = rand() % (Nslots-1) + 1;
   _color = "red";

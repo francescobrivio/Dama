@@ -5,8 +5,6 @@
 
 int main(int argc, char *argv[])
 {
-  srand(time(NULL));
-
   int x = 0, y = 0;
   char xStr = ' ', yStr =  ' ';
   std::string pos = "";
@@ -24,6 +22,8 @@ int main(int argc, char *argv[])
 
   while(endGame == 0)
     {
+      srand(time(NULL));
+
       endMatch = 0;
       board.setNmoves(0);
       error_log = "ok";
@@ -88,9 +88,9 @@ int main(int argc, char *argv[])
           if(pos == "auto")
             {
               isCPU_log = true;
-              if(turn == P1pawns->at(0)->getColor())
+              if(turn[0] == tolower(P1pawns->at(0)->getColor()[0]))
                 pos = autoMove(P1pawns);
-              else if(turn == P2pawns->at(0)->getColor())
+              else if(turn[0] == tolower(P2pawns->at(0)->getColor()[0]))
                 pos = autoMove(P2pawns);
 	    }
 
@@ -180,10 +180,16 @@ int main(int argc, char *argv[])
                           // Move the pawn
                           tmp_pawn->Move(x, y);
 
-                          if(turn == P1pawns->at(0)->getColor())
-                            //P2pawns = erasePawns(P2pawns, pos);
+			  // Change pawns into big_pawns 
+			  if(turn == P1pawns->at(0)->getColor())
+			    evolvePedina(P1pawns);
+			  else if(turn == P2pawns->at(0)->getColor())
+			    evolvePedina(P2pawns);
+
+                          if(turn[0] == tolower(P1pawns->at(0)->getColor()[0]))
+                            //P2pawns = eraePawns(P2pawns, pos);
                             erasePawns(P2pawns, pos);
-                          else if(turn == P2pawns->at(0)->getColor())
+                          else if(turn[0] == tolower(P2pawns->at(0)->getColor()[0]))
                             //P1pawns = erasePawns(P1pawns, pos);
                             erasePawns(P1pawns, pos);
                         }
@@ -200,13 +206,7 @@ int main(int argc, char *argv[])
 		      error_log = "This is not your turn!";
                     }
                 }
-   
-	      // Change pawns into big_pawns
-	      if(turn == P1pawns->at(0)->getColor())
-		evolvePedina(P1pawns);
-	      else if(turn == P2pawns->at(0)->getColor())
-		evolvePedina(P2pawns);
-
+	      
 	      // Update the board positions
 	      updatePositions(&board, P1pawns, P2pawns);
 	      

@@ -23,8 +23,8 @@ class Board
   void autoMove(const char val);
   void Print(const char* name = "");
   void PrintPositions(const char* name = "");
-  
   std::string getPositions();
+  void setPositions(std::string pos);
     
  private:
   Matrix _board;

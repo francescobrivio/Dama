@@ -9,6 +9,7 @@ class Pedone : public Pedina
  public:
   Pedone();
   Pedone(const std::string color, int x, int y, Board* board);
+  
   //Pedone(const Pedone& origin);
   ~Pedone();
   
